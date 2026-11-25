@@ -1,11 +1,17 @@
 {
   "framework": null,
   "buildCommand": "echo \"Pas d'étape de construction : API Python et fichiers statiques\"",
+  "outputDirectory": "frontend",
   "functions": {
     "api/index.py": {
       "maxDuration": 30,
       "includeFiles": "{backend/**,frontend/**,models/pd_model.json,models/model_card.json,data/demo/**}"
     }
   },
-  "rewrites": [{ "source": "/(.*)", "destination": "/api/index" }]
+  "rewrites": [
+    {
+      "source": "/(.*)",
+      "destination": "/api/index"
+    }
+  ]
 }
