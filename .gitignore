@@ -8,3 +8,6 @@ data/uploads/
 data/.secret
 
 /api/__pycache__/
+.vercel
+.env*
+.env.local

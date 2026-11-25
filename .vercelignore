@@ -10,4 +10,6 @@ data/.secret
 models/pd_model.joblib
 Dockerfile
 *.docx
-/GPU_Challenge*.pdf
+.env*
+.vercel
+/*.pdf
