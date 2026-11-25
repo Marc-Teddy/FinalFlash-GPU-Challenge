@@ -246,7 +246,10 @@ def auth_google(body: GoogleAuth, resp: Response):
     return _open_session(resp, info["email"], body.role, body.mode, profile)
 
 
-# Session = cookie signé « id.expiration.signature » : valable sur toutes les instances, sans table en base.
+# Session = cookie signé contenant l'identité (adresse, rôle, nom, commerce) et l'échéance.
+# L'utilisateur est retrouvé par son adresse, jamais par un numéro interne : sur Vercel, chaque instance a sa
+# propre base temporaire et les numéros n'y coïncident pas. Si une instance ne connaît pas encore le compte,
+# elle le recrée à partir du cookie, dont la signature garantit qu'il n'a pas été modifié.
 def _sign(payload: str) -> str:
     return hmac.new(services.SECRET, payload.encode(), hashlib.sha256).hexdigest()
 
@@ -254,23 +257,35 @@ def _sign(payload: str) -> str:
 def current_user(request: Request) -> dict:
     token = request.cookies.get("cw_session") or ""
     try:
-        uid, exp, sig = token.split(".")
-        valid = hmac.compare_digest(_sign(f"{uid}.{exp}"), sig) and int(exp) > time.time()
-    except ValueError:
-        valid = False
-    if not valid:
+        raw, sig = token.rsplit(".", 1)
+        body = json.loads(otp._unb64(raw)) if hmac.compare_digest(_sign(raw), sig) else None
+    except (ValueError, json.JSONDecodeError):
+        body = None
+    if not body or body.get("x", 0) < time.time():
         raise HTTPException(401, "Connexion requise")
     with db.tx() as con:
-        row = con.execute("SELECT * FROM users WHERE id=?", (int(uid),)).fetchone()
-    if not row:
+        row = con.execute("SELECT * FROM users WHERE username=?", (body["u"],)).fetchone()
+        if row is None:  # compte créé sur une autre instance : on le restaure depuis le cookie signé
+            uid = con.execute("INSERT INTO users(username, password_hash, role, display_name, organisation, accepted_terms_at) "
+                              "VALUES (?,?,?,?,?,CURRENT_TIMESTAMP)",
+                              (body["u"], f"{secrets.token_hex(16)}$connexion-par-code", body["r"], body["n"], body.get("o"))).lastrowid
+            if body.get("c"):
+                con.execute("INSERT INTO companies(owner_user_id, name, sector, city) VALUES (?,?,?,?)",
+                            (uid, body["c"]["name"], body["c"].get("sector"), body["c"].get("city")))
+            row = con.execute("SELECT * FROM users WHERE id=?", (uid,)).fetchone()
+    if row["role"] != body["r"]:
         raise HTTPException(401, "Session expirée")
     return {k: row[k] for k in ("id", "username", "role", "display_name", "organisation")}
 
 
 def _session(resp: Response, con, user_id: int):
-    exp = int(time.time()) + SESSION_HOURS * 3600
-    token = f"{user_id}.{exp}.{_sign(f'{user_id}.{exp}')}"
-    resp.set_cookie("cw_session", token, httponly=True, samesite="strict", secure=db.ON_VERCEL, max_age=SESSION_HOURS * 3600)
+    u = con.execute("SELECT * FROM users WHERE id=?", (user_id,)).fetchone()
+    c = con.execute("SELECT name, sector, city FROM companies WHERE owner_user_id=? ORDER BY id LIMIT 1", (user_id,)).fetchone()
+    body = {"u": u["username"], "r": u["role"], "n": u["display_name"], "o": u["organisation"],
+            "c": dict(c) if c else None, "x": int(time.time()) + SESSION_HOURS * 3600}
+    raw = otp._b64(json.dumps(body, separators=(",", ":"), ensure_ascii=False).encode())
+    resp.set_cookie("cw_session", f"{raw}.{_sign(raw)}", httponly=True, samesite="strict", secure=db.ON_VERCEL,
+                    max_age=SESSION_HOURS * 3600)
 
 
 _failures: dict[str, list[float]] = {}  # identifiant -> horodatages des échecs récents

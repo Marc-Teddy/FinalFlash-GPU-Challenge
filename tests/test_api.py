@@ -164,3 +164,18 @@ def test_connexion_par_code_et_defi_falsifie(client):
     # mauvais espace
     r = c.post("/api/auth/code", json={"email": "amivi@exemple.bj", "role": "institution", "mode": "login"}).json()
     assert c.post("/api/auth/verify", json={"challenge": r["challenge"], "code": r["demo_code"]}).status_code == 403
+
+
+def test_session_restauree_sur_une_autre_instance(client):
+    """Sur Vercel, une autre instance ne connaît pas le compte : le cookie signé suffit à le restaurer."""
+    from backend import db
+    c = TestClient(client)
+    r = c.post("/api/auth/code", json={"email": "instance@exemple.bj", "role": "merchant", "mode": "signup",
+                                       "profile": PROFIL, "accept_terms": True}).json()
+    assert c.post("/api/auth/verify", json={"challenge": r["challenge"], "code": r["demo_code"]}).status_code == 200
+    with db.tx() as con:  # simule une instance qui n'a jamais vu ce compte
+        uid = con.execute("SELECT id FROM users WHERE username='instance@exemple.bj'").fetchone()[0]
+        con.execute("DELETE FROM companies WHERE owner_user_id=?", (uid,))
+        con.execute("DELETE FROM users WHERE id=?", (uid,))
+    me = c.get("/api/me").json()
+    assert me["username"] == "instance@exemple.bj" and me["companies"][0]["name"] == "Boutique Test"
