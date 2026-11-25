@@ -56,7 +56,7 @@ def test_acces_refuse_sans_autorisation(client):
 def test_dossier_signe_aller_retour_et_falsification(client):
     m = login(client, "akwaba")
     cid = m.get("/api/me").json()["companies"][0]["id"]
-    pdf = m.get(f"/api/companies/{cid}/dossier.pdf").content
+    pdf = m.post(f"/api/companies/{cid}/dossier.pdf", json={}).content
     inst = login(client, "analyste")
     new = inst.post("/api/companies", json={"name": "Dossier reçu"}).json()["id"]
     ok = inst.post(f"/api/companies/{new}/documents", files=[("files", ("d.pdf", pdf, "application/pdf"))]).json()["results"][0]
@@ -82,3 +82,85 @@ def test_rapport_et_decision_traces(client):
     cid = m.get("/api/me").json()["companies"][0]["id"]
     actions = {x["action"] for x in m.get(f"/api/companies/{cid}/access-log").json()}
     assert {"decision_credit", "telechargement_rapport", "consultation_analyse"} <= actions
+
+
+def test_securite_entrees_et_details_internes(client):
+    c = login(client, "akwaba")
+    cid = c.get("/api/me").json()["companies"][0]["id"]
+    # pas de chemin serveur exposé
+    assert all("path" not in d for d in c.get(f"/api/companies/{cid}/documents").json())
+    # format de fichier refusé, nom assaini
+    r = c.post(f"/api/companies/{cid}/documents", files=[("files", ("../../evil.sh", b"x", "text/plain"))]).json()["results"][0]
+    assert r["n_values"] == 0 and "/" not in r["filename"]
+    # entrées invalides refusées
+    assert c.get(f"/api/companies/{cid}/analysis", params={"amount": -5}).status_code == 422
+    assert TestClient(client).post("/api/auth/code", json={"email": "pas-une-adresse", "role": "merchant",
+                                                          "mode": "login"}).status_code == 422
+    # en-têtes de sécurité et documentation interne non publiée
+    assert c.get("/").headers["x-frame-options"] == "DENY"
+    assert c.get("/openapi.json").status_code == 404 or "openapi" not in c.get("/openapi.json").text
+
+
+def test_limitation_des_tentatives(client):
+    c = TestClient(client)
+    codes = [c.post("/api/login", json={"username": "bonprix", "password": "faux"}).status_code for _ in range(6)]
+    assert codes[:5] == [401] * 5 and codes[5] == 429
+
+
+def test_connexion_refusee_dans_le_mauvais_espace(client):
+    c = TestClient(client)
+    r = c.post("/api/login", json={"username": "analyste", "password": "demo", "role": "merchant"})
+    assert r.status_code == 403 and "établissement" in r.json()["detail"]
+    assert c.post("/api/login", json={"username": "analyste", "password": "demo", "role": "institution"}).status_code == 200
+
+
+def test_session_sans_erreur(client):
+    c = TestClient(client)
+    assert c.get("/api/session").json() == {"authenticated": False}
+    c.post("/api/login", json={"username": "akwaba", "password": "demo"})
+    r = c.get("/api/session").json()
+    assert r["authenticated"] and r["role"] == "merchant" and r["companies"]
+
+
+def test_cookie_falsifie_refuse(client):
+    c = TestClient(client)
+    c.cookies.set("cw_session", "1.9999999999.signaturebidon")
+    assert c.get("/api/me").status_code == 401
+    assert c.get("/api/session").json() == {"authenticated": False}
+
+
+PROFIL = {"full_name": "Amivi Dossou", "company_name": "Boutique Test", "category": "Alimentation", "city": "Cotonou"}
+
+
+def test_inscription_par_code(client):
+    c = TestClient(client)
+    # conditions non acceptées : refus
+    r = c.post("/api/auth/code", json={"email": "amivi@exemple.bj", "role": "merchant", "mode": "signup", "profile": PROFIL})
+    assert r.status_code == 400
+    r = c.post("/api/auth/code", json={"email": "Amivi@Exemple.bj", "role": "merchant", "mode": "signup",
+                                       "profile": PROFIL, "accept_terms": True}).json()
+    assert r["sent_to"].startswith("am") and len(r["demo_code"]) == 6
+    # mauvais code refusé, bon code accepté, compte et commerce créés
+    assert c.post("/api/auth/verify", json={"challenge": r["challenge"], "code": "000000" if r["demo_code"] != "000000" else "111111"}).status_code == 400
+    assert c.post("/api/auth/verify", json={"challenge": r["challenge"], "code": r["demo_code"]}).json()["role"] == "merchant"
+    me = c.get("/api/me").json()
+    assert me["username"] == "amivi@exemple.bj" and me["companies"][0]["name"] == "Boutique Test"
+    # le même code ne sert pas deux fois
+    assert TestClient(client).post("/api/auth/verify", json={"challenge": r["challenge"], "code": r["demo_code"]}).status_code == 400
+    # nouvelle inscription avec la même adresse : refus
+    assert c.post("/api/auth/code", json={"email": "amivi@exemple.bj", "role": "merchant", "mode": "signup",
+                                          "profile": PROFIL, "accept_terms": True}).status_code == 409
+
+
+def test_connexion_par_code_et_defi_falsifie(client):
+    c = TestClient(client)
+    r = c.post("/api/auth/code", json={"email": "amivi@exemple.bj", "role": "merchant", "mode": "login"}).json()
+    raw, sig = r["challenge"].split(".")
+    assert c.post("/api/auth/verify", json={"challenge": raw + "." + ("1" if sig[0] == "0" else "0") + sig[1:], "code": r["demo_code"]}).status_code == 400
+    assert c.post("/api/auth/verify", json={"challenge": r["challenge"], "code": r["demo_code"]}).status_code == 200
+    # adresse inconnue : même réponse (pas de divulgation), mais aucune session possible
+    r = c.post("/api/auth/code", json={"email": "inconnu@exemple.bj", "role": "merchant", "mode": "login"}).json()
+    assert c.post("/api/auth/verify", json={"challenge": r["challenge"], "code": r["demo_code"]}).status_code == 404
+    # mauvais espace
+    r = c.post("/api/auth/code", json={"email": "amivi@exemple.bj", "role": "institution", "mode": "login"}).json()
+    assert c.post("/api/auth/verify", json={"challenge": r["challenge"], "code": r["demo_code"]}).status_code == 403

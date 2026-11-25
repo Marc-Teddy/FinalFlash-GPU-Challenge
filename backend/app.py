@@ -3,36 +3,80 @@ from __future__ import annotations
 
 import json
 import math
+import re
+import hashlib
+import hmac
+import os
 import secrets
+import threading
+import time
 from datetime import date
 from pathlib import Path
 
-from fastapi import Depends, FastAPI, File, HTTPException, Request, Response, UploadFile
+from fastapi import Depends, FastAPI, File, HTTPException, Query, Request, Response, UploadFile
 from fastapi.responses import FileResponse, JSONResponse
 from fastapi.staticfiles import StaticFiles
+from typing import Annotated
+
 from pydantic import BaseModel, Field
 
-from . import db, reports, services
+from . import db, otp, reports, services
+
+from contextlib import asynccontextmanager  # noqa: E402
 
 ROOT = Path(__file__).resolve().parents[1]
-from contextlib import asynccontextmanager  # noqa: E402
+SESSION_HOURS = 8
+MAX_UPLOAD = 15 * 1024 * 1024
+MAX_FILES = 10
+
+
+_ready = threading.Lock()
+_initialised = False
+
+
+def ensure_ready() -> None:
+    """Crée la base au premier appel et charge la démonstration si elle est vide.
+    Sur Vercel, chaque démarrage à froid repart d'une base neuve dans /tmp."""
+    global _initialised
+    if _initialised:
+        return
+    with _ready:
+        if _initialised:
+            return
+        db.init()
+        if db.is_empty() and os.environ.get("CREDITWISE_AUTOSEED", "1") != "0":
+            from . import seed
+            seed.populate()
+        _initialised = True
 
 
 @asynccontextmanager
 async def lifespan(_app):
-    db.init()
+    ensure_ready()
     yield
 
 
-app = FastAPI(title="CreditWise", version="0.1", lifespan=lifespan)
+# Pas de documentation d'API publique : elle exposerait la structure interne.
+app = FastAPI(title="CreditWise", version="0.1", lifespan=lifespan, docs_url=None, redoc_url=None, openapi_url=None)
+
+SECURITY_HEADERS = {
+    "Cache-Control": "no-cache",
+    "X-Content-Type-Options": "nosniff",
+    "X-Frame-Options": "DENY",
+    "Referrer-Policy": "no-referrer",
+    "Content-Security-Policy": "default-src 'self'; img-src 'self' data:; style-src 'self' 'unsafe-inline' https://accounts.google.com/gsi/style; "
+                               "script-src 'self' https://accounts.google.com/gsi/client; frame-src https://accounts.google.com; "
+                               "connect-src 'self' https://accounts.google.com; object-src 'none'; frame-ancestors 'none'",
+}
 
 
 @app.middleware("http")
-async def no_cache(request: Request, call_next):
+async def security_headers(request: Request, call_next):
+    if request.url.path.startswith("/api"):
+        ensure_ready()
     resp = await call_next(request)
-    resp.headers["Cache-Control"] = "no-cache"  # l'interface est toujours à jour pendant la démo
+    resp.headers.update(SECURITY_HEADERS)
     return resp
-MAX_UPLOAD = 15 * 1024 * 1024
 
 
 def attachment(name: str) -> dict:
@@ -58,72 +102,206 @@ def clean(o):
 
 
 # ------------------------------------------------------------------ auth
+ROLE_LABEL = {"merchant": "commerçant", "institution": "établissement de crédit"}
+
+
 class Login(BaseModel):
-    username: str
-    password: str
+    username: str = Field(max_length=40)
+    password: str = Field(max_length=128)
+    role: str | None = Field(default=None, pattern="^(merchant|institution)$")  # espace de connexion utilisé
 
 
-class Register(BaseModel):
-    username: str = Field(min_length=3, max_length=40)
-    password: str = Field(min_length=4)
+Text = Annotated[str | None, Field(max_length=120)]
+EMAIL = r"^[^@\s]{1,64}@[^@\s]{1,180}\.[a-zA-Z]{2,24}$"
+CATEGORIES = {"Vêtements et mode", "Alimentation", "Quincaillerie", "Cosmétiques", "Téléphonie", "Restauration",
+              "Pièces auto", "Autre commerce"}
+FUNCTIONS = {"Analyste crédit", "Responsable crédit", "Direction", "Autre"}
+
+
+class Profile(BaseModel):
+    full_name: str = Field(min_length=2, max_length=80)
+    company_name: Text = None      # commerçant : nom du commerce
+    category: Text = None          # commerçant : catégorie principale
+    organisation: Text = None      # établissement de crédit
+    function: Text = None          # établissement de crédit : fonction
+    city: Text = None
+
+
+class CodeRequest(BaseModel):
+    email: str = Field(pattern=EMAIL, max_length=254)
     role: str = Field(pattern="^(merchant|institution)$")
-    display_name: str
-    organisation: str | None = None
-    company_name: str | None = None
-    sector: str | None = None
-    city: str | None = None
-    has_accounting_software: bool = False
+    mode: str = Field(pattern="^(signup|login)$")
+    profile: Profile | None = None
+    accept_terms: bool = False
+
+
+class CodeCheck(BaseModel):
+    challenge: str = Field(max_length=4000)
+    code: str = Field(max_length=12)
+
+
+class GoogleAuth(BaseModel):
+    credential: str = Field(max_length=5000)
+    role: str = Field(pattern="^(merchant|institution)$")
+    mode: str = Field(pattern="^(signup|login)$")
+    profile: Profile | None = None
+    accept_terms: bool = False
+
+
+def _check_profile(role: str, p: Profile | None, accept_terms: bool) -> dict:
+    if not accept_terms:
+        raise HTTPException(400, "Acceptez les conditions générales et la politique de confidentialité.")
+    if p is None:
+        raise HTTPException(400, "Complétez le formulaire.")
+    if role == "merchant" and (not p.company_name or p.category not in CATEGORIES):
+        raise HTTPException(400, "Indiquez le nom du commerce et sa catégorie principale.")
+    if role == "institution" and (not p.organisation or (p.function and p.function not in FUNCTIONS)):
+        raise HTTPException(400, "Indiquez le nom de l'établissement.")
+    return p.model_dump()
+
+
+def _create_account(con, email: str, role: str, p: dict) -> int:
+    unusable = f"{secrets.token_hex(16)}$connexion-par-code"  # aucun mot de passe : connexion par code ou Google
+    uid = con.execute("INSERT INTO users(username, password_hash, role, display_name, organisation, accepted_terms_at) "
+                      "VALUES (?,?,?,?,?,CURRENT_TIMESTAMP)",
+                      (email, unusable, role, p["full_name"], p.get("organisation") if role == "institution" else None)).lastrowid
+    if role == "merchant":
+        con.execute("INSERT INTO companies(owner_user_id, name, sector, city) VALUES (?,?,?,?)",
+                    (uid, p["company_name"], p["category"], p.get("city")))
+    db.log(con, uid, None, "creation_compte", "conditions acceptées")
+    return uid
+
+
+def _open_session(resp: Response, email: str, role: str, mode: str, profile: dict | None) -> dict:
+    with db.tx() as con:
+        u = con.execute("SELECT * FROM users WHERE username=?", (email,)).fetchone()
+        if u and u["role"] != role:
+            raise HTTPException(403, f"Cette adresse est liée à un compte {ROLE_LABEL[u['role']]} : utilisez l'espace {ROLE_LABEL[u['role']]}.")
+        if not u:
+            if mode != "signup" or not profile:
+                raise HTTPException(404, "Aucun compte pour cette adresse : créez un compte.")
+            uid = _create_account(con, email, role, profile)
+        else:
+            uid = u["id"]
+        _session(resp, con, uid)
+        db.log(con, uid, None, "connexion")
+    return {"ok": True, "role": role}
+
+
+@app.get("/api/auth/config")
+def auth_config():
+    return {"google_client_id": otp.google_client_id(), "demo_codes": otp.demo_codes(), "email_delivery": otp.smtp_configured()}
+
+
+@app.post("/api/auth/code")
+def auth_code(body: CodeRequest):
+    email = body.email.strip().lower()
+    profile = _check_profile(body.role, body.profile, body.accept_terms) if body.mode == "signup" else None
+    if body.mode == "signup":
+        with db.tx() as con:
+            if con.execute("SELECT 1 FROM users WHERE username=?", (email,)).fetchone():
+                raise HTTPException(409, "Un compte existe déjà avec cette adresse : connectez-vous.")
+    if not otp.can_send(email):
+        raise HTTPException(429, "Trop de codes demandés. Réessayez dans 15 minutes.")
+    challenge, code = otp.new_challenge(services.SECRET, email, body.role, body.mode, profile)
+    try:
+        sent = otp.send_code(email, code)
+    except Exception:
+        raise HTTPException(502, "Envoi de l'e-mail impossible pour le moment.") from None
+    out = {"challenge": challenge, "sent_to": otp.mask(email), "expires_in": otp.CODE_TTL}
+    if not sent and otp.demo_codes():
+        out["demo_code"] = code  # prototype sans serveur d'e-mail : code affiché à l'écran
+    elif not sent:
+        raise HTTPException(503, "Aucun service d'envoi d'e-mail n'est configuré.")
+    return out
+
+
+@app.post("/api/auth/verify")
+def auth_verify(body: CodeCheck, resp: Response):
+    try:
+        data = otp.check_challenge(services.SECRET, body.challenge, body.code)
+    except ValueError as e:
+        raise HTTPException(400, str(e)) from None
+    return _open_session(resp, data["e"], data["r"], data["m"], data["p"] or None)
+
+
+@app.post("/api/auth/google")
+def auth_google(body: GoogleAuth, resp: Response):
+    try:
+        info = otp.verify_google(body.credential)
+    except ValueError as e:
+        raise HTTPException(400, str(e)) from None
+    profile = None
+    if body.mode == "signup":
+        if body.profile is None:
+            body.profile = Profile(full_name=info["name"])
+        profile = _check_profile(body.role, body.profile, body.accept_terms)
+    return _open_session(resp, info["email"], body.role, body.mode, profile)
+
+
+# Session = cookie signé « id.expiration.signature » : valable sur toutes les instances, sans table en base.
+def _sign(payload: str) -> str:
+    return hmac.new(services.SECRET, payload.encode(), hashlib.sha256).hexdigest()
 
 
 def current_user(request: Request) -> dict:
-    token = request.cookies.get("cw_session")
-    if not token:
+    token = request.cookies.get("cw_session") or ""
+    try:
+        uid, exp, sig = token.split(".")
+        valid = hmac.compare_digest(_sign(f"{uid}.{exp}"), sig) and int(exp) > time.time()
+    except ValueError:
+        valid = False
+    if not valid:
         raise HTTPException(401, "Connexion requise")
     with db.tx() as con:
-        row = con.execute("SELECT u.* FROM sessions s JOIN users u ON u.id=s.user_id WHERE s.token=?", (token,)).fetchone()
+        row = con.execute("SELECT * FROM users WHERE id=?", (int(uid),)).fetchone()
     if not row:
         raise HTTPException(401, "Session expirée")
     return {k: row[k] for k in ("id", "username", "role", "display_name", "organisation")}
 
 
 def _session(resp: Response, con, user_id: int):
-    token = secrets.token_urlsafe(32)
-    con.execute("INSERT INTO sessions(token, user_id) VALUES (?,?)", (token, user_id))
-    resp.set_cookie("cw_session", token, httponly=True, samesite="lax", max_age=8 * 3600)
+    exp = int(time.time()) + SESSION_HOURS * 3600
+    token = f"{user_id}.{exp}.{_sign(f'{user_id}.{exp}')}"
+    resp.set_cookie("cw_session", token, httponly=True, samesite="strict", secure=db.ON_VERCEL, max_age=SESSION_HOURS * 3600)
+
+
+_failures: dict[str, list[float]] = {}  # identifiant -> horodatages des échecs récents
 
 
 @app.post("/api/login")
 def login(body: Login, resp: Response):
+    name = body.username.strip().lower()[:40]
+    recent = [t for t in _failures.get(name, []) if time.time() - t < 900]
+    if len(recent) >= 5:
+        raise HTTPException(429, "Trop de tentatives. Réessayez dans 15 minutes.")
     with db.tx() as con:
-        u = con.execute("SELECT * FROM users WHERE username=?", (body.username.strip().lower(),)).fetchone()
-        if not u or not db.check_password(body.password, u["password_hash"]):
+        u = con.execute("SELECT * FROM users WHERE username=?", (name,)).fetchone()
+        if not u or not db.check_password(body.password[:128], u["password_hash"]):
+            _failures[name] = recent + [time.time()]
             raise HTTPException(401, "Identifiant ou mot de passe incorrect")
+        _failures.pop(name, None)
+        if body.role and u["role"] != body.role:
+            raise HTTPException(403, f"Ce compte est un compte {ROLE_LABEL[u['role']]} : utilisez l'espace {ROLE_LABEL[u['role']]}.")
         _session(resp, con, u["id"])
         db.log(con, u["id"], None, "connexion")
     return {"ok": True, "role": u["role"]}
 
 
-@app.post("/api/register")
-def register(body: Register, resp: Response):
-    with db.tx() as con:
-        if con.execute("SELECT 1 FROM users WHERE username=?", (body.username.lower(),)).fetchone():
-            raise HTTPException(409, "Identifiant déjà utilisé")
-        uid = con.execute("INSERT INTO users(username, password_hash, role, display_name, organisation) VALUES (?,?,?,?,?)",
-                          (body.username.lower(), db.hash_password(body.password), body.role, body.display_name,
-                           body.organisation)).lastrowid
-        if body.role == "merchant":
-            con.execute("INSERT INTO companies(owner_user_id, name, sector, city, has_accounting_software) VALUES (?,?,?,?,?)",
-                        (uid, body.company_name or body.display_name, body.sector, body.city, int(body.has_accounting_software)))
-        _session(resp, con, uid)
-    return {"ok": True}
-
-
 @app.post("/api/logout")
-def logout(request: Request, resp: Response):
-    with db.tx() as con:
-        con.execute("DELETE FROM sessions WHERE token=?", (request.cookies.get("cw_session"),))
+def logout(resp: Response):
     resp.delete_cookie("cw_session")
     return {"ok": True}
+
+
+@app.get("/api/session")
+def session(request: Request):
+    """État de connexion sans erreur : les pages publiques l'appellent à chaque visite."""
+    try:
+        user = current_user(request)
+    except HTTPException:
+        return {"authenticated": False}
+    return {"authenticated": True, **me(user)}
 
 
 @app.get("/api/me")
@@ -158,15 +336,22 @@ def require_owner(con, user, company_id):
 # ------------------------------------------------------------------ documents & données
 @app.post("/api/companies/{company_id}/documents")
 async def upload(company_id: int, files: list[UploadFile] = File(...), user=Depends(current_user)):
+    if len(files) > MAX_FILES:
+        raise HTTPException(400, f"{MAX_FILES} fichiers au maximum par envoi")
     results = []
     with db.tx() as con:
         require_owner(con, user, company_id)
         for f in files:
-            data = await f.read()
-            if len(data) > MAX_UPLOAD:
-                results.append({"filename": f.filename, "warnings": ["Fichier trop volumineux (15 Mo max)."], "n_values": 0})
+            # Nom de fichier assaini : jamais utilisé tel quel dans un chemin ou affiché brut
+            name = re.sub(r"[^\w.\- ]", "_", Path(f.filename or "fichier").name)[:120] or "fichier"
+            if not name.lower().endswith((".pdf", ".xlsx", ".xlsm", ".csv", ".txt")):
+                results.append({"filename": name, "kind": "inconnu", "warnings": ["Format refusé (PDF, XLSX ou CSV attendus)."], "n_values": 0, "n_transactions": 0})
                 continue
-            results.append(services.import_document(con, company_id, user["id"], f.filename, data))
+            data = await f.read(MAX_UPLOAD + 1)
+            if len(data) > MAX_UPLOAD:
+                results.append({"filename": name, "kind": "inconnu", "warnings": ["Fichier trop volumineux (15 Mo max)."], "n_values": 0, "n_transactions": 0})
+                continue
+            results.append(services.import_document(con, company_id, user["id"], name, data))
     return clean({"results": results})
 
 
@@ -174,7 +359,7 @@ async def upload(company_id: int, files: list[UploadFile] = File(...), user=Depe
 def documents(company_id: int, user=Depends(current_user)):
     with db.tx() as con:
         require_read(con, user, company_id)
-        return clean(services.load_documents(con, company_id))
+        return clean(services.public_documents(services.load_documents(con, company_id)))
 
 
 @app.delete("/api/documents/{doc_id}")
@@ -203,7 +388,7 @@ def values(company_id: int, status: str | None = None, user=Depends(current_user
 
 
 class Verify(BaseModel):
-    ids: list[int] = []
+    ids: list[int] = Field(default=[], max_length=5000)
     document_id: int | None = None
 
 
@@ -224,8 +409,8 @@ def verify(company_id: int, body: Verify, user=Depends(current_user)):
 
 
 class Correct(BaseModel):
-    amount: float
-    comment: str | None = None
+    amount: float = Field(allow_inf_nan=False, ge=-1e13, le=1e13)
+    comment: str | None = Field(default=None, max_length=500)
 
 
 @app.patch("/api/values/{value_id}")
@@ -250,8 +435,10 @@ def _request(con, request_id):
 
 
 @app.get("/api/companies/{company_id}/analysis")
-def analysis(company_id: int, request_id: int | None = None, amount: float | None = None, duration_months: int | None = None,
-             annual_rate: float | None = None, user=Depends(current_user)):
+def analysis(company_id: int, request_id: int | None = None,
+             amount: Annotated[float | None, Query(gt=0, le=1e12)] = None,
+             duration_months: Annotated[int | None, Query(gt=0, le=120)] = None,
+             annual_rate: Annotated[float | None, Query(ge=0, le=1)] = None, user=Depends(current_user)):
     with db.tx() as con:
         require_read(con, user, company_id)
         req = None
@@ -322,8 +509,13 @@ def access_log(company_id: int, user=Depends(current_user)):
             "WHERE a.company_id=? ORDER BY a.id DESC LIMIT 100", (company_id,))]
 
 
-@app.get("/api/companies/{company_id}/dossier.pdf")
-def dossier(company_id: int, password: str | None = None, user=Depends(current_user)):
+class DossierExport(BaseModel):
+    password: str | None = Field(default=None, max_length=128)
+
+
+@app.post("/api/companies/{company_id}/dossier.pdf")
+def dossier(company_id: int, body: DossierExport, user=Depends(current_user)):
+    password = body.password
     with db.tx() as con:
         require_owner(con, user, company_id)
         a = services.full_analysis(con, company_id)
@@ -337,9 +529,9 @@ def dossier(company_id: int, password: str | None = None, user=Depends(current_u
 
 # ------------------------------------------------------------------ institution
 class NewCompany(BaseModel):
-    name: str
-    sector: str | None = None
-    city: str | None = None
+    name: str = Field(min_length=1, max_length=120)
+    sector: Text = None
+    city: Text = None
 
 
 @app.post("/api/companies")
@@ -378,7 +570,7 @@ class NewRequest(BaseModel):
     amount: float = Field(gt=0)
     duration_months: int = Field(gt=0, le=120)
     annual_rate: float = Field(ge=0, le=1)
-    purpose: str | None = None
+    purpose: str | None = Field(default=None, max_length=200)
 
 
 @app.post("/api/requests")
@@ -396,7 +588,7 @@ def create_request(body: NewRequest, user=Depends(current_user)):
 
 class Decision(BaseModel):
     decision: str = Field(pattern="^(Accordé|Accordé sous conditions|Refusé|Ajourné : pièces complémentaires)$")
-    comment: str = Field(min_length=5)
+    comment: str = Field(min_length=5, max_length=2000)
 
 
 @app.post("/api/requests/{request_id}/decision")

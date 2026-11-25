@@ -6,6 +6,7 @@ import hmac
 import io
 import json
 import os
+import secrets
 from datetime import date
 
 from . import db
@@ -15,7 +16,20 @@ from .engine.finance import analyse
 from .engine.items import ITEMS
 from .engine.scoring import pd_estimate, rule_score
 
-SECRET = os.environ.get("CREDITWISE_SECRET", "creditwise-demo-secret-change-me").encode()
+def _secret() -> bytes:
+    if os.environ.get("CREDITWISE_SECRET"):
+        return os.environ["CREDITWISE_SECRET"].encode()
+    if db.ON_VERCEL:  # plusieurs instances : une clé aléatoire par instance casserait sessions et signatures
+        raise RuntimeError("Variable d'environnement CREDITWISE_SECRET manquante (voir README, déploiement Vercel).")
+    path = db.DB_PATH.parent / ".secret"
+    if not path.exists():
+        path.parent.mkdir(parents=True, exist_ok=True)
+        path.write_text(secrets.token_hex(32))
+        path.chmod(0o600)
+    return path.read_text().strip().encode()
+
+
+SECRET = _secret()
 DOSSIER_ATTACHMENT = "creditwise_dossier.json"
 
 
@@ -98,6 +112,11 @@ def load_values(con, company_id: int) -> list[dict]:
             for r in rows]
 
 
+def public_documents(docs: list[dict]) -> list[dict]:
+    """Retire les détails internes (chemin sur le serveur) avant envoi au navigateur."""
+    return [{k: v for k, v in d.items() if k not in {"path", "uploaded_by"}} for d in docs]
+
+
 def load_transactions(con, company_id: int) -> list[dict]:
     rows = con.execute("SELECT * FROM transactions WHERE company_id=?", (company_id,)).fetchall()
     return [{**dict(r), "date": date.fromisoformat(r["date"]) if r["date"] else None} for r in rows]
@@ -127,7 +146,7 @@ def full_analysis(con, company_id: int, request: dict | None = None, today: date
         {"document": "Historique de remboursement de crédits", "ok": False, "note": "Non disponible : à demander"},
     ]
     out = {k: v for k, v in a.items() if k not in {"pnl", "balances", "flows_raw", "stocks_raw", "conflicts", "ratios_by_key"}}
-    out.update({"company": company, "alerts": alerts, "score": score, "pd": pd, "documents": docs,
+    out.update({"company": company, "alerts": alerts, "score": score, "pd": pd, "documents": public_documents(docs),
                 "n_transactions": len(txs), "checklist": checklist,
                 "limits": [
                     "Les données de démonstration sont fictives ; le modèle PD est entraîné sur des données réelles d'entreprises polonaises.",

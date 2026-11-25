@@ -11,14 +11,17 @@ from contextlib import contextmanager
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
-DB_PATH = Path(os.environ.get("CREDITWISE_DB", ROOT / "data" / "creditwise.db"))
-UPLOADS = Path(os.environ.get("CREDITWISE_UPLOADS", ROOT / "data" / "uploads"))
+# Sur Vercel, seul /tmp est inscriptible : la base de démonstration y est recréée à chaque démarrage à froid.
+ON_VERCEL = bool(os.environ.get("VERCEL"))
+_DATA = Path("/tmp/creditwise") if ON_VERCEL else ROOT / "data"
+DB_PATH = Path(os.environ.get("CREDITWISE_DB", _DATA / "creditwise.db"))
+UPLOADS = Path(os.environ.get("CREDITWISE_UPLOADS", _DATA / "uploads"))
 
 SCHEMA = """
 CREATE TABLE IF NOT EXISTS users (
   id INTEGER PRIMARY KEY, username TEXT UNIQUE NOT NULL, password_hash TEXT NOT NULL,
   role TEXT NOT NULL CHECK (role IN ('merchant','institution')), display_name TEXT NOT NULL,
-  organisation TEXT, created_at TEXT DEFAULT CURRENT_TIMESTAMP);
+  organisation TEXT, accepted_terms_at TEXT, created_at TEXT DEFAULT CURRENT_TIMESTAMP);
 CREATE TABLE IF NOT EXISTS sessions (token TEXT PRIMARY KEY, user_id INTEGER NOT NULL, created_at TEXT DEFAULT CURRENT_TIMESTAMP);
 CREATE TABLE IF NOT EXISTS companies (
   id INTEGER PRIMARY KEY, owner_user_id INTEGER NOT NULL, name TEXT NOT NULL, sector TEXT, city TEXT,
@@ -76,6 +79,14 @@ def init() -> None:
     UPLOADS.mkdir(parents=True, exist_ok=True)
     with tx() as con:
         con.executescript(SCHEMA)
+        cols = {r[1] for r in con.execute("PRAGMA table_info(users)")}
+        if "accepted_terms_at" not in cols:  # base créée avant l'ajout de la colonne
+            con.execute("ALTER TABLE users ADD COLUMN accepted_terms_at TEXT")
+
+
+def is_empty() -> bool:
+    with tx() as con:
+        return con.execute("SELECT COUNT(*) FROM users").fetchone()[0] == 0
 
 
 def hash_password(pw: str, salt: str | None = None) -> str:

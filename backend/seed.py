@@ -1,11 +1,11 @@
 """Initialise la base de démonstration (les fichiers passent par le vrai pipeline d'import).
 
 Comptes (mot de passe : demo) :
-  akwaba    — commerçante, Boutique Akwaba Mode (A)
-  solidite  — commerçant, Quincaillerie La Solidité (B)
-  bonprix   — commerçant, Alimentation Générale Le Bon Prix (C)
-  nouveau   — commerçant sans données (import en direct pendant la démo)
-  analyste  — analyste crédit, institution de microfinance fictive
+  akwaba    : commerçante, Boutique Akwaba Mode (A)
+  solidite  : commerçant, Quincaillerie La Solidité (B)
+  bonprix   : commerçant, Alimentation Générale Le Bon Prix (C)
+  nouveau   : commerçant sans données (import en direct pendant la démo)
+  analyste  : analyste crédit, institution de microfinance fictive
 Usage : python -m backend.seed
 """
 from __future__ import annotations
@@ -28,11 +28,19 @@ MERCHANTS = [
 
 
 def main() -> None:
+    """Réinitialise complètement la base de démonstration."""
     if db.DB_PATH.exists():
         db.DB_PATH.unlink()
-    for f in db.UPLOADS.glob("*"):
-        f.unlink()
+    if db.UPLOADS.exists():
+        for f in db.UPLOADS.glob("*"):
+            f.unlink()
     db.init()
+    populate()
+    print("Base initialisée :", db.DB_PATH)
+
+
+def populate() -> None:
+    """Crée les comptes et importe les fichiers de démonstration dans une base vide."""
     with db.tx() as con:
         inst = con.execute("INSERT INTO users(username, password_hash, role, display_name, organisation) VALUES (?,?,?,?,?)",
                            ("analyste", db.hash_password("demo"), "institution", "Analyste crédit", "Microfinance Démo (fictive)")).lastrowid
@@ -42,8 +50,7 @@ def main() -> None:
             cid = con.execute("INSERT INTO companies(owner_user_id, name, sector, city, has_accounting_software) VALUES (?,?,?,?,?)",
                               (uid, company, sector, city, soft)).lastrowid
             for f in sorted((DEMO / key).iterdir()):
-                r = services.import_document(con, cid, uid, f.name, f.read_bytes())
-                print(f"  {company:38s} {f.name:40s} {r['kind']:22s} {r['n_values']:4d} valeurs {r['n_transactions']:4d} opérations")
+                services.import_document(con, cid, uid, f.name, f.read_bytes())
             con.execute("INSERT INTO shares(company_id, institution_user_id, granted_by) VALUES (?,?,?)", (cid, inst, uid))
             db.log(con, uid, cid, "autorisation_partage", "Microfinance Démo (fictive)")
             con.execute("INSERT INTO credit_requests(company_id, institution_user_id, amount, duration_months, annual_rate, purpose) "
@@ -52,7 +59,6 @@ def main() -> None:
                           ("nouveau", db.hash_password("demo"), "merchant", "Nouveau commerçant")).lastrowid
         con.execute("INSERT INTO companies(owner_user_id, name, sector, city) VALUES (?,?,?,?)",
                     (uid, "Mon commerce (démo en direct)", "Commerce", "Cotonou"))
-    print("Base initialisée :", db.DB_PATH)
 
 
 if __name__ == "__main__":
