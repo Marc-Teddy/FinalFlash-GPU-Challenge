@@ -1,4 +1,6 @@
 {
+  "framework": null,
+  "buildCommand": "echo \"Pas d'étape de construction : API Python et fichiers statiques\"",
   "functions": {
     "api/index.py": {
       "maxDuration": 30,
