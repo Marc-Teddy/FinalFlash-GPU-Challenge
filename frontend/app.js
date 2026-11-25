@@ -152,46 +152,67 @@ function renderShell(h, pub) {
 
 const LOGO = `<img class="mark" src="assets/logo-mark.png" alt=""><span class="word">CreditWise</span>`;
 const LOGO_FULL = (cls) => `<img class="${cls}" src="assets/logo.png" alt="CreditWise, financer mieux, avancer plus">`;
-function publicTop(dark = false) { // barre claire par défaut : le logo est conçu pour un fond blanc
-  return `<header class="pub-top ${dark ? "dark" : ""}"><a class="brand" href="#/">${LOGO}</a>
-    <nav><a href="#/guide/commercant">Guide commerçant</a><a href="#/guide/microfinance">Guide établissement</a></nav>
+function publicTop() {
+  return `<header class="pub-top"><a class="brand" href="#/" aria-label="CreditWise, accueil">${LOGO.replace('class="word"', 'class="word" style="color:var(--navy)"')}</a>
+    <nav aria-label="Navigation principale"><a href="#/" data-goto="etapes">Comment ça marche</a><a href="#/guide/commercant">Guide commerçant</a><a href="#/guide/microfinance">Guide établissement</a></nav>
     <div class="pub-cta"><a class="btn sm" href="#/connexion/commercant">Espace commerçant</a><a class="btn sm brand" href="#/connexion/microfinance">Espace établissement</a></div></header>`;
 }
 
-// ------------------------------------------------------------------ accueil
+// ------------------------------------------------------------------ accueil (affiche)
+const ETAPES = [
+  ["Importer", "Le commerçant dépose ses états financiers, sa balance ou son journal de caisse (PDF, Excel ou CSV). CreditWise reconnaît le document et la période."],
+  ["Vérifier", "Les montants lus automatiquement dans un PDF sont marqués « à vérifier ». Le commerçant les confirme ou les corrige avant de partager."],
+  ["Partager", "Le commerçant choisit l'établissement de crédit qui peut voir son dossier. Il peut retirer cet accès à tout moment, chaque consultation est enregistrée."],
+  ["Décider", "L'analyste lit les ratios, l'évolution mois par mois et les écarts relevés, simule le crédit, puis enregistre sa décision avec un motif obligatoire."],
+];
+const LEXIQUE = [
+  ["Chiffre d'affaires", "Le total des ventes sur une période, encaissées ou non."],
+  ["Trésorerie", "L'argent disponible en caisse et en banque, moins les découverts."],
+  ["Marge nette", "La part des ventes qui reste en bénéfice, en pourcentage."],
+  ["DSCR", "Capacité à payer les échéances : flux disponible divisé par les échéances. Au-dessus de 1,25, il reste une marge de sécurité."],
+  ["Alerte", "Un signal à vérifier, jamais une accusation. Chaque alerte donne sa raison et sa méthode."],
+];
+function accordion(container, cls) {
+  $$(`.${cls} > button`, container).forEach((b) => (b.onclick = () => {
+    const row = b.parentElement, open = !row.classList.contains("on");
+    row.classList.toggle("on", open); b.setAttribute("aria-expanded", String(open));
+  }));
+}
 function viewLanding() {
   app().innerHTML = `${publicTop()}
-  <section class="landing-hero">
-    ${LOGO_FULL("landing-logo")}
-    <h1>Étudier une demande de crédit <em>à partir des comptes du commerçant</em></h1>
-    <p class="lead">Le commerçant importe ses états financiers, sa balance ou son journal de caisse. CreditWise calcule les ratios, compare les mois entre eux et relève les écarts dans les comptes. L'analyste de l'établissement de crédit prend la décision.</p>
-    <div class="space-grid">
-      ${spaceCard("merchant", "Je suis commerçant", "Préparez un dossier financier solide et partagez-le avec l'établissement de crédit de votre choix.",
-        ["Importez vos états, votre balance ou votre journal de caisse", "Vérifiez les chiffres lus automatiquement", "Décidez qui peut consulter votre dossier"])}
-      ${spaceCard("institution", "Établissement de crédits", "Analysez les dossiers partagés : ratios, évolution, anomalies, score et rapport PDF.",
-        ["Indicateurs et formules du guide Finance", "Écarts signalés, score détaillé critère par critère", "Décision prise et motivée par l'analyste"])}
+  <section class="landing-hero" aria-labelledby="titre-accueil">
+    <div class="hero-bars" aria-hidden="true"><i></i><i></i><i></i></div>
+    <h1 class="geant" id="titre-accueil" aria-label="CreditWise"><span class="l1">Credit</span><span class="l2">Wise</span></h1>
+    <div class="hero-bas">
+      <p><b>Étudier une demande de crédit à partir des comptes du commerçant.</b> Le commerçant importe ses documents comptables. CreditWise calcule les ratios, compare les mois entre eux et relève les écarts. L'analyste de l'établissement de crédit décide.</p>
+      <div><p class="tagline-big">Financer mieux, avancer plus.</p>
+        <div class="acts"><a class="btn brand" href="#/inscription/commercant">Je suis commerçant</a><a class="btn primary" href="#/inscription/microfinance">Je suis un établissement</a></div></div>
     </div>
   </section>
-  <section class="landing-steps">
-    <h2 class="center-title">Comment ça marche ?</h2>
-    <div class="grid g4">
-      ${[["upload", "1. Importer", "Le commerçant dépose ses fichiers PDF, Excel ou CSV."], ["check", "2. Vérifier", "Il confirme les montants lus automatiquement dans les PDF."],
-         ["shield", "3. Partager", "Il autorise un établissement de crédit à consulter son dossier."], ["scale", "4. Décider", "L'analyste étudie la synthèse et enregistre sa décision motivée."]]
-        .map(([i, t, d]) => `<div class="card step-card"><span class="ic blue">${icon(i)}</span><h3>${t}</h3><p class="small muted">${d}</p></div>`).join("")}
-    </div>
-    <div class="trust">
-      <span>${icon("lock")}Données partagées uniquement avec votre accord</span>
-      <span>${icon("eye")}Chaque consultation est tracée</span>
-      <span>${icon("scale")}La décision revient à l'analyste</span>
-    </div>
-    <p class="small muted" style="text-align:center;margin-top:24px">Prototype GPU Challenge 2026. Les entreprises et personnes de démonstration sont fictives.</p>
-  </section>`;
-}
-function spaceCard(role, title, text, bullets) {
-  const slug = SLUG_OF[role];
-  return `<div class="space-card"><span class="ic ${role === "merchant" ? "teal" : "blue"}">${icon(role === "merchant" ? "store" : "bank")}</span>
-    <h2>${title}</h2><p>${text}</p><ul>${bullets.map((b) => `<li>${icon("check")}${b}</li>`).join("")}</ul>
-    <div class="row"><a class="btn brand" href="#/inscription/${slug}">Créer un compte</a><a class="btn" href="#/connexion/${slug}">Se connecter</a><a class="btn ghost" href="#/guide/${slug}">${icon("book")}Guide</a></div></div>`;
+  <div class="facts" role="list"><span role="listitem">PDF, Excel, CSV</span><span role="listitem">20 ratios expliqués</span><span role="listitem">Alertes justifiées</span><span role="listitem">Décision humaine</span></div>
+
+  <section class="esp" id="espaces" aria-label="Les deux espaces">
+    <article class="vol c"><div><p class="kick">Espace commerçant</p><h2>Je suis<br>commerçant</h2>
+      <p class="lead">Préparez un dossier financier solide et partagez-le avec l'établissement de crédit de votre choix.</p>
+      <ul><li>Importez vos états, votre balance ou votre journal de caisse</li><li>Vérifiez les chiffres lus automatiquement</li><li>Décidez qui peut consulter votre dossier</li></ul></div>
+      <div class="acts"><a class="btn brand" href="#/inscription/commercant">Créer un compte</a><a class="btn" href="#/connexion/commercant">Se connecter</a><a class="btn ghost" href="#/guide/commercant">Guide</a></div></article>
+    <article class="vol i"><div><p class="kick">Espace établissement</p><h2>Établissement<br>de crédits</h2>
+      <p class="lead">Analysez les dossiers partagés : ratios, évolution, anomalies, score et rapport PDF.</p>
+      <ul><li>Indicateurs et formules du guide Finance</li><li>Écarts signalés, score détaillé critère par critère</li><li>Décision prise et motivée par l'analyste</li></ul></div>
+      <div class="acts"><a class="btn brand" href="#/inscription/microfinance">Créer un compte</a><a class="btn" href="#/connexion/microfinance">Se connecter</a><a class="btn ghost" href="#/guide/microfinance">Guide</a></div></article>
+  </section>
+
+  <section class="sec" id="etapes" aria-labelledby="titre-etapes"><p class="kick">Comment ça marche</p><h2 class="titre" id="titre-etapes">Quatre<br>étapes.</h2>
+    <div id="etps">${ETAPES.map(([t, d], i) => `<div class="et${i === 0 ? " on" : ""}"><button aria-expanded="${i === 0}" aria-controls="et${i}"><span class="nu">0${i + 1}</span><span class="tt">${t}</span><span class="pl" aria-hidden="true">+</span></button>
+      <div class="in" id="et${i}"><p>${d}</p></div></div>`).join("")}</div></section>
+  <div class="facts inv" role="list"><span role="listitem">Données partagées avec votre accord</span><span role="listitem">Chaque consultation est tracée</span></div>
+
+  <section class="sec" id="lexique" aria-labelledby="titre-lex"><p class="kick">Le guide</p><h2 class="titre" id="titre-lex">Les mots<br>du dossier.</h2>
+    <div id="lx">${LEXIQUE.map(([t, d], i) => `<div class="lex-row"><button aria-expanded="false" aria-controls="lx${i}">${t}</button><div class="df" id="lx${i}">${d}</div></div>`).join("")}</div>
+    <p style="margin-top:24px;display:flex;gap:10px;flex-wrap:wrap"><a class="btn" href="#/guide/commercant">Guide commerçant complet</a><a class="btn" href="#/guide/microfinance">Guide établissement complet</a></p></section>
+  <footer class="pied">CreditWise ne prête pas d'argent et ne remplace pas le banquier. Prototype GPU Challenge 2026 : entreprises et personnes de démonstration fictives. <a href="#/cgu">Conditions générales</a>, <a href="#/confidentialite">Confidentialité</a></footer>`;
+  accordion(app(), "et"); accordion(app(), "lex-row");
+  $$("[data-goto]").forEach((a) => (a.onclick = (e) => { e.preventDefault(); $("#" + a.dataset.goto)?.scrollIntoView(); }));
 }
 
 // ------------------------------------------------------------------ connexion et inscription (code par e-mail, Google)
@@ -725,16 +746,20 @@ async function viewDossier(cid, rid, sim = null) {
 
   <div class="card" style="margin-bottom:18px;padding:18px 22px"><div class="row" style="align-items:flex-end">
     <div class="field" style="min-width:250px;max-width:300px"><label>Demande de crédit</label><select id="reqsel">${d.requests.map((q) => `<option value="${q.id}" ${q.id === rid ? "selected" : ""}>#${q.id} : ${money(q.amount)} · ${q.duration_months} mois</option>`).join("")}<option value="" ${!rid ? "selected" : ""}>Sans demande</option></select></div>
-    <div class="field"><label>Montant (FCFA)</label><input id="s_amount" type="number" step="50000" value="${cur?.amount ?? ""}"></div>
-    <div class="field" style="max-width:140px"><label>Durée (mois)</label><input id="s_dur" type="number" value="${cur?.duration_months ?? 12}"></div>
-    <div class="field" style="max-width:140px"><label>Taux annuel (%)</label><input id="s_rate" type="number" step="0.5" value="${cur ? +(cur.annual_rate * 100).toFixed(2) : 15}"></div>
+    </div><div class="sim-grid" style="margin-top:16px">
+    <div class="field"><label for="s_amount">Montant <b id="o_amount" aria-live="polite"></b></label><input id="s_amount" type="range" min="100000" max="10000000" step="50000" value="${cur?.amount ?? 1000000}"></div>
+    <div class="field"><label for="s_dur">Durée <b id="o_dur" aria-live="polite"></b></label><input id="s_dur" type="range" min="3" max="60" step="1" value="${cur?.duration_months ?? 12}"></div>
+    <div class="field"><label for="s_rate">Taux annuel <b id="o_rate" aria-live="polite"></b></label><input id="s_rate" type="range" min="0" max="30" step="0.5" value="${cur ? +(cur.annual_rate * 100).toFixed(2) : 15}"></div>
+    </div><div class="row" style="margin-top:6px">
     <button class="btn" id="simbtn">${icon("bolt")}Simuler « et si »</button>
     <button class="btn ${sim ? "primary" : ""}" id="savereq">${icon("plus")}Enregistrer comme demande</button>
   </div>${sim ? `<div class="notice" style="margin-top:12px">${icon("info")}<span>Simulation : rien n'est enregistré.</span></div>` : req?.purpose ? `<div class="small muted" style="margin-top:10px">Objet : ${esc(req.purpose)}</div>` : ""}</div>
 
   <div class="grid g3">
     <div class="card"><div class="card-head"><h2>Score de risque</h2><span class="chip plain neutral">règles explicables</span></div>
-      <div style="display:flex;gap:18px;align-items:center">${scoreRing(s.score, s.capped, 128, 11)}<div><span class="verdict ${verdictClass(s.score, s.capped)}">${verdictShort(s)}</span><div class="small" style="margin-top:8px;color:var(--ink-2)">${esc(s.category)}</div><div class="small muted" style="margin-top:6px">${nHigh ? `<b style="color:var(--red)">${nHigh}</b> alerte(s) élevée(s) · ` : ""}${a.alerts.length} signal(aux) au total</div></div></div>
+      <div style="display:flex;gap:18px;align-items:flex-end;flex-wrap:wrap"><div class="giant" style="color:${scoreColor(s.score, s.capped)}" aria-label="Score ${s.score === null ? "non calculable" : Math.round(s.score) + " sur 100"}">${s.score === null ? "-" : Math.round(s.score)}<span style="font-size:18px;letter-spacing:0">/100</span></div><div><span class="verdict ${verdictClass(s.score, s.capped)}">${verdictShort(s)}</span><div class="small" style="margin-top:8px;color:var(--ink-2)">${esc(s.category)}</div><div class="small muted" style="margin-top:6px">${nHigh ? `<b style="color:var(--red)">${nHigh}</b> alerte(s) élevée(s) · ` : ""}${a.alerts.length} signal(aux) au total</div></div></div>
+      <div class="zone" role="img" aria-label="Échelle de risque : moins de 60 risque élevé, 60 à 79 à examiner, 80 et plus favorable"><div class="z1"></div><div class="z2"></div><div class="z3"></div>${s.score === null ? "" : `<span class="rep" style="left:${s.score}%"></span>`}</div>
+      <p class="small" style="margin:0 0 14px;display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap"><span style="color:var(--red)">0 à 59 : risque élevé</span><span style="color:var(--amber)">60 à 79 : à examiner</span><span style="color:var(--teal)">80 et plus : favorable</span></p>
       <div style="margin-top:18px">${s.dimensions.map((x) => `<div class="dim"><div class="top"><span>${esc(x.label)} <span class="muted">· ${x.weight * 100} %</span></span><b>${x.note === null ? "n.c." : Math.round(x.note)}</b></div><div class="bar"><span style="width:${x.note ?? 0}%;background:${noteColor(x.note)}"></span></div></div>`).join("")}</div></div>
     <div class="card"><div class="card-head"><h2>Probabilité de défaut</h2><span class="chip plain good">données réelles</span></div>${p.available ? `
       <div class="big-pd" style="color:${p.relative_to_base > 2 ? "var(--red)" : p.relative_to_base > 1 ? "var(--amber)" : "var(--teal)"}">${pct(p.pd * 100)}</div>
@@ -745,7 +770,7 @@ async function viewDossier(cid, rid, sim = null) {
       : `<p class="muted">${esc(p.reason)}</p>`}</div>
     <div class="card"><div class="card-head"><h2>Capacité de remboursement</h2></div>
       <div style="padding:14px 16px;border-radius:12px;background:${dscr === null ? "var(--grey-bg)" : dscr >= 1.25 ? "var(--teal-bg)" : dscr >= 1 ? "var(--amber-bg)" : "var(--red-bg)"};margin-bottom:16px">
-        <div class="small" style="color:var(--ink-2);font-weight:600">DSCR avec le crédit demandé</div><div style="font-size:32px;font-weight:800;letter-spacing:-.03em;color:${dscrCol}">${fmtRatio(R.dscr_avec_credit)}</div>
+        <div class="small" style="color:var(--ink-2);font-weight:600">DSCR avec le crédit demandé</div><div class="giant" style="color:${dscrCol};margin:6px 0">${fmtRatio(R.dscr_avec_credit)}</div>
         <div class="small muted">${dscr === null ? "" : dscr >= 1.25 ? "Échéances couvertes avec une marge" : dscr >= 1 ? "Couverture juste, sans marge de sécurité" : "Les flux ne couvrent pas les échéances"}</div></div>
       <dl class="kv">
       <dt>Flux disponible annuel (EBE - impôt)</dt><dd>${money(cr.cfads_annual)}</dd>
@@ -779,8 +804,10 @@ async function viewDossier(cid, rid, sim = null) {
     <div class="card"><h2>Fichiers sources</h2><div class="table-wrap"><table><thead><tr><th>Fichier</th><th>Type</th><th class="num">Valeurs</th><th class="num">Opér.</th></tr></thead><tbody>${a.documents.map((x) => `<tr><td class="small" style="font-weight:500">${esc(x.filename)}</td><td class="small">${KIND[x.kind] || esc(x.kind)}</td><td class="num">${x.n_values}</td><td class="num">${x.n_transactions}</td></tr>`).join("")}</tbody></table></div>
       <h3 style="margin-top:22px">Limites de l'analyse</h3><ul class="small muted" style="padding-left:18px;line-height:1.8;margin:0">${a.limits.map((l) => `<li>${esc(l)}</li>`).join("")}</ul></div></div></div>
   <div data-p="decision" class="hidden"><div class="grid g2">
-    <div class="card"><h2>Décision de l'analyste</h2>${req ? `<form id="dec"><div class="field"><label>Décision</label><select name="decision">${["Accordé", "Accordé sous conditions", "Refusé", "Ajourné : pièces complémentaires"].map((x) => `<option>${x}</option>`).join("")}</select></div>
-      <div class="field"><label>Motif (obligatoire, conservé dans le rapport)</label><textarea name="comment" rows="5" required minlength="5" placeholder="Ex. : DSCR de 1,41 avec le crédit, activité stable sur 24 mois ; demander les relevés bancaires des 3 derniers mois."></textarea></div>
+    <div class="card"><h2>Décision de l'analyste</h2>${req ? `<form id="dec"><input type="hidden" name="decision" id="decval" value="">
+      <div class="dec-opts" role="group" aria-label="Choix de la décision">${[["Accordé", "Accorder"], ["Accordé sous conditions", "Accorder sous conditions"], ["Ajourné : pièces complémentaires", "Demander des pièces"], ["Refusé", "Refuser"]].map(([v, l]) => `<button type="button" class="dec-opt" data-v="${v}" aria-pressed="false">${l}<span aria-hidden="true">↗</span></button>`).join("")}</div>
+      <div class="field" style="margin-top:18px">
+      <label for="motif">Motif (obligatoire, conservé dans le rapport)</label><textarea id="motif" name="comment" rows="5" required minlength="5" placeholder="Ex. : DSCR de 1,41 avec le crédit, activité stable sur 24 mois ; demander les relevés bancaires des 3 derniers mois."></textarea></div>
       <button class="btn primary">${icon("check")}Enregistrer la décision</button></form><p class="small muted" style="margin:14px 0 0">La décision reste humaine : CreditWise prépare l'analyse, l'analyste habilité décide.</p>` : `<p class="muted">Sélectionnez ou créez une demande de crédit pour enregistrer une décision.</p>`}</div>
     <div class="card"><h2>Historique</h2>${req?.decision ? `<div style="display:flex;gap:12px;align-items:center;margin-bottom:12px">${decisionChip(req)}<span class="small muted">par ${esc(req.decision.analyst)} · ${esc(req.decision.decided_at.slice(0, 16))}</span></div><p style="margin:0 0 12px">${esc(req.decision.comment)}</p><p class="small muted" style="margin:0">Score au moment de la décision : ${req.decision.score === null ? "-" : Math.round(req.decision.score)} · PD : ${req.decision.pd === null ? "-" : pct(req.decision.pd * 100)}</p>` : `<p class="muted">Aucune décision enregistrée.</p>`}</div></div></div>`;
 
@@ -794,7 +821,16 @@ async function viewDossier(cid, rid, sim = null) {
     const r = await api("/api/requests", { json: { company_id: cid, ...v, purpose } }); toast("Demande enregistrée"); location.hash = `#/i/dossier/${cid}/${r.id}`; };
   $("#savereq").onclick = createReq;
   if ($("#dl")) $("#dl").onclick = () => download(`/api/requests/${rid}/report.pdf`, "Rapport_CreditWise.pdf");
+  $$(".dec-opt").forEach((b) => (b.onclick = () => {
+    $$(".dec-opt").forEach((x) => x.setAttribute("aria-pressed", String(x === b))); $("#decval").value = b.dataset.v;
+  }));
+  const showSim = () => {
+    $("#o_amount").textContent = money(+$("#s_amount").value); $("#o_dur").textContent = $("#s_dur").value + " mois";
+    $("#o_rate").textContent = pct(+$("#s_rate").value);
+  };
+  ["s_amount", "s_dur", "s_rate"].forEach((id) => $("#" + id).addEventListener("input", showSim)); showSim();
   if ($("#dec")) $("#dec").onsubmit = async (e) => { e.preventDefault(); const f = Object.fromEntries(new FormData(e.target));
+    if (!f.decision) { toast("Choisissez une décision"); $(".dec-opt")?.focus(); return; }
     try { await api(`/api/requests/${rid}/decision`, { json: f }); toast("Décision enregistrée et tracée"); viewDossier(cid, rid); } catch (err) { toast(err.message); } };
 }
 
