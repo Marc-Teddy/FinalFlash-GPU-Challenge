@@ -131,14 +131,63 @@ def load_documents(con, company_id: int) -> list[dict]:
     return [{**dict(r), "unmatched": json.loads(r["unmatched"] or "[]"), "warnings": json.loads(r["warnings"] or "[]")} for r in rows]
 
 
-def full_analysis(con, company_id: int, request: dict | None = None, today: date | None = None) -> dict:
+def proof(a: dict, txs: list[dict]) -> dict:
+    """Rapprochement mois par mois : ventes déclarées face aux pièces (grand livre, relevé mobile money).
+    Une vente est « justifiée » si le grand livre la retrouve à 2 % près."""
+    from collections import defaultdict
+
+    from .engine.finance import ym
+    from .engine.items import match_account
+
+    gl, mm_in, mm_out = defaultdict(float), defaultdict(float), defaultdict(float)
+    for t in txs:
+        if not t["date"]:
+            continue
+        m = ym(t["date"])
+        if t["account"] == "MM":
+            mm_in[m] += t["debit"]; mm_out[m] += t["credit"]
+        elif match_account(t["account"]) == "ventes":
+            gl[m] += t["credit"] - t["debit"]
+    rows, justified = [], 0
+    for r in a.get("monthly", []):
+        m, v = r["month"], r["ventes"]
+        if v is None:
+            continue
+        g = gl.get(m)
+        ecart = None if g is None or not v else (g - v) / v * 100
+        cover = None if m not in mm_in or not v else mm_in[m] / v * 100
+        if ecart is not None and abs(ecart) <= 2:
+            statut, ok = "Justifié par le grand livre", True
+        elif ecart is not None:
+            statut, ok = "Écart avec le grand livre", False
+        elif cover is not None and cover >= 50:
+            statut, ok = "Partiellement justifié (mobile money)", False
+        else:
+            statut, ok = "Déclaré, sans pièce", False
+        justified += ok
+        rows.append({"month": m, "ventes": v, "grand_livre": g and round(g), "ecart_pct": ecart and round(ecart, 1),
+                     "mobile_money_entrees": round(mm_in[m]) if m in mm_in else None, "couverture_mm_pct": cover and round(cover),
+                     "statut": statut, "justifie": ok})
+    return {"rows": rows, "justified_months": justified, "months": len(rows),
+            "sources": [s for s, c in (("grand livre", gl), ("relevé mobile money", mm_in)) if c]}
+
+
+def full_analysis(con, company_id: int, request: dict | None = None, today: date | None = None,
+                  local_default_rate: float | None = None) -> dict:
     values = load_values(con, company_id)
     txs = load_transactions(con, company_id)
     docs = load_documents(con, company_id)
     a = analyse(values, request)
+    pr = proof(a, txs) if not a.get("empty") else {"rows": [], "justified_months": 0, "months": 0, "sources": []}
+    if pr["justified_months"]:  # une vente retrouvée dans le grand livre compte comme justifiée
+        sc = a["coverage"]["status_counts"]
+        for _ in range(pr["justified_months"]):
+            src = next((k for k in ("declare", "verifie", "extrait", "estime") if sc.get(k)), None)
+            if src:
+                sc[src] -= 1; sc["justifie"] = sc.get("justifie", 0) + 1
     alerts = detect(a, txs, docs, today)
     score = rule_score(a, alerts)
-    pd = pd_estimate(a) if not a.get("empty") else {"available": False, "reason": "Aucune donnée."}
+    pd = pd_estimate(a, local_default_rate=local_default_rate) if not a.get("empty") else {"available": False, "reason": "Aucune donnée."}
     company = dict(con.execute("SELECT * FROM companies WHERE id=?", (company_id,)).fetchone())
     doc_kinds = {d["kind"] for d in docs}
     checklist = [
@@ -150,7 +199,7 @@ def full_analysis(con, company_id: int, request: dict | None = None, today: date
         {"document": "Historique de remboursement de crédits", "ok": False, "note": "Non disponible : à demander"},
     ]
     out = {k: v for k, v in a.items() if k not in {"pnl", "balances", "flows_raw", "stocks_raw", "conflicts", "ratios_by_key"}}
-    out.update({"company": company, "alerts": alerts, "score": score, "pd": pd, "documents": public_documents(docs),
+    out.update({"proof": pr, "company": company, "alerts": alerts, "score": score, "pd": pd, "documents": public_documents(docs),
                 "n_transactions": len(txs), "checklist": checklist,
                 "limits": [
                     "Les données de démonstration sont fictives ; le modèle PD est entraîné sur des données réelles d'entreprises polonaises.",

@@ -14,6 +14,7 @@ from reportlab.lib.styles import ParagraphStyle, getSampleStyleSheet
 from reportlab.lib.units import cm
 from reportlab.platypus import Image, KeepTogether, Paragraph, SimpleDocTemplate, Spacer, Table, TableStyle
 
+from .engine.finance import STATUS_LABEL
 from .engine.items import ITEMS
 
 NAVY = colors.HexColor("#0b2545")
@@ -122,6 +123,11 @@ def analysis_report(a: dict, request: dict | None, analyst: str, decision: dict 
     doc = SimpleDocTemplate(buf, pagesize=A4, leftMargin=1.6 * cm, rightMargin=1.6 * cm, topMargin=1.4 * cm, bottomMargin=1.6 * cm,
                             title=f"CreditWise, rapport d'analyse : {a['company']['name']}")
     c, cov, s, pdm = a["company"], a["coverage"], a["score"], a["pd"]
+    num = [0]
+
+    def h(title):
+        num[0] += 1
+        el.append(Paragraph(f"{num[0]}. {title}", H2))
     el = [_logo(), Spacer(1, 6)]
     el.append(Paragraph("Rapport d'analyse de crédit", H1))
     el.append(Paragraph(f"<b>{c['name']}</b>, {c.get('sector') or ''}, {c.get('city') or ''}. "
@@ -131,7 +137,7 @@ def analysis_report(a: dict, request: dict | None, analyst: str, decision: dict 
                             f"{request['annual_rate'] * 100:.1f} %. Objet : {request.get('purpose') or 'non précisé'}. "
                             f"Échéance mensuelle estimée : {money(a['credit']['new_installment'])}.", P))
     # Synthèse
-    el.append(Paragraph("1. Synthèse", H2))
+    h("Synthèse")
     R = {r["key"]: r for r in a["ratios"]}
     syn = [["Indicateur", "Valeur", "Lecture"],
            ["Score de risque (règles)", "-" if s["score"] is None else f"{s['score']:.0f} / 100", Paragraph(s["category"], CELL)],
@@ -145,12 +151,39 @@ def analysis_report(a: dict, request: dict | None, analyst: str, decision: dict 
         el.append(Paragraph("• " + e, P))
     el.append(Paragraph("Ces éléments éclairent la décision ; ils ne la remplacent pas. Aucune décision automatique de crédit.", SMALL))
 
+    h("Recommandation et justification")
+    if decision:
+        el.append(Paragraph(f"Décision : <b>{decision['decision']}</b>, par {decision['analyst']} le {decision['decided_at'][:16]}.", P))
+        el.append(Paragraph("Motif de l'analyste : " + decision["comment"], P))
+    else:
+        el.append(Paragraph("<b>Recommandation à compléter par l'analyste</b> (aucune décision enregistrée à la date du rapport).", P))
+    forts = [e.split(" : ", 1)[1] for e in s["explanations"] if e.startswith("Atout")]
+    prudence = [e.split(" : ", 1)[1] for e in s["explanations"] if e.startswith("À surveiller")] + \
+               [e for e in s["explanations"] if "plafonnée" in e] + [x["title"] for x in a["alerts"] if x["severity"] == "elevee"]
+    el.append(_table([["Éléments favorables", "Éléments de prudence"],
+                      [Paragraph("<br/>".join("• " + x for x in forts) or "Aucun point fort marqué.", CELL),
+                       Paragraph("<br/>".join("• " + x for x in prudence) or "Aucun point bloquant.", CELL)]],
+                     [8.9 * cm, 8.9 * cm], zebra=False))
+    cr, R = a["credit"], {r["key"]: r for r in a["ratios"]}
+    el.append(Spacer(1, 6))
+    cap = [["Capacité de remboursement", "Valeur"],
+           ["Flux disponible annuel (EBE - impôt)", money(cr["cfads_annual"])],
+           ["Échéances actuelles sur 12 mois (capital + intérêts)", money(cr["existing_service_annual"])],
+           ["Mensualité du crédit demandé", money(cr["new_installment"])],
+           ["Échéances du nouveau crédit sur 12 mois", money(cr["new_service_annual"])],
+           ["DSCR actuel", fmt_ratio(R["dscr_actuel"])], ["DSCR avec le crédit demandé", fmt_ratio(R["dscr_avec_credit"])],
+           ["Mensualité maximale supportable (DSCR 1,25)", money(cr["max_installment_dscr_1_25"])]]
+    if cr.get("new_installment") is not None and cr.get("max_installment_dscr_1_25") is not None:
+        ecart = cr["max_installment_dscr_1_25"] - cr["new_installment"]
+        cap.append(["Marge entre mensualité supportable et demandée", money(ecart)])
+    el.append(_table(cap, [12 * cm, 5.8 * cm]))
+
     # Couverture
-    el.append(Paragraph("2. Période couverte et documents", H2))
+    h("Période couverte et documents")
     el.append(Paragraph(f"Données de {cov['first_month']} à {cov['last_month']}, {cov['n_months_pnl']} mois de compte de résultat, "
                         f"dernier bilan : {cov['last_balance'] or 'aucun'}. Mois manquants : {', '.join(cov['missing_months']) or 'aucun'}. "
                         + ("Montants annuels <b>annualisés</b> (moins de 12 mois). " if cov["annualised"] else "")
-                        + "Statut des valeurs utilisées : " + ", ".join(f"{k} {v}" for k, v in cov["status_counts"].items()) + ".", P))
+                        + "Statut des valeurs utilisées : " + ", ".join(f"{v} {STATUS_LABEL.get(k, k)}" for k, v in cov["status_counts"].items()) + ".", P))
     rows = [["Document attendu", "Reçu", "Remarque"]] + [[x["document"], "Oui" if x["ok"] else "Non", Paragraph(x.get("note", ""), CELL)]
                                                          for x in a["checklist"]]
     el.append(_table(rows, [7.5 * cm, 1.6 * cm, 8.7 * cm]))
@@ -159,8 +192,26 @@ def analysis_report(a: dict, request: dict | None, analyst: str, decision: dict 
     el.append(Spacer(1, 4))
     el.append(_table(docs, [6.5 * cm, 3.6 * cm, 1.8 * cm, 2.1 * cm, 3.8 * cm]))
 
+    h("Niveau de preuve des données")
+    total = sum(cov["status_counts"].values()) or 1
+    st = [["Statut des valeurs", "Nombre", "Part"]] + [[STATUS_LABEL.get(k, k), str(v), f"{v / total * 100:.0f} %"]
+                                                        for k, v in sorted(cov["status_counts"].items(), key=lambda kv: -kv[1])]
+    el.append(_table(st, [9 * cm, 3 * cm, 5.8 * cm]))
+    el.append(Paragraph("Justifié : retrouvé dans une pièce (grand livre, relevé). Confirmé : validé par le commerçant. "
+                        "Déclaré : saisi ou exporté sans pièce. Extrait : lu automatiquement, non vérifié. Estimé : évaluation du commerçant.", SMALL))
+    pr = a.get("proof") or {}
+    if pr.get("rows"):
+        el.append(Paragraph(f"Rapprochement des ventes : {pr['justified_months']} mois justifiés sur {pr['months']}"
+                            + (f" (sources : {', '.join(pr['sources'])})." if pr.get("sources") else " (aucune pièce de rapprochement fournie)."), P))
+        rows = [["Mois", "Ventes déclarées", "Grand livre", "Écart", "Entrées mobile money", "Statut"]]
+        for r in pr["rows"][-12:]:
+            rows.append([r["month"], money(r["ventes"]), money(r["grand_livre"]),
+                         "-" if r["ecart_pct"] is None else f"{r['ecart_pct']:+.1f} %".replace(".", ","),
+                         money(r["mobile_money_entrees"]), Paragraph(r["statut"], CELL)])
+        el.append(_table(rows, [1.8 * cm, 3.2 * cm, 3.2 * cm, 1.8 * cm, 3.4 * cm, 4.4 * cm]))
+
     # Évolution
-    el.append(Paragraph("3. Évolution mensuelle et trimestrielle", H2))
+    h("Évolution mensuelle et trimestrielle")
     el.append(_chart(a))
     qrows = [["Trimestre", "Chiffre d'affaires", "vs trimestre préc.", "vs même trimestre N-1"]]
     for q in a["quarterly"]:
@@ -171,13 +222,13 @@ def analysis_report(a: dict, request: dict | None, analyst: str, decision: dict 
     el.append(Paragraph("Les trimestres incomplets ne sont pas comparés (périodes de durées différentes).", SMALL))
 
     # Ratios
-    el.append(Paragraph("4. Ratios financiers et formules", H2))
+    h("Ratios financiers et formules")
     rr = [["Ratio", "Valeur", "Formule"]] + [[Paragraph(r["label"], CELL), fmt_ratio(r), Paragraph(r["formula"] + (
         f". <i>{r['reason']}</i>" if r["value"] is None else ""), CELL)] for r in a["ratios"]]
     el.append(_table(rr, [5.4 * cm, 3.2 * cm, 9.2 * cm]))
 
     # Alertes
-    el.append(Paragraph(f"5. Anomalies et points de vigilance ({len(a['alerts'])})", H2))
+    h(f"Anomalies et points de vigilance ({len(a['alerts'])})")
     if not a["alerts"]:
         el.append(Paragraph("Aucune anomalie détectée par les contrôles programmés.", P))
     ar = [["Sévérité", "Alerte", "Raison du signalement"]]
@@ -189,9 +240,16 @@ def analysis_report(a: dict, request: dict | None, analyst: str, decision: dict 
     if a["alerts"]:
         el.append(_table(ar, [1.9 * cm, 4.6 * cm, 11.3 * cm]))
     el.append(Paragraph("Une anomalie mérite une vérification ; elle ne prouve pas une fraude.", SMALL))
+    questions = list(dict.fromkeys(q for x in a["alerts"] for q in x.get("questions", [])))
+    h("Questions à poser au commerçant")
+    if questions:
+        for k, q in enumerate(questions, 1):
+            el.append(Paragraph(f"{k}. {q}", P))
+    else:
+        el.append(Paragraph("Aucune question particulière issue des contrôles.", P))
 
     # Score
-    el.append(Paragraph("6. Détail du score de risque (règles explicables)", H2))
+    h("Détail du score de risque (règles explicables)")
     sr = [["Dimension (poids)", "Critère", "Valeur", "Note", "Règle"]]
     for d in s["dimensions"]:
         note = "-" if d["note"] is None else f"{d['note']:.0f}"
@@ -203,13 +261,15 @@ def analysis_report(a: dict, request: dict | None, analyst: str, decision: dict 
     el.append(Paragraph(s["weights_note"], SMALL))
 
     # PD
-    el.append(Paragraph("7. Probabilité de défaut indicative (modèle statistique)", H2))
+    h("Probabilité de défaut indicative (modèle statistique)")
     if pdm.get("available"):
         ds, m, b = pdm["dataset"], pdm["metrics"], pdm["baseline_metrics"]
         el.append(Paragraph(f"PD estimée : <b>{pdm['pd'] * 100:.1f} %</b> à un an ({pdm['variant_label']}). Modèle {pdm['model']} entraîné sur "
                             f"<b>données réelles</b> : {ds['name']} ({ds['rows']} entreprises, licence {ds['license']}). "
                             f"Test : ROC-AUC {m['roc_auc']:.3f}, PR-AUC {m['pr_auc']:.3f} (régression logistique de référence : "
                             f"{b['roc_auc']:.3f} / {b['pr_auc']:.3f}).", P))
+        el.append(Paragraph(pdm.get("calibration_note", "") + (f" Valeur brute du modèle : {pdm['pd_raw'] * 100:.1f} %.".replace(".", ",", 1)
+                                                              if pdm.get("recalibrated") else ""), P))
         fr = [["Facteur principal", "Valeur", "Effet"]] + [[Paragraph(f["label"], CELL), f"{f['value']}" + (" (imputé)" if f["imputed"] else ""),
                                                             f["effect"]] for f in pdm["factors"]]
         el.append(_table(fr, [9 * cm, 3.5 * cm, 5.3 * cm]))
@@ -223,15 +283,21 @@ def analysis_report(a: dict, request: dict | None, analyst: str, decision: dict 
         el.append(Paragraph(pdm.get("reason", "Non disponible."), P))
 
     # Limites et décision
-    el.append(Paragraph("8. Limites de l'analyse", H2))
+    h("Limites de l'analyse")
     for lim in a["limits"]:
         el.append(Paragraph("• " + lim, P))
-    el.append(Paragraph("9. Décision de l'analyste", H2))
+    h("Décision de l'analyste")
     if decision:
         el.append(KeepTogether([Paragraph(f"<b>{decision['decision']}</b>, par {decision['analyst']} le {decision['decided_at'][:16]}.", P),
                                 Paragraph("Motif : " + decision["comment"], P)]))
     else:
         el.append(Paragraph("Aucune décision enregistrée à la date du rapport. Décision réservée à un analyste habilité.", P))
+    h("Annexe : détail mois par mois")
+    ann = [["Mois", "Ventes", "Marge commerciale", "Résultat net", "Trésorerie nette", "vs mois préc."]]
+    for r in a["monthly"][-24:]:
+        ann.append([r["month"], money(r["ventes"]), money(r["marge_commerciale"]), money(r["resultat_net"]),
+                    money(r["tresorerie_nette_constatee"]), "-" if r["var_mom"] is None else f"{r['var_mom']:+.1f} %".replace(".", ",")])
+    el.append(_table(ann, [1.8 * cm, 3.4 * cm, 3.4 * cm, 3.2 * cm, 3.4 * cm, 2.6 * cm]))
     doc.build(el, onFirstPage=_footer(f"CreditWise, document confidentiel : {c['name']}"),
               onLaterPages=_footer(f"CreditWise, document confidentiel : {c['name']}"))
     return buf.getvalue()
@@ -268,7 +334,7 @@ def dossier_pdf(a: dict, payload: dict, password: str | None = None) -> bytes:
     el.append(_table([["Fichier source", "Type", "Valeurs", "Importé le"]] +
                      [[Paragraph(d["filename"], CELL), d["kind"], str(d["n_values"]), d["uploaded_at"][:16]] for d in a["documents"]],
                      [7.5 * cm, 4 * cm, 2.3 * cm, 4 * cm]))
-    el.append(Paragraph("Statuts : " + ", ".join(f"{k} {v}" for k, v in cov["status_counts"].items())
+    el.append(Paragraph("Statuts : " + ", ".join(f"{v} {STATUS_LABEL.get(k, k)}" for k, v in cov["status_counts"].items())
                         + ". Les valeurs extraites automatiquement et non vérifiées ne sont pas certaines.", SMALL))
     doc.build(el, onFirstPage=_footer(f"Dossier confidentiel, partage soumis à l'autorisation de {c['name']}"),
               onLaterPages=_footer(f"Dossier confidentiel, partage soumis à l'autorisation de {c['name']}"))

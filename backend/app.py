@@ -377,6 +377,60 @@ async def upload(company_id: int, files: list[UploadFile] = File(...), user=Depe
     return clean({"results": results})
 
 
+Montant = Annotated[float | None, Field(ge=0, le=1e12)]
+
+
+class Saisie(BaseModel):
+    """Saisie simplifiée d'un mois, pour un commerçant sans comptabilité."""
+    mois: str = Field(pattern=r"^20\d{2}-(0[1-9]|1[0-2])$")
+    ventes: float = Field(ge=0, le=1e12)
+    achats_marchandises: Montant = None
+    loyers: Montant = None
+    charges_personnel: Montant = None
+    transport: Montant = None
+    autres_charges_externes: Montant = None
+    remboursement_emprunts: Montant = None
+    charges_financieres: Montant = None
+    tresorerie: Montant = None          # caisse + banque + mobile money
+    stocks: Montant = None              # estimation
+    immobilisations: Montant = None     # matériel, estimation
+    creances_clients: Montant = None
+    dettes_fournisseurs: Montant = None
+    dettes_financieres_lt: Montant = None
+
+
+ESTIMES = {"stocks", "immobilisations"}
+
+
+@app.post("/api/companies/{company_id}/saisie")
+def saisie(company_id: int, body: Saisie, user=Depends(current_user)):
+    import calendar
+    y, m = int(body.mois[:4]), int(body.mois[5:])
+    start, end = date(y, m, 1).isoformat(), date(y, m, calendar.monthrange(y, m)[1]).isoformat()
+    name = f"Saisie du commerçant ({body.mois})"
+    data = body.model_dump(exclude={"mois"}, exclude_none=True)
+    with db.tx() as con:
+        require_owner(con, user, company_id)
+        old = con.execute("SELECT id FROM documents WHERE company_id=? AND filename=?", (company_id, name)).fetchall()
+        for d in old:  # une nouvelle saisie du même mois remplace la précédente
+            con.execute("DELETE FROM fin_values WHERE document_id=?", (d["id"],))
+            con.execute("DELETE FROM documents WHERE id=?", (d["id"],))
+        doc = con.execute("INSERT INTO documents(company_id, filename, kind, format, sha256, path, uploaded_by, n_values, unmatched, warnings) "
+                          "VALUES (?,?,?,?,?,?,?,?,?,?)", (company_id, name, "saisie_simplifiee", "saisie", secrets.token_hex(16), "",
+                                                           user["id"], 0, "[]", "[]")).lastrowid
+        rows = [(k, v, "estime" if k in ESTIMES else "declare", None) for k, v in data.items()]
+        actifs = sum(data.get(k, 0) for k in ("tresorerie", "stocks", "immobilisations", "creances_clients"))
+        dettes = sum(data.get(k, 0) for k in ("dettes_fournisseurs", "dettes_financieres_lt"))
+        if any(k in data for k in ("tresorerie", "stocks", "immobilisations")):
+            rows.append(("capitaux_propres", actifs - dettes, "estime", "Estimé : ce que possède le commerce moins ce qu'il doit"))
+        con.executemany("INSERT INTO fin_values(company_id, period_start, period_end, document_id, source_name, item, amount, status, "
+                        "source_label, confidence, comment) VALUES (?,?,?,?,?,?,?,?,?,?,?)",
+                        [(company_id, start, end, doc, name, k, v, st, "saisie simplifiée", 1.0, c) for k, v, st, c in rows])
+        con.execute("UPDATE documents SET n_values=? WHERE id=?", (len(rows), doc))
+        db.log(con, user["id"], company_id, "saisie_simplifiee", body.mois)
+    return {"ok": True, "n_values": len(rows)}
+
+
 @app.get("/api/companies/{company_id}/documents")
 def documents(company_id: int, user=Depends(current_user)):
     with db.tx() as con:
@@ -460,7 +514,8 @@ def _request(con, request_id):
 def analysis(company_id: int, request_id: int | None = None,
              amount: Annotated[float | None, Query(gt=0, le=1e12)] = None,
              duration_months: Annotated[int | None, Query(gt=0, le=120)] = None,
-             annual_rate: Annotated[float | None, Query(ge=0, le=1)] = None, user=Depends(current_user)):
+             annual_rate: Annotated[float | None, Query(ge=0, le=1)] = None,
+             taux_defaut: Annotated[float | None, Query(gt=0, lt=0.5)] = None, user=Depends(current_user)):
     with db.tx() as con:
         require_read(con, user, company_id)
         req = None
@@ -470,7 +525,7 @@ def analysis(company_id: int, request_id: int | None = None,
                 raise HTTPException(400)
         elif amount:
             req = {"amount": amount, "duration_months": duration_months or 12, "annual_rate": annual_rate or 0.15}
-        res = services.full_analysis(con, company_id, req)
+        res = services.full_analysis(con, company_id, req, local_default_rate=taux_defaut)
         if user["role"] == "institution":
             db.log(con, user["id"], company_id, "consultation_analyse", f"demande {request_id}" if request_id else None)
     return JSONResponse(clean(res))
@@ -629,11 +684,11 @@ def decide(request_id: int, body: Decision, user=Depends(current_user)):
 
 
 @app.get("/api/requests/{request_id}/report.pdf")
-def report(request_id: int, user=Depends(current_user)):
+def report(request_id: int, taux_defaut: Annotated[float | None, Query(gt=0, lt=0.5)] = None, user=Depends(current_user)):
     with db.tx() as con:
         req = _request(con, request_id)
         require_read(con, user, req["company_id"])
-        a = services.full_analysis(con, req["company_id"], req)
+        a = services.full_analysis(con, req["company_id"], req, local_default_rate=taux_defaut)
         d = con.execute("SELECT d.*, u.display_name AS analyst FROM decisions d JOIN users u ON u.id=d.analyst_user_id "
                         "WHERE request_id=? ORDER BY d.id DESC LIMIT 1", (request_id,)).fetchone()
         pdf = reports.analysis_report(a, req, f"{user['display_name']} ({user['organisation'] or ''})", dict(d) if d else None)
