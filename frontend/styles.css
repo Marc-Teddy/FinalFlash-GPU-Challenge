@@ -370,3 +370,4 @@ details summary { cursor: pointer; font-weight: 700; color: var(--ink); }
   .onboard-steps { grid-template-columns: 1fr; } .ob-step + .ob-step { border-left: 0; border-top: var(--rule); }
   .alert-item { grid-template-columns: 44px 1fr; }
 }
+.chip.justifie { background: var(--teal); color: #fff; border-color: var(--teal); }

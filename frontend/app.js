@@ -11,10 +11,10 @@ const money = (v) => (v === null || v === undefined ? "-" : nf0.format(v) + " FC
 const mfcfa = (v) => (v === null || v === undefined ? "-" : (v / 1e6).toLocaleString("fr-FR", { maximumFractionDigits: 2 }) + " M");
 const pct = (v, d = 1) => (v === null || v === undefined ? "-" : v.toLocaleString("fr-FR", { maximumFractionDigits: d, minimumFractionDigits: d }) + " %");
 const signed = (v) => (v === null || v === undefined ? "-" : (v > 0 ? "+" : "") + pct(v));
-const STATUS = { declare: "déclaré", extrait: "extrait auto.", verifie: "vérifié", estime: "estimé" };
+const STATUS = { justifie: "justifié par pièce", verifie: "confirmé", declare: "déclaré", extrait: "extrait auto.", estime: "estimé" };
 const SEV = { elevee: "Élevée", attention: "Attention", info: "Info" };
 const KIND = { etat_financier: "États financiers (XLSX/CSV)", etat_financier_long: "États financiers (format long)", etat_financier_pdf: "États financiers PDF",
-  balance_generale: "Balance générale", grand_livre: "Grand livre / journal", dossier_creditwise: "Dossier CreditWise signé", inconnu: "Non reconnu" };
+  balance_generale: "Balance générale", grand_livre: "Grand livre / journal", releve_mobile_money: "Relevé mobile money", saisie_simplifiee: "Saisie simplifiée", dossier_creditwise: "Dossier CreditWise signé", inconnu: "Non reconnu" };
 let ME = null;
 let SEQ = 0; // numéro de navigation : une réponse arrivée après un changement de page est ignorée
 const charts = [];
@@ -489,7 +489,8 @@ function alertsHtml(alerts, empty = "Aucune anomalie détectée par les contrôl
   if (!alerts.length) return `<div class="empty-ok">${icon("check").replace("<svg ", '<svg width="22" height="22" ')}${empty}</div>`;
   return alerts.map((x) => `<div class="alert-item ${x.severity}"><span class="aic">${icon(x.severity === "info" ? "info" : "alert")}</span><div style="min-width:0">
     <div class="title">${esc(x.title)} <span class="chip ${x.severity}">${SEV[x.severity]}</span></div><div class="reason">${esc(x.reason)}</div>
-    ${x.explanation ? `<div class="expl">${esc(x.explanation)}</div>` : ""}<div class="method">Méthode : ${esc(x.method)}${x.period ? " · période " + esc(x.period) : ""}</div></div></div>`).join("");
+    ${x.explanation ? `<div class="expl">${esc(x.explanation)}</div>` : ""}<div class="method">Méthode : ${esc(x.method)}${x.period ? " · période " + esc(x.period) : ""}</div>
+    ${x.questions?.length ? `<details style="margin-top:8px"><summary class="small">Questions à poser au commerçant (${x.questions.length})</summary><ul class="small" style="margin:6px 0 0;padding-left:18px">${x.questions.map((q) => `<li>${esc(q)}</li>`).join("")}</ul></details>` : ""}</div></div>`).join("");
 }
 
 function kpis(a) {
@@ -570,6 +571,17 @@ async function viewDocuments(cid, lastResults = "") {
         <div class="dz-ic">${icon("upload")}</div><b style="font-size:15px">Glissez-déposez vos fichiers ici</b><div class="muted small" style="margin-top:4px">ou <span style="color:var(--blue);font-weight:600">parcourez votre ordinateur</span>, plusieurs fichiers à la fois</div>
         <div style="margin-top:14px;display:flex;gap:6px;justify-content:center"><span class="chip plain neutral">PDF</span><span class="chip plain neutral">XLSX</span><span class="chip plain neutral">CSV</span></div></label>
       <div id="results">${lastResults}</div>
+      <details class="card" id="saisie-box"><summary><h2 style="display:inline;margin:0">Pas de comptabilité ? Saisie simplifiée du mois</h2></summary>
+        <p class="small" style="margin:10px 0 16px">Renseignez ce que vous connaissez, mois par mois. Les montants sont en FCFA. Le stock et le matériel sont des estimations : ils seront marqués « estimé ». Une nouvelle saisie du même mois remplace la précédente.</p>
+        <form id="saisie"><div class="grid" style="grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px">
+          ${[["mois", "Mois", "month", true], ["ventes", "Ventes du mois", "number", true], ["achats_marchandises", "Achats de marchandises", "number"],
+             ["loyers", "Loyer", "number"], ["charges_personnel", "Salaires", "number"], ["transport", "Transport", "number"],
+             ["autres_charges_externes", "Autres dépenses (électricité, eau...)", "number"], ["tresorerie", "Argent disponible fin de mois (caisse, banque, mobile money)", "number"],
+             ["stocks", "Valeur estimée du stock", "number"], ["immobilisations", "Valeur estimée du matériel", "number"],
+             ["creances_clients", "Ventes à crédit non encaissées", "number"], ["dettes_fournisseurs", "Dettes envers les fournisseurs", "number"],
+             ["dettes_financieres_lt", "Emprunt restant à rembourser", "number"], ["remboursement_emprunts", "Remboursement d'emprunt du mois", "number"]]
+            .map(([n, l, t, req]) => `<div class="field" style="margin:0"><label for="sf_${n}">${l}${req ? "" : ' <span class="muted" style="text-transform:none">(facultatif)</span>'}</label><input id="sf_${n}" name="${n}" type="${t}" ${t === "number" ? 'min="0" step="1000" inputmode="numeric"' : ""} ${req ? "required" : ""}></div>`).join("")}
+        </div><button class="btn brand" style="margin-top:16px">Enregistrer ce mois</button></form></details>
       <div class="card"><div class="card-head"><h2>Documents importés</h2><span class="chip plain neutral">${docs.length}</span></div>${docs.length ? `<div class="table-wrap"><table><thead><tr><th>Fichier</th><th>Type reconnu</th><th class="num">Valeurs</th><th class="num">Opérations</th><th>Importé le</th><th></th></tr></thead><tbody>
       ${docs.map((d) => `<tr><td><div style="display:flex;gap:10px;align-items:center"><span style="color:var(--muted)">${icon("file").replace("<svg ", '<svg width="18" height="18" ')}</span><div><b style="font-weight:600">${esc(d.filename)}</b>${d.warnings.length ? `<div class="muted small">${d.warnings.map(esc).join("<br>")}</div>` : ""}</div></div></td><td><span class="chip plain neutral">${KIND[d.kind] || esc(d.kind)}</span></td>
       <td class="num">${d.n_values}</td><td class="num">${d.n_transactions}</td><td class="small muted">${esc(d.uploaded_at.slice(0, 16))}</td>
@@ -582,6 +594,7 @@ async function viewDocuments(cid, lastResults = "") {
         <ul class="small muted" style="padding-left:18px;margin:0;line-height:1.9">
           <li>Tableau « poste × mois » (export logiciel)</li><li>Format long : periode_debut, periode_fin, poste, montant</li>
           <li>Balance : periode, compte, intitule, debit, credit</li><li>Grand livre : date, reference, tiers, libelle, compte, debit, credit</li>
+          <li>Relevé mobile money (MTN, Moov, Celtiis) : date, type, montant, solde. Pièce justificative</li>
           <li>PDF texte avec tableaux (lecture automatique, à vérifier)</li><li>Photos de reçus : prévu après le prototype (OCR)</li></ul></div>
     </div>
   </div>`;
@@ -596,6 +609,13 @@ async function viewDocuments(cid, lastResults = "") {
     } catch (e) { $("#results").innerHTML = `<div class="notice warn">${icon("alert")}<span>${esc(e.message)}</span></div>`; }
   };
   input.onchange = () => send(input.files);
+  $("#saisie").onsubmit = async (e) => {
+    e.preventDefault();
+    const body = {};
+    for (const [k, v] of new FormData(e.target)) if (v !== "") body[k] = k === "mois" ? v : Number(v);
+    try { await api(`/api/companies/${cid}/saisie`, { json: body }); toast(`Mois ${body.mois} enregistré`); await viewDocuments(cid); }
+    catch (err) { toast(err.message); }
+  };
   dz.ondragover = (e) => { e.preventDefault(); dz.classList.add("over"); };
   dz.ondragleave = () => dz.classList.remove("over");
   dz.ondrop = (e) => { e.preventDefault(); dz.classList.remove("over"); send(e.dataTransfer.files); };
@@ -609,7 +629,7 @@ async function viewData(cid) {
   const filter = counts.extrait ? "extrait" : "";
   app().innerHTML = `
   <div class="page-head"><div><div class="eyebrow">${icon("table").replace("<svg ", '<svg width="14" height="14" ')}Données</div><h1>Données financières normalisées</h1><p class="sub">Chaque valeur conserve sa source, sa période et son niveau de fiabilité. Une valeur extraite automatiquement doit être vérifiée.</p></div></div>
-  <div class="grid g4" style="margin-bottom:18px">${["declare", "extrait", "verifie", "estime"].map((s) => `<div class="card kpi" style="padding:16px"><div><div class="label"><span class="chip ${s}">${STATUS[s]}</span></div><div class="value" style="font-size:22px;margin-top:8px">${nf0.format(counts[s] || 0)}</div></div></div>`).join("")}</div>
+  <div class="grid" style="margin-bottom:18px;grid-template-columns:repeat(auto-fit,minmax(170px,1fr))">${["justifie", "verifie", "declare", "extrait", "estime"].map((s) => `<div class="card kpi" style="padding:16px"><div><div class="label"><span class="chip ${s}">${STATUS[s]}</span></div><div class="value" style="font-size:22px;margin-top:8px">${nf0.format(counts[s] || 0)}</div></div></div>`).join("")}</div>
   <div class="card">
     <div class="row" style="margin-bottom:16px">
       <div class="field"><label>Statut</label><select id="st"><option value="">Tous (${vals.length})</option>${Object.entries(counts).map(([s, n]) => `<option value="${s}" ${s === filter ? "selected" : ""}>${STATUS[s]} (${n})</option>`).join("")}</select></div>
@@ -730,7 +750,10 @@ async function viewDossier(cid, rid, sim = null) {
   const d = ds.find((x) => x.id === cid);
   if (!d) throw new Error("Dossier non partagé avec votre institution (ou accès retiré par le commerçant).");
   const req = d.requests.find((q) => q.id === rid) || null;
-  const params = sim ? `?amount=${sim.amount}&duration_months=${sim.duration_months}&annual_rate=${sim.annual_rate}` : rid ? `?request_id=${rid}` : "";
+  let localRate = null;
+  try { localRate = parseFloat(localStorage.getItem("cw_taux_defaut")) || null; } catch { localRate = null; }
+  const tq = localRate ? `taux_defaut=${localRate / 100}` : "";
+  const params = sim ? `?amount=${sim.amount}&duration_months=${sim.duration_months}&annual_rate=${sim.annual_rate}${tq ? "&" + tq : ""}` : rid ? `?request_id=${rid}${tq ? "&" + tq : ""}` : tq ? `?${tq}` : "";
   const a = await api(`/api/companies/${cid}/analysis${params}`);
   if (a.empty) { app().innerHTML = `<div class="card"><h1>${esc(d.name)}</h1><p class="muted">Aucune donnée exploitable dans ce dossier.</p>${d.access === "televerse" ? `<a class="btn" href="#/i/televerser/${cid}">Téléverser des fichiers</a>` : ""}</div>`; return; }
   const s = a.score, p = a.pd, cr = a.credit, R = Object.fromEntries(a.ratios.map((r) => [r.key, r]));
@@ -763,10 +786,13 @@ async function viewDossier(cid, rid, sim = null) {
       <div style="margin-top:18px">${s.dimensions.map((x) => `<div class="dim"><div class="top"><span>${esc(x.label)} <span class="muted">· ${x.weight * 100} %</span></span><b>${x.note === null ? "n.c." : Math.round(x.note)}</b></div><div class="bar"><span style="width:${x.note ?? 0}%;background:${noteColor(x.note)}"></span></div></div>`).join("")}</div></div>
     <div class="card"><div class="card-head"><h2>Probabilité de défaut</h2><span class="chip plain good">données réelles</span></div>${p.available ? `
       <div class="big-pd" style="color:${p.relative_to_base > 2 ? "var(--red)" : p.relative_to_base > 1 ? "var(--amber)" : "var(--teal)"}">${pct(p.pd * 100)}</div>
-      <div class="small muted" style="margin-top:4px">à 1 an · <b>${p.relative_to_base.toLocaleString("fr-FR")} ×</b> le taux moyen d'entraînement (${pct(p.base_rate * 100)})</div>
+      <div class="small muted" style="margin-top:4px">à 1 an · <b>${p.relative_to_base.toLocaleString("fr-FR")} ×</b> ${p.recalibrated ? "le taux de défaut de votre portefeuille" : "le taux moyen d'entraînement"} (${pct(p.base_rate * 100)})</div>
       <div style="margin-top:14px">${p.factors.map((f) => `<div class="factor"><span>${esc(f.label)}${f.imputed ? ' <span class="chip plain neutral">imputé</span>' : ""}</span><span class="chip ${f.effect.startsWith("augmente") ? "bad" : "good"}">${f.effect.startsWith("augmente") ? "↑ risque" : "↓ risque"}</span></div>`).join("")}</div>
       ${p.expected_loss ? `<div class="notice" style="margin-top:14px">${icon("scale")}<span>Perte attendue <b>${money(p.expected_loss.el)}</b><br><span class="small">EL = PD × LGD (${p.expected_loss.lgd * 100} %) × EAD (${money(p.expected_loss.ead)})</span></span></div>` : ""}
-      <p class="small muted" style="margin:12px 0 0">Modèle statistique appris sur des données publiques d'entreprises polonaises (UCI), pas sur des commerçants béninois. <a href="#/i/modele">Méthode et limites</a></p>`
+      <div class="notice ${p.recalibrated ? "ok" : "warn"}" style="margin-top:14px">${icon(p.recalibrated ? "check" : "info")}<span>${esc(p.calibration_note)}${p.recalibrated ? ` Valeur brute du modèle : ${pct(p.pd_raw * 100)}.` : ""}</span></div>
+      <form id="calib" class="row" style="margin-top:12px"><div class="field"><label for="taux">Taux de défaut de votre portefeuille (%)</label><input id="taux" type="number" min="0.1" max="49" step="0.1" inputmode="decimal" placeholder="ex. 4,5" value="${localRate ?? ""}"></div>
+        <button class="btn sm">Appliquer</button>${localRate ? '<button type="button" class="btn sm ghost" id="calib-reset">Retirer</button>' : ""}</form>
+      <p class="small muted" style="margin:12px 0 0">Modèle statistique appris sur des données publiques d'entreprises polonaises (UCI). Le recalibrage l'aligne sur votre niveau de risque ; seul un réentraînement sur vos historiques de remboursement le rendrait propre au marché béninois. <a href="#/i/modele">Méthode et limites</a></p>`
       : `<p class="muted">${esc(p.reason)}</p>`}</div>
     <div class="card"><div class="card-head"><h2>Capacité de remboursement</h2></div>
       <div style="padding:14px 16px;border-radius:12px;background:${dscr === null ? "var(--grey-bg)" : dscr >= 1.25 ? "var(--teal-bg)" : dscr >= 1 ? "var(--amber-bg)" : "var(--red-bg)"};margin-bottom:16px">
@@ -784,13 +810,18 @@ async function viewDossier(cid, rid, sim = null) {
   <div class="card mt"><div class="card-head"><h2>Pourquoi ce score ?</h2></div><div style="display:grid;gap:8px">${s.explanations.map((e) => { const bad = /^À surveiller|plafonnée/.test(e), good = /^Atout/.test(e);
     return `<div style="display:flex;gap:10px;align-items:flex-start"><span style="color:${bad ? "var(--red)" : good ? "var(--teal)" : "var(--muted)"};margin-top:1px">${icon(bad ? "alert" : good ? "check" : "info").replace("<svg ", '<svg width="17" height="17" ')}</span><span>${esc(capitalize(e.replace(/^(À surveiller|Atout) : /, "")))}</span></div>`; }).join("")}</div></div>
 
-  <div class="tabs" id="tabs">${[["evol", "Évolution"], ["alertes", `Anomalies · ${a.alerts.length}`], ["ratios", "Ratios"], ["score", "Détail du score"], ["couverture", "Données et documents"], ["decision", "Décision"]].map(([k, l], i) => `<button data-t="${k}" class="${i === 0 ? "active" : ""}">${l}</button>`).join("")}</div>
+  <div class="tabs" id="tabs">${[["evol", "Évolution"], ["alertes", `Anomalies · ${a.alerts.length}`], ["preuves", `Preuves · ${a.proof.justified_months}/${a.proof.months}`], ["ratios", "Ratios"], ["score", "Détail du score"], ["couverture", "Données et documents"], ["decision", "Décision"]].map(([k, l], i) => `<button data-t="${k}" class="${i === 0 ? "active" : ""}">${l}</button>`).join("")}</div>
   <div data-p="evol"><div class="grid g3"><div class="card span2"><div class="card-head"><h2>Évolution mensuelle</h2><span class="muted small">FCFA</span></div><div class="chart-box"><canvas id="ch"></canvas></div></div>
     <div class="card"><h2>Trimestres</h2><table><thead><tr><th>Trimestre</th><th class="num">CA</th><th class="num">vs préc.</th><th class="num">vs N-1</th></tr></thead><tbody>
       ${a.quarterly.map((q) => `<tr><td>${q.quarter}${q.complete ? "" : ` <span class="chip plain neutral">${q.months}/3</span>`}</td><td class="num">${q.complete ? mfcfa(q.ventes) : "-"}</td><td class="num" style="color:${q.var_vs_prev === null ? "inherit" : q.var_vs_prev >= 0 ? "var(--teal)" : "var(--red)"}">${signed(q.var_vs_prev)}</td><td class="num">${signed(q.var_yoy)}</td></tr>`).join("")}</tbody></table>
       <p class="small muted">Les trimestres incomplets ne sont pas comparés. La comparaison avec N-1 neutralise la saisonnalité.</p></div></div>
     <div class="card mt"><h2>Détail mensuel</h2><div class="table-wrap"><table><thead><tr><th>Mois</th><th class="num">CA</th><th class="num">vs M-1</th><th class="num">vs N-1</th><th class="num">Marge commerciale</th><th class="num">Résultat net</th><th class="num">Trésorerie nette</th></tr></thead><tbody>
       ${a.monthly.slice().reverse().map((m) => `<tr><td>${m.month}${m.has_pnl ? "" : ' <span class="chip warn">sans données</span>'}</td><td class="num">${money(m.ventes)}</td><td class="num" style="color:${m.var_mom === null ? "inherit" : m.var_mom >= 0 ? "var(--teal)" : "var(--red)"}">${signed(m.var_mom)}</td><td class="num">${signed(m.var_yoy)}</td><td class="num">${money(m.marge_commerciale)}</td><td class="num" style="color:${m.resultat_net !== null && m.resultat_net < 0 ? "var(--red)" : "inherit"}">${money(m.resultat_net)}</td><td class="num" style="color:${m.tresorerie_nette_constatee !== null && m.tresorerie_nette_constatee < 0 ? "var(--red)" : "inherit"}">${money(m.tresorerie_nette_constatee)}</td></tr>`).join("")}</tbody></table></div></div></div>
+  <div data-p="preuves" class="hidden"><div class="card"><div class="card-head"><h2>Ventes déclarées face aux pièces</h2><span class="chip ${a.proof.justified_months ? "good" : "warn"}">${a.proof.justified_months} mois justifiés sur ${a.proof.months}</span></div>
+    <p class="small" style="margin-top:0">Une vente est « justifiée » quand le grand livre la retrouve à 2 % près. Le relevé mobile money montre la part des ventes réellement encaissée par ce canal. Sources fournies : ${esc(a.proof.sources.join(", ") || "aucune pièce de rapprochement")}.</p>
+    <div class="table-wrap"><table><thead><tr><th>Mois</th><th class="num">Ventes déclarées</th><th class="num">Grand livre</th><th class="num">Écart</th><th class="num">Entrées mobile money</th><th>Statut</th></tr></thead><tbody>
+    ${a.proof.rows.slice().reverse().map((r) => `<tr><td>${r.month}</td><td class="num">${money(r.ventes)}</td><td class="num">${money(r.grand_livre)}</td><td class="num">${r.ecart_pct === null ? "-" : signed(r.ecart_pct)}</td><td class="num">${money(r.mobile_money_entrees)}</td><td><span class="chip ${r.justifie ? "justifie" : r.ecart_pct !== null ? "attention" : "neutral"}">${esc(r.statut)}</span></td></tr>`).join("")}
+    </tbody></table></div></div></div>
   <div data-p="alertes" class="hidden"><div class="notice" style="margin-bottom:14px">${icon("info")}<span>Une anomalie est un signal qui mérite une vérification : elle ne prouve pas une fraude. Chaque alerte affiche la raison et la méthode du signalement.</span></div>${alertsHtml(a.alerts)}</div>
   <div data-p="ratios" class="hidden"><div class="card">${ratiosTable(a.ratios)}<p class="small muted" style="margin:12px 0 0">Montants annuels calculés sur 12 mois glissants (${a.coverage.ttm_months[0]} à ${a.coverage.ttm_months.slice(-1)[0]})${a.coverage.annualised ? ", <b>annualisés</b> faute de 12 mois" : ""}. Bilan au ${esc(a.coverage.last_balance || "-")}.</p></div></div>
   <div data-p="score" class="hidden"><div class="card"><div class="table-wrap" style="max-height:none"><table><thead><tr><th>Dimension</th><th>Critère</th><th class="num">Valeur</th><th class="num">Note</th><th>Règle</th></tr></thead><tbody>
@@ -820,7 +851,18 @@ async function viewDossier(cid, rid, sim = null) {
     const purpose = prompt("Objet du crédit :", "Fonds de roulement") || null;
     const r = await api("/api/requests", { json: { company_id: cid, ...v, purpose } }); toast("Demande enregistrée"); location.hash = `#/i/dossier/${cid}/${r.id}`; };
   $("#savereq").onclick = createReq;
-  if ($("#dl")) $("#dl").onclick = () => download(`/api/requests/${rid}/report.pdf`, "Rapport_CreditWise.pdf");
+  if ($("#dl")) $("#dl").onclick = () => download(`/api/requests/${rid}/report.pdf${tq ? "?" + tq : ""}`, "Rapport_CreditWise.pdf");
+  if ($("#calib")) $("#calib").onsubmit = (e) => {
+    e.preventDefault();
+    const v = parseFloat(String($("#taux").value).replace(",", "."));
+    if (!(v > 0 && v < 50)) return toast("Indiquez un taux entre 0,1 et 49 %");
+    try { localStorage.setItem("cw_taux_defaut", String(v)); } catch { /* stockage indisponible : réglage non mémorisé */ }
+    destroyCharts(); viewDossier(cid, rid, sim);
+  };
+  if ($("#calib-reset")) $("#calib-reset").onclick = () => {
+    try { localStorage.removeItem("cw_taux_defaut"); } catch { /* rien à retirer */ }
+    destroyCharts(); viewDossier(cid, rid, sim);
+  };
   $$(".dec-opt").forEach((b) => (b.onclick = () => {
     $$(".dec-opt").forEach((x) => x.setAttribute("aria-pressed", String(x === b))); $("#decval").value = b.dataset.v;
   }));
