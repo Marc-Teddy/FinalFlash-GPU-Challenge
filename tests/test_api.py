@@ -179,3 +179,21 @@ def test_session_restauree_sur_une_autre_instance(client):
         con.execute("DELETE FROM users WHERE id=?", (uid,))
     me = c.get("/api/me").json()
     assert me["username"] == "instance@exemple.bj" and me["companies"][0]["name"] == "Boutique Test"
+
+
+def test_saisie_simplifiee_et_rapprochement(client):
+    c = login(client, "nouveau")
+    cid = c.get("/api/me").json()["companies"][0]["id"]
+    for i, mois in enumerate(["2026-08", "2026-09", "2026-10"]):
+        r = c.post(f"/api/companies/{cid}/saisie", json={"mois": mois, "ventes": 900_000 + 50_000 * i, "achats_marchandises": 600_000,
+                                                         "loyers": 50_000, "tresorerie": 300_000, "stocks": 400_000, "dettes_fournisseurs": 100_000})
+        assert r.status_code == 200
+    a = c.get(f"/api/companies/{cid}/analysis").json()
+    assert a["coverage"]["n_months_pnl"] == 3 and a["coverage"]["status_counts"].get("estime")
+    assert a["ratios_by_key"] if "ratios_by_key" in a else True
+    assert c.post(f"/api/companies/{cid}/saisie", json={"mois": "2026-13", "ventes": 1}).status_code == 422
+    # le grand livre du commerçant A justifie ses ventes déclarées
+    an = login(client, "analyste")
+    a = an.get("/api/companies/1/analysis", params={"request_id": 1, "taux_defaut": 0.03}).json()
+    assert a["proof"]["justified_months"] >= 20 and a["coverage"]["status_counts"]["justifie"] >= 20
+    assert a["pd"]["recalibrated"] and a["pd"]["pd"] < a["pd"]["pd_raw"]

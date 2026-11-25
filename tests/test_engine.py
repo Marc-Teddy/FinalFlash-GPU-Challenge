@@ -102,3 +102,28 @@ def test_baisse_prolongee_et_score_explique():
     s = rule_score(a, alerts)
     assert s["score"] is not None and s["explanations"]
     assert any(d["note"] is None for d in s["dimensions"])  # liquidité sans bilan : non calculable, signalé
+
+
+def test_releve_mobile_money_justifie_le_solde():
+    csv = ("date;type;montant;solde\n05/03/2026 10:12;Paiement reçu;150000;450000\n"
+           "20/03/2026;Retrait;-50000;400000\n02/04/2026;Paiement reçu;80000;480000\n").encode()
+    ex = extract("releve_momo.csv", csv)
+    assert ex.kind == "releve_mobile_money" and len(ex.transactions) == 3
+    soldes = {v["period_end"].month: (v["amount"], v["status"]) for v in ex.values}
+    assert soldes == {3: (400000, "justifie"), 4: (480000, "justifie")}
+
+
+def test_tresorerie_en_hausse_quand_les_ventes_baissent():
+    vals = []
+    for i, m in enumerate(range(1, 7)):
+        vals += [v("ventes", 3_000_000 - 300_000 * i, m=m), v("cout_ventes", 2_000_000 - 200_000 * i, m=m),
+                 v("tresorerie", 500_000 + 400_000 * i, m=m)]
+    alerts = detect(analyse(vals), [], [], date(2026, 11, 25))
+    a = next(x for x in alerts if x["code"] == "tresorerie_vs_ventes")
+    assert a["questions"] and "trésorerie" in a["title"].lower()
+
+
+def test_recalibrage_sur_le_taux_local():
+    from backend.engine.scoring import recalibrate
+    assert recalibrate(0.2, 0.069, 0.069) == pytest.approx(0.2)
+    assert recalibrate(0.2, 0.069, 0.03) < 0.2 < recalibrate(0.2, 0.069, 0.12)
