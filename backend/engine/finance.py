@@ -12,8 +12,8 @@ from datetime import date
 
 from .items import CONTROL_ITEMS, ITEMS
 
-STATUS_RANK = {"verifie": 3, "declare": 2, "extrait": 1, "estime": 0}
-STATUS_LABEL = {"verifie": "vérifié", "declare": "déclaré", "extrait": "extrait automatiquement", "estime": "estimé"}
+STATUS_RANK = {"justifie": 4, "verifie": 3, "declare": 2, "extrait": 1, "estime": 0}
+STATUS_LABEL = {"justifie": "justifié par une pièce", "verifie": "confirmé par le commerçant", "declare": "déclaré", "extrait": "extrait automatiquement", "estime": "estimé"}
 
 CHARGE_ITEMS = ["transport", "loyers", "autres_charges_externes", "impots_taxes", "charges_personnel",
                 "dotations_amortissements"]

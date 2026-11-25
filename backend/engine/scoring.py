@@ -92,14 +92,14 @@ def rule_score(analysis: dict, alerts: list[dict]) -> dict:
     ])
     sc = cov["status_counts"]
     total = sum(sc.values()) or 1
-    reliable = (sc.get("verifie", 0) + 0.8 * sc.get("declare", 0) + 0.4 * sc.get("extrait", 0)) / total
+    reliable = (sc.get("justifie", 0) + 0.85 * sc.get("verifie", 0) + 0.6 * sc.get("declare", 0) + 0.4 * sc.get("extrait", 0) + 0.3 * sc.get("estime", 0)) / total
     high = sum(1 for a in alerts if a["severity"] == "elevee")
     dims["qualite"] = _combine([
         (lin(cov["n_months_pnl"] - len(cov["missing_months"]), 3, 12), 0.4, "Mois couverts",
          f"{cov['n_months_pnl']} mois", "≤ 3 : note 0 ; ≥ 12 : note 100"),
         (round(100 * reliable, 1), 0.3, "Fiabilité des sources",
-         f"{sc.get('verifie', 0)} vérifiées / {sc.get('declare', 0)} déclarées / {sc.get('extrait', 0)} extraites",
-         "vérifié 100 % · déclaré 80 % · extrait 40 %"),
+         f"{sc.get('justifie', 0)} justifiées / {sc.get('verifie', 0)} confirmées / {sc.get('declare', 0)} déclarées / {sc.get('extrait', 0)} extraites",
+         "justifié 100 % · confirmé 85 % · déclaré 60 % · extrait 40 % · estimé 30 %"),
         (max(0.0, 100.0 - 35 * high), 0.3, "Alertes de sévérité élevée", f"{high}", "-35 points par alerte élevée"),
     ])
 
@@ -148,7 +148,14 @@ def _load_model():
     return json.loads(path.read_text()), json.loads((MODEL_DIR / "model_card.json").read_text())
 
 
-def pd_estimate(analysis: dict, lgd: float = 0.45) -> dict:
+def recalibrate(pd: float, model_rate: float, local_rate: float) -> float:
+    """Correction du taux de base : le modèle a appris sur un taux de défaut de model_rate ; on ramène
+    ses probabilités au taux local observé par l'établissement (cotes multipliées par le rapport des cotes)."""
+    odds = pd / (1 - pd) * (local_rate / (1 - local_rate)) / (model_rate / (1 - model_rate))
+    return odds / (1 + odds)
+
+
+def pd_estimate(analysis: dict, lgd: float = 0.45, local_default_rate: float | None = None) -> dict:
     bundle, card = _load_model()
     if bundle is None:
         return {"available": False, "reason": "Modèle non entraîné (lancer ml/train_pd.py)."}
@@ -180,9 +187,18 @@ def pd_estimate(analysis: dict, lgd: float = 0.45) -> dict:
                         "contribution": round(float(contribs[i]), 3)})
     ead = (analysis.get("credit") or {}).get("request", {}).get("amount")
     base = card["dataset"]["base_rate"]
+    pd_raw = pd_value
+    local = local_default_rate if local_default_rate and 0 < local_default_rate < 0.5 else None
+    if local:
+        pd_value = recalibrate(pd_raw, base, local)
     return {
-        "available": True, "pd": round(pd_value, 4), "base_rate": round(base, 4),
-        "relative_to_base": round(pd_value / base, 2),
+        "available": True, "pd": round(pd_value, 4), "pd_raw": round(pd_raw, 4), "recalibrated": bool(local),
+        "local_default_rate": local, "base_rate": round(local or base, 4), "model_base_rate": round(base, 4),
+        "relative_to_base": round(pd_value / (local or base), 2),
+        "calibration_note": (f"Recalibrée sur le taux de défaut de votre portefeuille ({local * 100:.1f} %), "
+                             f"au lieu du taux du jeu d'entraînement ({base * 100:.1f} %).".replace(".", ",", 2) if local else
+                             "Non recalibrée : probabilité relative au jeu d'entraînement (entreprises polonaises). "
+                             "Saisissez le taux de défaut observé sur votre portefeuille pour l'adapter à votre marché."),
         "features_used": present, "features_total": len(names), "variant": variant,
         "variant_label": card["variants"][variant], "imputed": imputed,
         "inputs": {n: round(row[n], 4) for n in names},

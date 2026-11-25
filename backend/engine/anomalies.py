@@ -31,9 +31,9 @@ def fmt(x):
     return f"{x:,.0f}".replace(",", " ") + " FCFA" if isinstance(x, (int, float)) else str(x)
 
 
-def alert(code, severity, title, reason, period=None, explanation=None, evidence=None, method="règle"):
+def alert(code, severity, title, reason, period=None, explanation=None, evidence=None, method="règle", questions=None):
     return {"code": code, "severity": severity, "title": title, "reason": reason, "period": period,
-            "explanation": explanation, "evidence": evidence or {}, "method": method}
+            "explanation": explanation, "evidence": evidence or {}, "method": method, "questions": questions or []}
 
 
 def detect(analysis: dict, transactions: list[dict], documents: list[dict], today: date | None = None) -> list[dict]:
@@ -165,6 +165,33 @@ def detect(analysis: dict, transactions: list[dict], documents: list[dict], toda
                              f"Trésorerie nette de {fmt(v_last)} en {m_last}, contre un maximum de "
                              f"{fmt(max(v for _, v in tr[-6:]))} sur les 6 derniers mois.", period=m_last))
 
+    # 5 bis. Évolutions contradictoires sur 6 mois : ventes et trésorerie
+    pairs = [(r["ventes"], r["tresorerie_nette_constatee"]) for r in analysis["monthly"]
+             if r["ventes"] is not None and r["tresorerie_nette_constatee"] is not None][-6:]
+    if len(pairs) >= 6:
+        v0, v1 = sum(p[0] for p in pairs[:3]), sum(p[0] for p in pairs[3:])
+        t0, t1 = pairs[0][1], pairs[-1][1]
+        dv = (v1 - v0) / v0 * 100 if v0 else 0
+        dt = t1 - t0
+        seuil = 0.05 * v1 / 3  # variation de trésorerie significative : plus de 5 % des ventes mensuelles
+        if dv <= -10 and dt > seuil:
+            out.append(alert("tresorerie_vs_ventes", "attention", "Trésorerie en hausse alors que les ventes baissent",
+                             f"Ventes des 3 derniers mois {dv:+.1f} % par rapport aux 3 précédents, mais trésorerie nette passée de "
+                             f"{fmt(t0)} à {fmt(t1)} ({fmt(dt)} de plus).",
+                             explanation="Possibles : apport personnel, emprunt non déclaré, ventes non déclarées, retards de paiement aux fournisseurs, déstockage.",
+                             method="Comparaison des tendances sur 6 mois (ventes -10 % et trésorerie en hausse)",
+                             questions=["D'où vient l'argent supplémentaire en caisse ou en banque ces derniers mois ?",
+                                        "Avez-vous reçu un prêt, une aide familiale ou fait un apport personnel ?",
+                                        "Avez-vous retardé le paiement de vos fournisseurs ou réduit votre stock ?"]))
+        elif dv >= 10 and dt < -seuil:
+            out.append(alert("ventes_vs_tresorerie", "attention", "Ventes en hausse mais trésorerie en baisse",
+                             f"Ventes des 3 derniers mois {dv:+.1f} % par rapport aux 3 précédents, mais trésorerie nette passée de "
+                             f"{fmt(t0)} à {fmt(t1)}.",
+                             explanation="Possibles : ventes à crédit non encaissées, constitution de stock, remboursement d'emprunt, prélèvements personnels.",
+                             method="Comparaison des tendances sur 6 mois (ventes +10 % et trésorerie en baisse)",
+                             questions=["Une partie des ventes récentes est-elle encore à encaisser ?",
+                                        "Avez-vous constitué du stock ou remboursé une dette ces derniers mois ?"]))
+
     # 6. Contrôles sur les transactions (grand livre)
     out += _transaction_checks(analysis, transactions, today)
 
@@ -178,6 +205,19 @@ def detect(analysis: dict, transactions: list[dict], documents: list[dict], toda
                              f"Fichier identique importé {len(names)} fois : {', '.join(names)}.",
                              explanation="Les valeurs n'ont été comptées qu'une fois."))
 
+    QUESTIONS = {
+        "baisse_prolongee": ["Qu'est-ce qui explique la baisse des ventes (saison, concurrence, rupture de stock, fermeture) ?",
+                             "Quelles mesures avez-vous prises pour relancer les ventes ?"],
+        "doublons": ["Pouvez-vous présenter les pièces des opérations signalées en double ?"],
+        "ecart_grand_livre": ["Pourquoi les ventes du journal diffèrent-elles des ventes déclarées ces mois-là ?"],
+        "montant_inhabituel": ["À quoi correspond l'opération inhabituelle signalée ? Avez-vous la facture ou le reçu ?"],
+        "tresorerie_negative": ["Quel est le montant autorisé de votre découvert et depuis quand l'utilisez-vous ?"],
+        "poste_absent_mois": ["La charge manquante a-t-elle été payée ce mois-là ? Pouvez-vous fournir le reçu ?"],
+        "date_impossible": ["Pouvez-vous corriger la date de l'opération signalée ?"],
+    }
+    for x in out:
+        if not x.get("questions"):
+            x["questions"] = QUESTIONS.get(x["code"], [])
     out.sort(key=lambda a: (SEV_ORDER[a["severity"]], a["code"]))
     for x in out:  # décimales à la française : « -44,9 % », « Z = 17,0 »
         for k in ("title", "reason", "explanation"):
@@ -253,6 +293,19 @@ def _transaction_checks(analysis: dict, txs: list[dict], today: date) -> list[di
     for t in txs:
         if t["date"] and match_account(t["account"]) == "ventes":
             gl_sales[ym(t["date"])] += t["credit"] - t["debit"]
+    mm_in = defaultdict(float)
+    for t in txs:
+        if t["date"] and t["account"] == "MM":
+            mm_in[ym(t["date"])] += t["debit"]
+    trop = [(m, v, analysis["pnl"][m]["ventes"]) for m, v in sorted(mm_in.items())
+            if m in analysis["pnl"] and analysis["pnl"][m]["ventes"] and v > 1.2 * analysis["pnl"][m]["ventes"]]
+    if len(trop) >= 2:
+        out.append(alert("mobile_money_vs_ventes", "attention", f"Encaissements mobile money supérieurs aux ventes ({len(trop)} mois)",
+                         " ; ".join(f"{m} : {fmt(v)} reçus pour {fmt(s_)} de ventes déclarées" for m, v, s_ in trop[:4]),
+                         explanation="Ventes sous-déclarées, ou encaissements non commerciaux (transferts familiaux, tontine, prêts).",
+                         method="Entrées du relevé mobile money comparées aux ventes déclarées (seuil +20 %)",
+                         questions=["Quelle part des sommes reçues sur votre compte mobile money correspond à des ventes ?",
+                                    "Recevez-vous des transferts familiaux, des fonds de tontine ou des prêts sur ce compte ?"]))
     gaps = []
     for m, tot in sorted(gl_sales.items()):
         decl = analysis["pnl"].get(m, {}).get("ventes")

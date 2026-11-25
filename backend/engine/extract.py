@@ -109,7 +109,7 @@ def parse_date(v) -> date | None:
         return v
     s = str(v or "").strip()
     try:
-        if m := re.fullmatch(r"(\d{1,2})[/.-](\d{1,2})[/.-](\d{4})", s):
+        if m := re.match(r"(\d{1,2})[/.-](\d{1,2})[/.-](\d{4})", s):
             return date(int(m[3]), int(m[2]), int(m[1]))
         if m := re.match(r"(\d{4})-(\d{1,2})-(\d{1,2})", s):
             return date(int(m[1]), int(m[2]), int(m[3]))
@@ -168,6 +168,30 @@ def _from_table(header: list, rows: list[list], status: str, ex: Extraction) -> 
                 "account": str(r["compte"]).split(".")[0], "debit": debit, "credit": credit,
             })
         return
+    if "date" in cols and "solde" in cols and "compte" not in cols and ("montant" in cols or {"debit", "credit"} <= cols):
+        # Relevé mobile money (MTN MoMo, Moov Money, Celtiis Cash...) : une pièce justificative
+        ex.kind = "releve_mobile_money"
+        last: dict[str, tuple] = {}
+        for r in n:
+            d = parse_date(r["date"])
+            amt = parse_amount(r.get("montant")) if "montant" in cols else \
+                (parse_amount(r.get("credit")) or 0.0) - (parse_amount(r.get("debit")) or 0.0)
+            if d is None or amt is None:
+                ex.warnings.append(f"Ligne ignorée (date ou montant illisible) : {r.get('date')}")
+                continue
+            ex.transactions.append({"date": d, "raw_date": str(r["date"]), "reference": str(r.get("reference") or r.get("id") or ""),
+                                    "counterparty": str(r.get("tiers") or r.get("correspondant") or ""),
+                                    "label": str(r.get("type") or r.get("libelle") or r.get("description") or ""),
+                                    "account": "MM", "debit": max(amt, 0.0), "credit": max(-amt, 0.0)})
+            solde = parse_amount(r.get("solde"))
+            key = f"{d.year:04d}-{d.month:02d}"
+            if solde is not None and (key not in last or d >= last[key][0]):
+                last[key] = (d, solde)
+        for key, (d, solde) in last.items():
+            ex.values.append({"period_start": date(d.year, d.month, 1), "period_end": month_end(d.year, d.month),
+                              "item": "solde_mobile_money", "amount": solde, "status": "justifie",
+                              "source_label": "relevé mobile money", "confidence": 1.0, "comment": "Dernier solde du mois sur le relevé"})
+        return
     if "compte" in cols and ({"debit", "credit"} <= cols or "solde" in cols) and "periode" in cols:
         ex.kind = "balance_generale"
         agg: dict[tuple, float] = {}
@@ -191,7 +215,7 @@ def _from_table(header: list, rows: list[list], status: str, ex: Extraction) -> 
         # (Pas pour les comptes de gestion : un poste de charge absent doit rester visible.)
         for p in {p for p, _ in agg}:
             for item, (_, nature) in ITEMS.items():
-                if nature == "stock" and item not in {"total_actif", "total_passif"} and (p, item) not in agg:
+                if nature == "stock" and item not in {"total_actif", "total_passif", "solde_mobile_money"} and (p, item) not in agg:
                     ex.values.append({"period_start": p[0], "period_end": p[1], "item": item, "amount": 0.0,
                                       "status": status, "source_label": "balance générale", "confidence": 1.0,
                                       "comment": "Compte absent de la balance : solde nul"})
@@ -211,7 +235,7 @@ def _from_table(header: list, rows: list[list], status: str, ex: Extraction) -> 
                 continue
             st = str(r.get("statut") or status)
             ex.values.append({"period_start": ps[0], "period_end": pe[1], "item": item, "amount": a,
-                              "status": st if st in {"declare", "extrait", "verifie", "estime"} else status,
+                              "status": st if st in {"justifie", "declare", "extrait", "verifie", "estime"} else status,
                               "source_label": str(r["poste"]), "confidence": conf,
                               "comment": None if conf == 1 else f"Libellé rapproché de « {ITEMS[item][0]} »"})
         return

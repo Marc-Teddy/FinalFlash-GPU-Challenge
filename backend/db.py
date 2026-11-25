@@ -34,7 +34,7 @@ CREATE TABLE IF NOT EXISTS fin_values (
   id INTEGER PRIMARY KEY, company_id INTEGER NOT NULL, period_start TEXT NOT NULL, period_end TEXT NOT NULL,
   imported_at TEXT DEFAULT CURRENT_TIMESTAMP, document_id INTEGER, source_name TEXT, item TEXT NOT NULL,
   amount REAL NOT NULL, currency TEXT DEFAULT 'XOF', unit TEXT DEFAULT 'FCFA',
-  status TEXT NOT NULL CHECK (status IN ('declare','extrait','verifie','estime')),
+  status TEXT NOT NULL CHECK (status IN ('justifie','declare','extrait','verifie','estime')),
   source_label TEXT, confidence REAL, comment TEXT, verified_by INTEGER, verified_at TEXT);
 CREATE INDEX IF NOT EXISTS ix_values_company ON fin_values(company_id);
 CREATE TABLE IF NOT EXISTS transactions (

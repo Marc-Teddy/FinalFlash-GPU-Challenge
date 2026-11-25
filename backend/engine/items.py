@@ -42,6 +42,7 @@ ITEMS: dict[str, tuple[str, str]] = {
     "dettes_fournisseurs": ("Dettes fournisseurs", "stock"),
     "dettes_fiscales_sociales": ("Dettes fiscales et sociales", "stock"),
     "autres_dettes": ("Autres dettes", "stock"),
+    "solde_mobile_money": ("Solde mobile money (relevé)", "stock"),
     "total_actif": ("Total actif déclaré", "stock"),
     "total_passif": ("Total passif déclaré", "stock"),
 }
