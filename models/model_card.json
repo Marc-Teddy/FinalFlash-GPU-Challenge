@@ -28,9 +28,9 @@
     "cash_ratio": "Trésorerie / Passif circulant",
     "operating_margin": "Résultat d'exploitation / Chiffre d'affaires",
     "receivable_days": "Créances clients × 365 / Chiffre d'affaires",
-    "quick_ratio": "(Actif circulant – Stocks) / Passif circulant",
+    "quick_ratio": "(Actif circulant - Stocks) / Passif circulant",
     "st_liabilities_assets": "Passif circulant / Total actif",
-    "gross_margin": "(CA – Coût des ventes) / CA"
+    "gross_margin": "(CA - Coût des ventes) / CA"
   },
   "split": "Stratifié 75/25, graine 42 (jeu de test mis de côté avant tout réglage)",
   "variants": {
@@ -44,13 +44,13 @@
         "roc_auc": 0.8328,
         "pr_auc": 0.379,
         "brier": 0.0524,
-        "train_seconds": 0.3652
+        "train_seconds": 0.2447
       },
       "xgboost": {
         "roc_auc": 0.8853,
         "pr_auc": 0.5862,
         "brier": 0.0423,
-        "train_seconds": 6.5087,
+        "train_seconds": 7.1434,
         "device": "cpu"
       }
     },
@@ -59,13 +59,13 @@
         "roc_auc": 0.8367,
         "pr_auc": 0.3668,
         "brier": 0.0536,
-        "train_seconds": 0.3386
+        "train_seconds": 0.3499
       },
       "xgboost": {
         "roc_auc": 0.88,
         "pr_auc": 0.4357,
         "brier": 0.0496,
-        "train_seconds": 5.3906,
+        "train_seconds": 5.3274,
         "device": "cpu"
       }
     }

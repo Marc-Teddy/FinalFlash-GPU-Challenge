@@ -58,23 +58,23 @@ def rule_score(analysis: dict, alerts: list[dict]) -> dict:
 
     dims = {}
     dims["rentabilite"] = _combine([
-        (lin(R["marge_nette"], 0, 12), 0.5, "Marge nette", fmt_pct(R["marge_nette"]), "0 % → 0 ; ≥ 12 % → 100"),
-        (lin(R["marge_exploitation"], 0, 15), 0.25, "Marge d'exploitation", fmt_pct(R["marge_exploitation"]), "0 % → 0 ; ≥ 15 % → 100"),
-        (lin(R["roa"], 0, 15), 0.25, "ROA", fmt_pct(R["roa"]), "0 % → 0 ; ≥ 15 % → 100"),
+        (lin(R["marge_nette"], 0, 12), 0.5, "Marge nette", fmt_pct(R["marge_nette"]), "0 % : note 0 ; ≥ 12 % : note 100"),
+        (lin(R["marge_exploitation"], 0, 15), 0.25, "Marge d'exploitation", fmt_pct(R["marge_exploitation"]), "0 % : note 0 ; ≥ 15 % : note 100"),
+        (lin(R["roa"], 0, 15), 0.25, "ROA", fmt_pct(R["roa"]), "0 % : note 0 ; ≥ 15 % : note 100"),
     ])
     tn = R["tresorerie_nette"]
     dims["liquidite"] = _combine([
-        (lin(R["liquidite_generale"], 0.8, 2.0), 0.5, "Liquidité générale", fmt_x(R["liquidite_generale"]), "≤ 0,8 → 0 ; ≥ 2 → 100"),
-        (lin(R["liquidite_immediate"], 0.05, 0.5), 0.25, "Trésorerie immédiate", fmt_x(R["liquidite_immediate"]), "≤ 0,05 → 0 ; ≥ 0,5 → 100"),
-        (None if tn is None else (100.0 if tn > 0 else 0.0), 0.25, "Trésorerie nette (FR – BFR)",
-         None if tn is None else f"{tn:,.0f} FCFA".replace(",", " "), "> 0 → 100 ; ≤ 0 → 0"),
+        (lin(R["liquidite_generale"], 0.8, 2.0), 0.5, "Liquidité générale", fmt_x(R["liquidite_generale"]), "≤ 0,8 : note 0 ; ≥ 2 : note 100"),
+        (lin(R["liquidite_immediate"], 0.05, 0.5), 0.25, "Trésorerie immédiate", fmt_x(R["liquidite_immediate"]), "≤ 0,05 : note 0 ; ≥ 0,5 : note 100"),
+        (None if tn is None else (100.0 if tn > 0 else 0.0), 0.25, "Trésorerie nette (FR - BFR)",
+         None if tn is None else f"{tn:,.0f} FCFA".replace(",", " "), "> 0 : note 100 ; ≤ 0 : note 0"),
     ])
     dims["endettement"] = _combine([
         (lin(R["dettes_capitaux_propres"], 2.0, 0.3), 0.35, "Dettes financières / capitaux propres",
-         fmt_x(R["dettes_capitaux_propres"]), "≥ 2 → 0 ; ≤ 0,3 → 100"),
-        (lin(R["poids_dettes"], 80, 30), 0.15, "Poids des dettes", fmt_pct(R["poids_dettes"]), "≥ 80 % → 0 ; ≤ 30 % → 100"),
+         fmt_x(R["dettes_capitaux_propres"]), "≥ 2 : note 0 ; ≤ 0,3 : note 100"),
+        (lin(R["poids_dettes"], 80, 30), 0.15, "Poids des dettes", fmt_pct(R["poids_dettes"]), "≥ 80 % : note 0 ; ≤ 30 % : note 100"),
         (lin(R["dscr_avec_credit"], 1.0, 2.0), 0.5, "DSCR avec le crédit demandé", fmt_x(R["dscr_avec_credit"]),
-         "≤ 1 → 0 ; ≥ 2 → 100"),
+         "≤ 1 : note 0 ; ≥ 2 : note 100"),
     ])
     cv = statistics.pstdev(sales) / statistics.mean(sales) if len(sales) >= 3 and statistics.mean(sales) > 0 else None
     slope = None
@@ -84,11 +84,11 @@ def rule_score(analysis: dict, alerts: list[dict]) -> dict:
     has_decline = any(a["code"] == "baisse_prolongee" for a in alerts)
     dims["stabilite"] = _combine([
         (lin(cv, 0.35, 0.05), 0.4, "Régularité des ventes (coef. de variation)", fmt_pct(cv and cv * 100),
-         "≥ 35 % → 0 ; ≤ 5 % → 100"),
+         "≥ 35 % : note 0 ; ≤ 5 % : note 100"),
         (lin(slope, -5, 2), 0.4, "Tendance des ventes", None if slope is None else f"{slope:+.1f} % / mois".replace(".", ","),
-         "≤ –5 %/mois → 0 ; ≥ +2 %/mois → 100"),
+         "≤ -5 %/mois : note 0 ; ≥ +2 %/mois : note 100"),
         (0.0 if has_decline else 100.0, 0.2, "Absence de baisse prolongée", "baisse détectée" if has_decline else "aucune",
-         "baisse ≥ 3 mois consécutifs → 0"),
+         "baisse ≥ 3 mois consécutifs : note 0"),
     ])
     sc = cov["status_counts"]
     total = sum(sc.values()) or 1
@@ -96,11 +96,11 @@ def rule_score(analysis: dict, alerts: list[dict]) -> dict:
     high = sum(1 for a in alerts if a["severity"] == "elevee")
     dims["qualite"] = _combine([
         (lin(cov["n_months_pnl"] - len(cov["missing_months"]), 3, 12), 0.4, "Mois couverts",
-         f"{cov['n_months_pnl']} mois", "≤ 3 → 0 ; ≥ 12 → 100"),
+         f"{cov['n_months_pnl']} mois", "≤ 3 : note 0 ; ≥ 12 : note 100"),
         (round(100 * reliable, 1), 0.3, "Fiabilité des sources",
          f"{sc.get('verifie', 0)} vérifiées / {sc.get('declare', 0)} déclarées / {sc.get('extrait', 0)} extraites",
          "vérifié 100 % · déclaré 80 % · extrait 40 %"),
-        (max(0.0, 100.0 - 35 * high), 0.3, "Alertes de sévérité élevée", f"{high}", "–35 points par alerte élevée"),
+        (max(0.0, 100.0 - 35 * high), 0.3, "Alertes de sévérité élevée", f"{high}", "-35 points par alerte élevée"),
     ])
 
     dimensions, num, den = [], 0.0, 0.0
@@ -129,9 +129,9 @@ def rule_score(analysis: dict, alerts: list[dict]) -> dict:
         worst = min((x for x in d["details"] if x["note"] is not None), key=lambda x: x["note"], default=None)
         best = max((x for x in d["details"] if x["note"] is not None), key=lambda x: x["note"], default=None)
         if d["note"] < 50 and worst:
-            expl.append(f"Point faible — {d['label']} ({d['note']:.0f}/100) : {worst['criterion']} = {worst['value']}.")
+            expl.append(f"À surveiller : {d['label'].lower()} ({d['note']:.0f}/100) : {worst['criterion']} = {worst['value']}.")
         elif d["note"] >= 75 and best:
-            expl.append(f"Point fort — {d['label']} ({d['note']:.0f}/100) : {best['criterion']} = {best['value']}.")
+            expl.append(f"Atout : {d['label'].lower()} ({d['note']:.0f}/100) : {best['criterion']} = {best['value']}.")
     missing = [d["label"] for d in dimensions if d["note"] is None]
     if missing:
         expl.append("Non calculable (pondération redistribuée) : " + ", ".join(missing) + ".")
@@ -141,12 +141,11 @@ def rule_score(analysis: dict, alerts: list[dict]) -> dict:
 
 @lru_cache(maxsize=1)
 def _load_model():
-    import joblib
-
-    path = MODEL_DIR / "pd_model.joblib"
+    """Modèle exporté en JSON (ml/export_model.py) : aucune dépendance lourde en production."""
+    path = MODEL_DIR / "pd_model.json"
     if not path.exists():
         return None, None
-    return joblib.load(path), json.loads((MODEL_DIR / "model_card.json").read_text())
+    return json.loads(path.read_text()), json.loads((MODEL_DIR / "model_card.json").read_text())
 
 
 def pd_estimate(analysis: dict, lgd: float = 0.45) -> dict:
@@ -157,13 +156,12 @@ def pd_estimate(analysis: dict, lgd: float = 0.45) -> dict:
     if not feats:
         return {"available": False, "reason": "Données insuffisantes."}
     variant = "complet" if feats.get("sales_growth") is not None else "sans_croissance"
-    entry = bundle["models"][variant]
+    entry = bundle["variants"][variant]
     names = entry["features"]
     present = sum(feats.get(n) is not None for n in names)
     if present < 8:
         return {"available": False, "reason": f"Seulement {present}/{len(names)} ratios calculables : estimation non fiable."}
-    import pandas as pd
-    import xgboost as xgb
+    from .pd_runtime import predict
 
     row, imputed = {}, []
     for n in names:
@@ -173,27 +171,13 @@ def pd_estimate(analysis: dict, lgd: float = 0.45) -> dict:
             imputed.append(card["features"][n])
             v = bundle["medians"][n]  # valeur neutre : médiane d'entraînement
         row[n] = float(min(hi, max(lo, v)))
-    X = pd.DataFrame([row], columns=names)
-    model = entry["model"]
-    pd_value = float(model.predict_proba(X)[0, 1])
-
-    # Contributions TreeSHAP natives de XGBoost (moyenne sur les modèles calibrés)
-    contribs = np.zeros(len(names))
-    n_models = 0
-    for cc in getattr(model, "calibrated_classifiers_", []):
-        est = cc.estimator
-        if hasattr(est, "get_booster"):
-            contribs += est.get_booster().predict(xgb.DMatrix(X), pred_contribs=True)[0][:-1]
-            n_models += 1
+    pd_value, contribs = predict(entry, [row[n] for n in names])
     factors = []
-    if n_models:
-        contribs /= n_models
-        order = np.argsort(-np.abs(contribs))
-        for i in order[:5]:
-            factors.append({"feature": names[i], "label": card["features"][names[i]],
-                            "value": round(row[names[i]], 3), "imputed": feats.get(names[i]) is None,
-                            "effect": "augmente le risque" if contribs[i] > 0 else "réduit le risque",
-                            "contribution": round(float(contribs[i]), 3)})
+    for i in np.argsort(-np.abs(contribs))[:5]:
+        factors.append({"feature": names[i], "label": card["features"][names[i]],
+                        "value": round(row[names[i]], 3), "imputed": feats.get(names[i]) is None,
+                        "effect": "augmente le risque" if contribs[i] > 0 else "réduit le risque",
+                        "contribution": round(float(contribs[i]), 3)})
     ead = (analysis.get("credit") or {}).get("request", {}).get("amount")
     base = card["dataset"]["base_rate"]
     return {
@@ -205,7 +189,7 @@ def pd_estimate(analysis: dict, lgd: float = 0.45) -> dict:
         "factors": factors,
         "expected_loss": None if not ead else {"pd": round(pd_value, 4), "lgd": lgd, "ead": ead,
                                                "el": round(pd_value * lgd * ead)},
-        "model": entry["selected"], "metrics": card["metrics_test"][variant][entry["selected"]],
+        "model": card["selected_model"][variant], "metrics": card["metrics_test"][variant][card["selected_model"][variant]],
         "baseline_metrics": card["metrics_test"][variant]["logistic_regression"],
         "dataset": card["dataset"], "limits": card["limits"],
     }

@@ -50,9 +50,9 @@ FEATURES = {
     "Attr40": ("cash_ratio", "Trésorerie / Passif circulant"),
     "Attr42": ("operating_margin", "Résultat d'exploitation / Chiffre d'affaires"),
     "Attr44": ("receivable_days", "Créances clients × 365 / Chiffre d'affaires"),
-    "Attr46": ("quick_ratio", "(Actif circulant – Stocks) / Passif circulant"),
+    "Attr46": ("quick_ratio", "(Actif circulant - Stocks) / Passif circulant"),
     "Attr51": ("st_liabilities_assets", "Passif circulant / Total actif"),
-    "Attr56": ("gross_margin", "(CA – Coût des ventes) / CA"),
+    "Attr56": ("gross_margin", "(CA - Coût des ventes) / CA"),
 }
 FEATURE_NAMES = [v[0] for v in FEATURES.values()]
 
