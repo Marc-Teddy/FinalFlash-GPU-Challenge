@@ -1,0 +1,13 @@
+.venv
+.git
+.playwright-mcp
+tests
+ml
+data/raw
+data/uploads
+data/creditwise.db
+data/.secret
+models/pd_model.joblib
+Dockerfile
+*.docx
+/GPU_Challenge*.pdf

@@ -5,3 +5,6 @@ __pycache__/
 .playwright-mcp/
 data/creditwise.db
 data/uploads/
+data/.secret
+
+/api/__pycache__/
