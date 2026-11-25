@@ -1,0 +1,795 @@
+date;reference;tiers;libelle;compte;debit;credit
+01/11/2024;VT-202411-00001;Client mobile money;Ventes du jour;701;;155400
+02/11/2024;VT-202411-00002;Client mobile money;Ventes du jour;701;;150900
+04/11/2024;VT-202411-00003;Client comptant;Ventes du jour;701;;139700
+05/11/2024;VT-202411-00004;Client mobile money;Ventes du jour;701;;157200
+06/11/2024;VT-202411-00005;Client comptant;Ventes du jour;701;;113500
+07/11/2024;VT-202411-00006;Client comptant;Ventes du jour;701;;74200
+08/11/2024;VT-202411-00007;Client comptant;Ventes du jour;701;;98000
+09/11/2024;VT-202411-00008;Client comptant;Ventes du jour;701;;117500
+11/11/2024;VT-202411-00009;Client comptant;Ventes du jour;701;;93600
+12/11/2024;VT-202411-00010;Client comptant;Ventes du jour;701;;108500
+13/11/2024;VT-202411-00011;Client comptant;Ventes du jour;701;;146100
+14/11/2024;VT-202411-00012;Client comptant;Ventes du jour;701;;130600
+15/11/2024;VT-202411-00013;Client comptant;Ventes du jour;701;;119300
+16/11/2024;VT-202411-00014;Client comptant;Ventes du jour;701;;69600
+18/11/2024;VT-202411-00015;Client comptant;Ventes du jour;701;;131200
+19/11/2024;VT-202411-00016;Client comptant;Ventes du jour;701;;100000
+20/11/2024;VT-202411-00017;Client comptant;Ventes du jour;701;;105300
+21/11/2024;VT-202411-00018;Client mobile money;Ventes du jour;701;;103200
+22/11/2024;VT-202411-00019;Client mobile money;Ventes du jour;701;;120000
+23/11/2024;VT-202411-00020;Client comptant;Ventes du jour;701;;112200
+25/11/2024;VT-202411-00021;Client mobile money;Ventes du jour;701;;77800
+26/11/2024;VT-202411-00022;Client comptant;Ventes du jour;701;;112900
+27/11/2024;VT-202411-00023;Client comptant;Ventes du jour;701;;134800
+28/11/2024;VT-202411-00024;Client comptant;Ventes du jour;701;;121300
+29/11/2024;VT-202411-00025;Client comptant;Ventes du jour;701;;111500
+30/11/2024;VT-202411-00026;Client mobile money;Ventes du jour;701;;149700
+03/11/2024;FA-202411-01;Fournisseur Cotonou Textiles;Achat de marchandises;601;536100;
+10/11/2024;FA-202411-02;Import Lomé SARL;Achat de marchandises;601;446700;
+17/11/2024;FA-202411-03;Fournisseur Cotonou Textiles;Achat de marchandises;601;446700;
+24/11/2024;FA-202411-04;Fournisseur Cotonou Textiles;Achat de marchandises;601;357460;
+28/11/2024;CH-202411-622;Bailleur;Loyer boutique;622;180000;
+28/11/2024;CH-202411-661;Personnel;Salaires du mois;661;320000;
+28/11/2024;CH-202411-618;Transporteur zem / camion;Transport marchandises;618;76350;
+02/12/2024;VT-202412-00034;Client mobile money;Ventes du jour;701;;122000
+03/12/2024;VT-202412-00035;Client comptant;Ventes du jour;701;;140500
+04/12/2024;VT-202412-00036;Client mobile money;Ventes du jour;701;;213100
+05/12/2024;VT-202412-00037;Client comptant;Ventes du jour;701;;158300
+06/12/2024;VT-202412-00038;Client comptant;Ventes du jour;701;;170300
+07/12/2024;VT-202412-00039;Client comptant;Ventes du jour;701;;176600
+09/12/2024;VT-202412-00040;Client mobile money;Ventes du jour;701;;189600
+10/12/2024;VT-202412-00041;Client mobile money;Ventes du jour;701;;140400
+11/12/2024;VT-202412-00042;Client comptant;Ventes du jour;701;;116100
+12/12/2024;VT-202412-00043;Client mobile money;Ventes du jour;701;;192900
+13/12/2024;VT-202412-00044;Client comptant;Ventes du jour;701;;92600
+14/12/2024;VT-202412-00045;Client mobile money;Ventes du jour;701;;109700
+16/12/2024;VT-202412-00046;Client comptant;Ventes du jour;701;;199000
+17/12/2024;VT-202412-00047;Client comptant;Ventes du jour;701;;208600
+18/12/2024;VT-202412-00048;Client mobile money;Ventes du jour;701;;189400
+19/12/2024;VT-202412-00049;Client mobile money;Ventes du jour;701;;204500
+20/12/2024;VT-202412-00050;Client mobile money;Ventes du jour;701;;135300
+21/12/2024;VT-202412-00051;Client comptant;Ventes du jour;701;;115800
+23/12/2024;VT-202412-00052;Client comptant;Ventes du jour;701;;175900
+24/12/2024;VT-202412-00053;Client comptant;Ventes du jour;701;;148300
+25/12/2024;VT-202412-00054;Client mobile money;Ventes du jour;701;;184900
+26/12/2024;VT-202412-00055;Client comptant;Ventes du jour;701;;152100
+27/12/2024;VT-202412-00056;Client mobile money;Ventes du jour;701;;144400
+28/12/2024;VT-202412-00057;Client comptant;Ventes du jour;701;;172400
+30/12/2024;VT-202412-00058;Client comptant;Ventes du jour;701;;95500
+31/12/2024;VT-202412-00059;Client comptant;Ventes du jour;701;;126800
+03/12/2024;FA-202412-01;Import Lomé SARL;Achat de marchandises;601;928700;
+10/12/2024;FA-202412-02;Fournisseur Cotonou Textiles;Achat de marchandises;601;773900;
+17/12/2024;FA-202412-03;Fournisseur Cotonou Textiles;Achat de marchandises;601;773900;
+24/12/2024;FA-202412-04;Grossiste Dantokpa;Achat de marchandises;601;619108;
+28/12/2024;CH-202412-622;Bailleur;Loyer boutique;622;180000;
+28/12/2024;CH-202412-661;Personnel;Salaires du mois;661;320000;
+28/12/2024;CH-202412-618;Transporteur zem / camion;Transport marchandises;618;101875;
+01/01/2025;VT-202501-00067;Client mobile money;Ventes du jour;701;;106000
+02/01/2025;VT-202501-00068;Client comptant;Ventes du jour;701;;74000
+03/01/2025;VT-202501-00069;Client comptant;Ventes du jour;701;;67900
+04/01/2025;VT-202501-00070;Client comptant;Ventes du jour;701;;62000
+06/01/2025;VT-202501-00071;Client mobile money;Ventes du jour;701;;101100
+07/01/2025;VT-202501-00072;Client comptant;Ventes du jour;701;;79400
+08/01/2025;VT-202501-00073;Client comptant;Ventes du jour;701;;117500
+09/01/2025;VT-202501-00074;Client mobile money;Ventes du jour;701;;86300
+10/01/2025;VT-202501-00075;Client comptant;Ventes du jour;701;;58900
+11/01/2025;VT-202501-00076;Client comptant;Ventes du jour;701;;110300
+13/01/2025;VT-202501-00077;Client mobile money;Ventes du jour;701;;103200
+14/01/2025;VT-202501-00078;Client comptant;Ventes du jour;701;;130700
+15/01/2025;VT-202501-00079;Client mobile money;Ventes du jour;701;;125600
+16/01/2025;VT-202501-00080;Client comptant;Ventes du jour;701;;112200
+17/01/2025;VT-202501-00081;Client comptant;Ventes du jour;701;;131600
+18/01/2025;VT-202501-00082;Client comptant;Ventes du jour;701;;101000
+20/01/2025;VT-202501-00083;Client mobile money;Ventes du jour;701;;95300
+21/01/2025;VT-202501-00084;Client mobile money;Ventes du jour;701;;68700
+22/01/2025;VT-202501-00085;Client comptant;Ventes du jour;701;;105100
+23/01/2025;VT-202501-00086;Client mobile money;Ventes du jour;701;;112500
+24/01/2025;VT-202501-00087;Client mobile money;Ventes du jour;701;;81100
+25/01/2025;VT-202501-00088;Client mobile money;Ventes du jour;701;;91000
+27/01/2025;VT-202501-00089;Client comptant;Ventes du jour;701;;71000
+28/01/2025;VT-202501-00090;Client mobile money;Ventes du jour;701;;69000
+29/01/2025;VT-202501-00091;Client mobile money;Ventes du jour;701;;119500
+30/01/2025;VT-202501-00092;Client comptant;Ventes du jour;701;;104200
+31/01/2025;VT-202501-00093;Client comptant;Ventes du jour;701;;97900
+03/01/2025;FA-202501-01;Grossiste Dantokpa;Achat de marchandises;601;305400;
+10/01/2025;FA-202501-02;Grossiste Dantokpa;Achat de marchandises;601;254500;
+17/01/2025;FA-202501-03;Fournisseur Cotonou Textiles;Achat de marchandises;601;254500;
+24/01/2025;FA-202501-04;Fournisseur Cotonou Textiles;Achat de marchandises;601;203485;
+28/01/2025;CH-202501-622;Bailleur;Loyer boutique;622;180000;
+28/01/2025;CH-202501-661;Personnel;Salaires du mois;661;320000;
+28/01/2025;CH-202501-618;Transporteur zem / camion;Transport marchandises;618;64575;
+01/02/2025;VT-202502-00101;Client mobile money;Ventes du jour;701;;91500
+03/02/2025;VT-202502-00102;Client mobile money;Ventes du jour;701;;131300
+04/02/2025;VT-202502-00103;Client comptant;Ventes du jour;701;;115600
+05/02/2025;VT-202502-00104;Client mobile money;Ventes du jour;701;;94000
+06/02/2025;VT-202502-00105;Client comptant;Ventes du jour;701;;139700
+07/02/2025;VT-202502-00106;Client mobile money;Ventes du jour;701;;124000
+08/02/2025;VT-202502-00107;Client mobile money;Ventes du jour;701;;75000
+10/02/2025;VT-202502-00108;Client comptant;Ventes du jour;701;;133600
+11/02/2025;VT-202502-00109;Client mobile money;Ventes du jour;701;;88300
+12/02/2025;VT-202502-00110;Client comptant;Ventes du jour;701;;133700
+13/02/2025;VT-202502-00111;Client mobile money;Ventes du jour;701;;160700
+14/02/2025;VT-202502-00112;Client mobile money;Ventes du jour;701;;76300
+15/02/2025;VT-202502-00113;Client mobile money;Ventes du jour;701;;154700
+17/02/2025;VT-202502-00114;Client mobile money;Ventes du jour;701;;133000
+18/02/2025;VT-202502-00115;Client mobile money;Ventes du jour;701;;118000
+19/02/2025;VT-202502-00116;Client mobile money;Ventes du jour;701;;136600
+20/02/2025;VT-202502-00117;Client comptant;Ventes du jour;701;;73700
+21/02/2025;VT-202502-00118;Client mobile money;Ventes du jour;701;;133400
+22/02/2025;VT-202502-00119;Client comptant;Ventes du jour;701;;92600
+24/02/2025;VT-202502-00120;Client mobile money;Ventes du jour;701;;156100
+25/02/2025;VT-202502-00121;Client mobile money;Ventes du jour;701;;157200
+26/02/2025;VT-202502-00122;Client comptant;Ventes du jour;701;;84900
+27/02/2025;VT-202502-00123;Client comptant;Ventes du jour;701;;134900
+28/02/2025;VT-202502-00124;Client comptant;Ventes du jour;701;;89200
+03/02/2025;FA-202502-01;Import Lomé SARL;Achat de marchandises;601;466500;
+10/02/2025;FA-202502-02;Grossiste Dantokpa;Achat de marchandises;601;388800;
+17/02/2025;FA-202502-03;Grossiste Dantokpa;Achat de marchandises;601;388800;
+24/02/2025;FA-202502-04;Grossiste Dantokpa;Achat de marchandises;601;311015;
+28/02/2025;CH-202502-622;Bailleur;Loyer boutique;622;180000;
+28/02/2025;CH-202502-661;Personnel;Salaires du mois;661;320000;
+28/02/2025;CH-202502-618;Transporteur zem / camion;Transport marchandises;618;70700;
+01/03/2025;VT-202503-00132;Client comptant;Ventes du jour;701;;71400
+03/03/2025;VT-202503-00133;Client mobile money;Ventes du jour;701;;79700
+04/03/2025;VT-202503-00134;Client comptant;Ventes du jour;701;;113900
+05/03/2025;VT-202503-00135;Client comptant;Ventes du jour;701;;102200
+06/03/2025;VT-202503-00136;Client comptant;Ventes du jour;701;;122500
+07/03/2025;VT-202503-00137;Client comptant;Ventes du jour;701;;149700
+08/03/2025;VT-202503-00138;Client comptant;Ventes du jour;701;;151000
+10/03/2025;VT-202503-00139;Client comptant;Ventes du jour;701;;88200
+11/03/2025;VT-202503-00140;Client mobile money;Ventes du jour;701;;73500
+12/03/2025;VT-202503-00141;Client mobile money;Ventes du jour;701;;151000
+13/03/2025;VT-202503-00142;Client comptant;Ventes du jour;701;;104200
+14/03/2025;VT-202503-00143;Client comptant;Ventes du jour;701;;135900
+15/03/2025;VT-202503-00144;Client mobile money;Ventes du jour;701;;145800
+17/03/2025;VT-202503-00145;Client mobile money;Ventes du jour;701;;91400
+18/03/2025;VT-202503-00146;Client comptant;Ventes du jour;701;;129600
+19/03/2025;VT-202503-00147;Client mobile money;Ventes du jour;701;;97400
+20/03/2025;VT-202503-00148;Client mobile money;Ventes du jour;701;;142000
+21/03/2025;VT-202503-00149;Client comptant;Ventes du jour;701;;140000
+22/03/2025;VT-202503-00150;Client comptant;Ventes du jour;701;;124800
+24/03/2025;VT-202503-00151;Client mobile money;Ventes du jour;701;;124100
+25/03/2025;VT-202503-00152;Client mobile money;Ventes du jour;701;;134300
+26/03/2025;VT-202503-00153;Client mobile money;Ventes du jour;701;;83500
+27/03/2025;VT-202503-00154;Client comptant;Ventes du jour;701;;144800
+28/03/2025;VT-202503-00155;Client comptant;Ventes du jour;701;;80000
+29/03/2025;VT-202503-00156;Client comptant;Ventes du jour;701;;112200
+31/03/2025;VT-202503-00157;Client comptant;Ventes du jour;701;;80900
+03/03/2025;FA-202503-01;Grossiste Dantokpa;Achat de marchandises;601;544600;
+10/03/2025;FA-202503-02;Import Lomé SARL;Achat de marchandises;601;453900;
+17/03/2025;FA-202503-03;Grossiste Dantokpa;Achat de marchandises;601;453900;
+24/03/2025;FA-202503-04;Grossiste Dantokpa;Achat de marchandises;601;363053;
+28/03/2025;CH-202503-622;Bailleur;Loyer boutique;622;180000;
+28/03/2025;CH-202503-661;Personnel;Salaires du mois;661;320000;
+28/03/2025;CH-202503-618;Transporteur zem / camion;Transport marchandises;618;74350;
+01/04/2025;VT-202504-00165;Client comptant;Ventes du jour;701;;122200
+02/04/2025;VT-202504-00166;Client mobile money;Ventes du jour;701;;112900
+03/04/2025;VT-202504-00167;Client mobile money;Ventes du jour;701;;143500
+04/04/2025;VT-202504-00168;Client mobile money;Ventes du jour;701;;93600
+05/04/2025;VT-202504-00169;Client comptant;Ventes du jour;701;;130200
+07/04/2025;VT-202504-00170;Client comptant;Ventes du jour;701;;115500
+08/04/2025;VT-202504-00171;Client comptant;Ventes du jour;701;;119600
+09/04/2025;VT-202504-00172;Client mobile money;Ventes du jour;701;;116200
+10/04/2025;VT-202504-00173;Client comptant;Ventes du jour;701;;142500
+11/04/2025;VT-202504-00174;Client comptant;Ventes du jour;701;;90700
+12/04/2025;VT-202504-00175;Client comptant;Ventes du jour;701;;82200
+14/04/2025;VT-202504-00176;Client comptant;Ventes du jour;701;;103200
+15/04/2025;VT-202504-00177;Client comptant;Ventes du jour;701;;147200
+16/04/2025;VT-202504-00178;Client comptant;Ventes du jour;701;;138600
+17/04/2025;VT-202504-00179;Client comptant;Ventes du jour;701;;122300
+18/04/2025;VT-202504-00180;Client comptant;Ventes du jour;701;;137100
+19/04/2025;VT-202504-00181;Client comptant;Ventes du jour;701;;121800
+21/04/2025;VT-202504-00182;Client comptant;Ventes du jour;701;;142400
+22/04/2025;VT-202504-00183;Client comptant;Ventes du jour;701;;96900
+23/04/2025;VT-202504-00184;Client comptant;Ventes du jour;701;;144400
+24/04/2025;VT-202504-00185;Client mobile money;Ventes du jour;701;;94200
+25/04/2025;VT-202504-00186;Client comptant;Ventes du jour;701;;126400
+26/04/2025;VT-202504-00187;Client comptant;Ventes du jour;701;;101000
+28/04/2025;VT-202504-00188;Client comptant;Ventes du jour;701;;65800
+29/04/2025;VT-202504-00189;Client mobile money;Ventes du jour;701;;123000
+30/04/2025;VT-202504-00190;Client comptant;Ventes du jour;701;;88600
+03/04/2025;FA-202504-01;Import Lomé SARL;Achat de marchandises;601;565900;
+10/04/2025;FA-202504-02;Fournisseur Cotonou Textiles;Achat de marchandises;601;471600;
+17/04/2025;FA-202504-03;Grossiste Dantokpa;Achat de marchandises;601;471600;
+24/04/2025;FA-202504-04;Import Lomé SARL;Achat de marchandises;601;377244;
+28/04/2025;CH-202504-622;Bailleur;Loyer boutique;622;180000;
+28/04/2025;CH-202504-661;Personnel;Salaires du mois;661;320000;
+28/04/2025;CH-202504-618;Transporteur zem / camion;Transport marchandises;618;75550;
+01/05/2025;VT-202505-00198;Client comptant;Ventes du jour;701;;103300
+02/05/2025;VT-202505-00199;Client mobile money;Ventes du jour;701;;99900
+03/05/2025;VT-202505-00200;Client comptant;Ventes du jour;701;;135400
+05/05/2025;VT-202505-00201;Client comptant;Ventes du jour;701;;125300
+06/05/2025;VT-202505-00202;Client comptant;Ventes du jour;701;;135200
+07/05/2025;VT-202505-00203;Client comptant;Ventes du jour;701;;82800
+08/05/2025;VT-202505-00204;Client comptant;Ventes du jour;701;;69000
+09/05/2025;VT-202505-00205;Client mobile money;Ventes du jour;701;;130100
+10/05/2025;VT-202505-00206;Client comptant;Ventes du jour;701;;114500
+12/05/2025;VT-202505-00207;Client comptant;Ventes du jour;701;;115700
+13/05/2025;VT-202505-00208;Client comptant;Ventes du jour;701;;145300
+14/05/2025;VT-202505-00209;Client comptant;Ventes du jour;701;;136200
+15/05/2025;VT-202505-00210;Client comptant;Ventes du jour;701;;86700
+16/05/2025;VT-202505-00211;Client comptant;Ventes du jour;701;;68000
+17/05/2025;VT-202505-00212;Client mobile money;Ventes du jour;701;;114500
+19/05/2025;VT-202505-00213;Client comptant;Ventes du jour;701;;103600
+20/05/2025;VT-202505-00214;Client mobile money;Ventes du jour;701;;151500
+21/05/2025;VT-202505-00215;Client comptant;Ventes du jour;701;;78800
+22/05/2025;VT-202505-00216;Client comptant;Ventes du jour;701;;122100
+23/05/2025;VT-202505-00217;Client mobile money;Ventes du jour;701;;74400
+24/05/2025;VT-202505-00218;Client mobile money;Ventes du jour;701;;82400
+26/05/2025;VT-202505-00219;Client comptant;Ventes du jour;701;;69900
+27/05/2025;VT-202505-00220;Client mobile money;Ventes du jour;701;;143300
+28/05/2025;VT-202505-00221;Client mobile money;Ventes du jour;701;;139500
+29/05/2025;VT-202505-00222;Client mobile money;Ventes du jour;701;;139200
+30/05/2025;VT-202505-00223;Client comptant;Ventes du jour;701;;96700
+31/05/2025;VT-202505-00224;Client mobile money;Ventes du jour;701;;112700
+03/05/2025;FA-202505-01;Fournisseur Cotonou Textiles;Achat de marchandises;601;547300;
+10/05/2025;FA-202505-02;Import Lomé SARL;Achat de marchandises;601;456100;
+17/05/2025;FA-202505-03;Fournisseur Cotonou Textiles;Achat de marchandises;601;456100;
+24/05/2025;FA-202505-04;Fournisseur Cotonou Textiles;Achat de marchandises;601;364722;
+28/05/2025;CH-202505-622;Bailleur;Loyer boutique;622;180000;
+28/05/2025;CH-202505-661;Personnel;Salaires du mois;661;320000;
+28/05/2025;CH-202505-618;Transporteur zem / camion;Transport marchandises;618;74400;
+02/06/2025;VT-202506-00232;Client comptant;Ventes du jour;701;;117800
+03/06/2025;VT-202506-00233;Client comptant;Ventes du jour;701;;100700
+04/06/2025;VT-202506-00234;Client comptant;Ventes du jour;701;;128700
+05/06/2025;VT-202506-00235;Client comptant;Ventes du jour;701;;136900
+06/06/2025;VT-202506-00236;Client comptant;Ventes du jour;701;;83700
+07/06/2025;VT-202506-00237;Client comptant;Ventes du jour;701;;122500
+09/06/2025;VT-202506-00238;Client comptant;Ventes du jour;701;;189100
+10/06/2025;VT-202506-00239;Client comptant;Ventes du jour;701;;141200
+11/06/2025;VT-202506-00240;Client mobile money;Ventes du jour;701;;128400
+12/06/2025;VT-202506-00241;Client mobile money;Ventes du jour;701;;87300
+13/06/2025;VT-202506-00242;Client comptant;Ventes du jour;701;;102300
+14/06/2025;VT-202506-00243;Client mobile money;Ventes du jour;701;;116300
+16/06/2025;VT-202506-00244;Client mobile money;Ventes du jour;701;;143800
+17/06/2025;VT-202506-00245;Client comptant;Ventes du jour;701;;112500
+18/06/2025;VT-202506-00246;Client comptant;Ventes du jour;701;;162400
+19/06/2025;VT-202506-00247;Client comptant;Ventes du jour;701;;94300
+20/06/2025;VT-202506-00248;Client comptant;Ventes du jour;701;;183300
+21/06/2025;VT-202506-00249;Client comptant;Ventes du jour;701;;142300
+23/06/2025;VT-202506-00250;Client comptant;Ventes du jour;701;;177400
+24/06/2025;VT-202506-00251;Client mobile money;Ventes du jour;701;;160300
+25/06/2025;VT-202506-00252;Client mobile money;Ventes du jour;701;;117200
+26/06/2025;VT-202506-00253;Client comptant;Ventes du jour;701;;88100
+27/06/2025;VT-202506-00254;Client mobile money;Ventes du jour;701;;126800
+28/06/2025;VT-202506-00255;Client mobile money;Ventes du jour;701;;142900
+30/06/2025;VT-202506-00256;Client comptant;Ventes du jour;701;;190800
+03/06/2025;FA-202506-01;Import Lomé SARL;Achat de marchandises;601;669200;
+10/06/2025;FA-202506-02;Grossiste Dantokpa;Achat de marchandises;601;557700;
+17/06/2025;FA-202506-03;Fournisseur Cotonou Textiles;Achat de marchandises;601;557700;
+24/06/2025;FA-202506-04;Fournisseur Cotonou Textiles;Achat de marchandises;601;446021;
+28/06/2025;CH-202506-622;Bailleur;Loyer boutique;622;180000;
+28/06/2025;CH-202506-661;Personnel;Salaires du mois;661;320000;
+28/06/2025;CH-202506-618;Transporteur zem / camion;Transport marchandises;618;82425;
+01/07/2025;VT-202507-00264;Client comptant;Ventes du jour;701;;67900
+02/07/2025;VT-202507-00265;Client comptant;Ventes du jour;701;;121300
+03/07/2025;VT-202507-00266;Client mobile money;Ventes du jour;701;;110000
+04/07/2025;VT-202507-00267;Client mobile money;Ventes du jour;701;;104900
+05/07/2025;VT-202507-00268;Client comptant;Ventes du jour;701;;139700
+07/07/2025;VT-202507-00269;Client mobile money;Ventes du jour;701;;147800
+08/07/2025;VT-202507-00270;Client comptant;Ventes du jour;701;;154700
+09/07/2025;VT-202507-00271;Client comptant;Ventes du jour;701;;156300
+10/07/2025;VT-202507-00272;Client mobile money;Ventes du jour;701;;82400
+11/07/2025;VT-202507-00273;Client mobile money;Ventes du jour;701;;113300
+12/07/2025;VT-202507-00274;Client mobile money;Ventes du jour;701;;83200
+14/07/2025;VT-202507-00275;Client comptant;Ventes du jour;701;;115300
+15/07/2025;VT-202507-00276;Client comptant;Ventes du jour;701;;81800
+16/07/2025;VT-202507-00277;Client comptant;Ventes du jour;701;;146500
+17/07/2025;VT-202507-00278;Client comptant;Ventes du jour;701;;113200
+18/07/2025;VT-202507-00279;Client mobile money;Ventes du jour;701;;146000
+19/07/2025;VT-202507-00280;Client comptant;Ventes du jour;701;;124600
+21/07/2025;VT-202507-00281;Client mobile money;Ventes du jour;701;;67300
+22/07/2025;VT-202507-00282;Client comptant;Ventes du jour;701;;100600
+23/07/2025;VT-202507-00283;Client mobile money;Ventes du jour;701;;100000
+24/07/2025;VT-202507-00284;Client comptant;Ventes du jour;701;;86400
+25/07/2025;VT-202507-00285;Client comptant;Ventes du jour;701;;80900
+26/07/2025;VT-202507-00286;Client comptant;Ventes du jour;701;;121700
+28/07/2025;VT-202507-00287;Client mobile money;Ventes du jour;701;;78400
+29/07/2025;VT-202507-00288;Client mobile money;Ventes du jour;701;;155200
+30/07/2025;VT-202507-00289;Client mobile money;Ventes du jour;701;;110400
+31/07/2025;VT-202507-00290;Client comptant;Ventes du jour;701;;145200
+03/07/2025;FA-202507-01;Grossiste Dantokpa;Achat de marchandises;601;556800;
+10/07/2025;FA-202507-02;Grossiste Dantokpa;Achat de marchandises;601;464000;
+17/07/2025;FA-202507-03;Import Lomé SARL;Achat de marchandises;601;464000;
+24/07/2025;FA-202507-04;Import Lomé SARL;Achat de marchandises;601;371149;
+28/07/2025;CH-202507-622;Bailleur;Loyer boutique;622;180000;
+28/07/2025;CH-202507-661;Personnel;Salaires du mois;661;320000;
+28/07/2025;CH-202507-618;Transporteur zem / camion;Transport marchandises;618;76375;
+01/08/2025;VT-202508-00298;Client comptant;Ventes du jour;701;;108700
+02/08/2025;VT-202508-00299;Client mobile money;Ventes du jour;701;;93600
+04/08/2025;VT-202508-00300;Client comptant;Ventes du jour;701;;143400
+05/08/2025;VT-202508-00301;Client comptant;Ventes du jour;701;;127500
+06/08/2025;VT-202508-00302;Client comptant;Ventes du jour;701;;139100
+07/08/2025;VT-202508-00303;Client mobile money;Ventes du jour;701;;99800
+08/08/2025;VT-202508-00304;Client mobile money;Ventes du jour;701;;80200
+09/08/2025;VT-202508-00305;Client comptant;Ventes du jour;701;;134700
+11/08/2025;VT-202508-00306;Client mobile money;Ventes du jour;701;;84000
+12/08/2025;VT-202508-00307;Client comptant;Ventes du jour;701;;124500
+13/08/2025;VT-202508-00308;Client mobile money;Ventes du jour;701;;95100
+14/08/2025;VT-202508-00309;Client mobile money;Ventes du jour;701;;133000
+15/08/2025;VT-202508-00310;Client comptant;Ventes du jour;701;;100400
+16/08/2025;VT-202508-00311;Client comptant;Ventes du jour;701;;134400
+18/08/2025;VT-202508-00312;Client comptant;Ventes du jour;701;;97900
+19/08/2025;VT-202508-00313;Client mobile money;Ventes du jour;701;;78300
+20/08/2025;VT-202508-00314;Client comptant;Ventes du jour;701;;129200
+21/08/2025;VT-202508-00315;Client mobile money;Ventes du jour;701;;121700
+22/08/2025;VT-202508-00316;Client mobile money;Ventes du jour;701;;75900
+23/08/2025;VT-202508-00317;Client comptant;Ventes du jour;701;;88100
+25/08/2025;VT-202508-00318;Client comptant;Ventes du jour;701;;137200
+26/08/2025;VT-202508-00319;Client mobile money;Ventes du jour;701;;92600
+27/08/2025;VT-202508-00320;Client comptant;Ventes du jour;701;;137700
+28/08/2025;VT-202508-00321;Client comptant;Ventes du jour;701;;103400
+29/08/2025;VT-202508-00322;Client comptant;Ventes du jour;701;;77500
+30/08/2025;VT-202508-00323;Client comptant;Ventes du jour;701;;119100
+03/08/2025;FA-202508-01;Fournisseur Cotonou Textiles;Achat de marchandises;601;487700;
+10/08/2025;FA-202508-02;Grossiste Dantokpa;Achat de marchandises;601;406400;
+17/08/2025;FA-202508-03;Import Lomé SARL;Achat de marchandises;601;406400;
+24/08/2025;FA-202508-04;Import Lomé SARL;Achat de marchandises;601;325189;
+28/08/2025;CH-202508-622;Bailleur;Loyer boutique;622;180000;
+28/08/2025;CH-202508-661;Personnel;Salaires du mois;661;320000;
+28/08/2025;CH-202508-618;Transporteur zem / camion;Transport marchandises;618;71425;
+01/09/2025;VT-202509-00331;Client comptant;Ventes du jour;701;;156900
+02/09/2025;VT-202509-00332;Client comptant;Ventes du jour;701;;90900
+03/09/2025;VT-202509-00333;Client comptant;Ventes du jour;701;;129000
+04/09/2025;VT-202509-00334;Client mobile money;Ventes du jour;701;;103500
+05/09/2025;VT-202509-00335;Client comptant;Ventes du jour;701;;114100
+06/09/2025;VT-202509-00336;Client mobile money;Ventes du jour;701;;162900
+08/09/2025;VT-202509-00337;Client comptant;Ventes du jour;701;;98800
+09/09/2025;VT-202509-00338;Client comptant;Ventes du jour;701;;149100
+10/09/2025;VT-202509-00339;Client comptant;Ventes du jour;701;;152800
+11/09/2025;VT-202509-00340;Client comptant;Ventes du jour;701;;177600
+12/09/2025;VT-202509-00341;Client comptant;Ventes du jour;701;;174100
+13/09/2025;VT-202509-00342;Client mobile money;Ventes du jour;701;;179600
+15/09/2025;VT-202509-00343;Client comptant;Ventes du jour;701;;138300
+16/09/2025;VT-202509-00344;Client comptant;Ventes du jour;701;;85500
+17/09/2025;VT-202509-00345;Client mobile money;Ventes du jour;701;;169100
+18/09/2025;VT-202509-00346;Client comptant;Ventes du jour;701;;155500
+19/09/2025;VT-202509-00347;Client comptant;Ventes du jour;701;;158300
+20/09/2025;VT-202509-00348;Client comptant;Ventes du jour;701;;189800
+22/09/2025;VT-202509-00349;Client comptant;Ventes du jour;701;;120800
+23/09/2025;VT-202509-00350;Client comptant;Ventes du jour;701;;171600
+24/09/2025;VT-202509-00351;Client comptant;Ventes du jour;701;;172800
+25/09/2025;VT-202509-00352;Client comptant;Ventes du jour;701;;141900
+26/09/2025;VT-202509-00353;Client comptant;Ventes du jour;701;;154000
+27/09/2025;VT-202509-00354;Client mobile money;Ventes du jour;701;;125600
+29/09/2025;VT-202509-00355;Client mobile money;Ventes du jour;701;;146500
+30/09/2025;VT-202509-00356;Client comptant;Ventes du jour;701;;105000
+03/09/2025;FA-202509-01;Grossiste Dantokpa;Achat de marchandises;601;827700;
+10/09/2025;FA-202509-02;Fournisseur Cotonou Textiles;Achat de marchandises;601;689800;
+17/09/2025;FA-202509-03;Fournisseur Cotonou Textiles;Achat de marchandises;601;689800;
+24/09/2025;FA-202509-04;Fournisseur Cotonou Textiles;Achat de marchandises;601;551730;
+28/09/2025;CH-202509-622;Bailleur;Loyer boutique;622;180000;
+28/09/2025;CH-202509-661;Personnel;Salaires du mois;661;320000;
+28/09/2025;CH-202509-618;Transporteur zem / camion;Transport marchandises;618;93100;
+01/10/2025;VT-202510-00364;Client mobile money;Ventes du jour;701;;167200
+02/10/2025;VT-202510-00365;Client mobile money;Ventes du jour;701;;167200
+03/10/2025;VT-202510-00366;Client comptant;Ventes du jour;701;;159700
+04/10/2025;VT-202510-00367;Client comptant;Ventes du jour;701;;135400
+06/10/2025;VT-202510-00368;Client comptant;Ventes du jour;701;;105000
+07/10/2025;VT-202510-00369;Client comptant;Ventes du jour;701;;105600
+08/10/2025;VT-202510-00370;Client comptant;Ventes du jour;701;;130500
+09/10/2025;VT-202510-00371;Client mobile money;Ventes du jour;701;;96700
+10/10/2025;VT-202510-00372;Client mobile money;Ventes du jour;701;;157100
+11/10/2025;VT-202510-00373;Client mobile money;Ventes du jour;701;;152900
+13/10/2025;VT-202510-00374;Client comptant;Ventes du jour;701;;75700
+14/10/2025;VT-202510-00375;Client mobile money;Ventes du jour;701;;119300
+15/10/2025;VT-202510-00376;Client mobile money;Ventes du jour;701;;74200
+16/10/2025;VT-202510-00377;Client comptant;Ventes du jour;701;;150000
+17/10/2025;VT-202510-00378;Client comptant;Ventes du jour;701;;96600
+18/10/2025;VT-202510-00379;Client comptant;Ventes du jour;701;;144800
+20/10/2025;VT-202510-00380;Client comptant;Ventes du jour;701;;91300
+21/10/2025;VT-202510-00381;Client mobile money;Ventes du jour;701;;98500
+22/10/2025;VT-202510-00382;Client comptant;Ventes du jour;701;;153200
+23/10/2025;VT-202510-00383;Client comptant;Ventes du jour;701;;110600
+24/10/2025;VT-202510-00384;Client mobile money;Ventes du jour;701;;93100
+25/10/2025;VT-202510-00385;Client comptant;Ventes du jour;701;;77400
+27/10/2025;VT-202510-00386;Client comptant;Ventes du jour;701;;111700
+28/10/2025;VT-202510-00387;Client comptant;Ventes du jour;701;;78400
+29/10/2025;VT-202510-00388;Client comptant;Ventes du jour;701;;141600
+30/10/2025;VT-202510-00389;Client comptant;Ventes du jour;701;;135700
+31/10/2025;VT-202510-00390;Client mobile money;Ventes du jour;701;;137600
+03/10/2025;FA-202510-01;Grossiste Dantokpa;Achat de marchandises;601;603700;
+10/10/2025;FA-202510-02;Grossiste Dantokpa;Achat de marchandises;601;503100;
+17/10/2025;FA-202510-03;Import Lomé SARL;Achat de marchandises;601;503100;
+24/10/2025;FA-202510-04;Fournisseur Cotonou Textiles;Achat de marchandises;601;402390;
+28/10/2025;CH-202510-622;Bailleur;Loyer boutique;622;180000;
+28/10/2025;CH-202510-661;Personnel;Salaires du mois;661;320000;
+28/10/2025;CH-202510-618;Transporteur zem / camion;Transport marchandises;618;81675;
+01/11/2025;VT-202511-00398;Client comptant;Ventes du jour;701;;170400
+03/11/2025;VT-202511-00399;Client comptant;Ventes du jour;701;;93000
+04/11/2025;VT-202511-00400;Client mobile money;Ventes du jour;701;;102000
+05/11/2025;VT-202511-00401;Client comptant;Ventes du jour;701;;171000
+06/11/2025;VT-202511-00402;Client comptant;Ventes du jour;701;;162000
+07/11/2025;VT-202511-00403;Client mobile money;Ventes du jour;701;;155600
+08/11/2025;VT-202511-00404;Client comptant;Ventes du jour;701;;94100
+10/11/2025;VT-202511-00405;Client mobile money;Ventes du jour;701;;151600
+11/11/2025;VT-202511-00406;Client comptant;Ventes du jour;701;;170600
+12/11/2025;VT-202511-00407;Client comptant;Ventes du jour;701;;118200
+13/11/2025;VT-202511-00408;Client comptant;Ventes du jour;701;;148700
+14/11/2025;VT-202511-00409;Client comptant;Ventes du jour;701;;136100
+15/11/2025;VT-202511-00410;Client comptant;Ventes du jour;701;;156700
+17/11/2025;VT-202511-00411;Client comptant;Ventes du jour;701;;99700
+18/11/2025;VT-202511-00412;Client comptant;Ventes du jour;701;;144000
+19/11/2025;VT-202511-00413;Client mobile money;Ventes du jour;701;;154400
+20/11/2025;VT-202511-00414;Client comptant;Ventes du jour;701;;95900
+21/11/2025;VT-202511-00415;Client comptant;Ventes du jour;701;;94900
+22/11/2025;VT-202511-00416;Client mobile money;Ventes du jour;701;;164200
+24/11/2025;VT-202511-00417;Client comptant;Ventes du jour;701;;164400
+25/11/2025;VT-202511-00418;Client comptant;Ventes du jour;701;;140400
+26/11/2025;VT-202511-00419;Client mobile money;Ventes du jour;701;;164700
+27/11/2025;VT-202511-00420;Client comptant;Ventes du jour;701;;171500
+28/11/2025;VT-202511-00421;Client comptant;Ventes du jour;701;;109400
+29/11/2025;VT-202511-00422;Client mobile money;Ventes du jour;701;;111500
+03/11/2025;FA-202511-01;Fournisseur Cotonou Textiles;Achat de marchandises;601;671500;
+10/11/2025;FA-202511-02;Grossiste Dantokpa;Achat de marchandises;601;559600;
+17/11/2025;FA-202511-03;Import Lomé SARL;Achat de marchandises;601;559600;
+24/11/2025;FA-202511-04;Fournisseur Cotonou Textiles;Achat de marchandises;601;447610;
+28/11/2025;CH-202511-622;Bailleur;Loyer boutique;622;180000;
+28/11/2025;CH-202511-661;Personnel;Salaires du mois;661;320000;
+28/11/2025;CH-202511-618;Transporteur zem / camion;Transport marchandises;618;86125;
+01/12/2025;VT-202512-00430;Client comptant;Ventes du jour;701;;201000
+02/12/2025;VT-202512-00431;Client comptant;Ventes du jour;701;;121500
+03/12/2025;VT-202512-00432;Client mobile money;Ventes du jour;701;;144300
+04/12/2025;VT-202512-00433;Client comptant;Ventes du jour;701;;196700
+05/12/2025;VT-202512-00434;Client comptant;Ventes du jour;701;;106100
+06/12/2025;VT-202512-00435;Client mobile money;Ventes du jour;701;;101700
+08/12/2025;VT-202512-00436;Client comptant;Ventes du jour;701;;113400
+09/12/2025;VT-202512-00437;Client comptant;Ventes du jour;701;;179400
+10/12/2025;VT-202512-00438;Client mobile money;Ventes du jour;701;;195300
+11/12/2025;VT-202512-00439;Client comptant;Ventes du jour;701;;209900
+12/12/2025;VT-202512-00440;Client comptant;Ventes du jour;701;;135200
+13/12/2025;VT-202512-00441;Client comptant;Ventes du jour;701;;202300
+15/12/2025;VT-202512-00442;Client comptant;Ventes du jour;701;;122700
+16/12/2025;VT-202512-00443;Client comptant;Ventes du jour;701;;126400
+17/12/2025;VT-202512-00444;Client comptant;Ventes du jour;701;;210300
+18/12/2025;VT-202512-00445;Client mobile money;Ventes du jour;701;;157500
+19/12/2025;VT-202512-00446;Client comptant;Ventes du jour;701;;158900
+20/12/2025;VT-202512-00447;Client comptant;Ventes du jour;701;;212600
+22/12/2025;VT-202512-00448;Client comptant;Ventes du jour;701;;123600
+23/12/2025;VT-202512-00449;Client comptant;Ventes du jour;701;;130900
+24/12/2025;VT-202512-00450;Client comptant;Ventes du jour;701;;230700
+25/12/2025;VT-202512-00451;Client comptant;Ventes du jour;701;;129300
+26/12/2025;VT-202512-00452;Client comptant;Ventes du jour;701;;122000
+27/12/2025;VT-202512-00453;Client comptant;Ventes du jour;701;;233900
+29/12/2025;VT-202512-00454;Client comptant;Ventes du jour;701;;157400
+30/12/2025;VT-202512-00455;Client mobile money;Ventes du jour;701;;157500
+31/12/2025;VT-202512-00456;Client comptant;Ventes du jour;701;;215500
+03/12/2025;FA-202512-01;Import Lomé SARL;Achat de marchandises;601;1013000;
+10/12/2025;FA-202512-02;Grossiste Dantokpa;Achat de marchandises;601;844100;
+17/12/2025;FA-202512-03;Fournisseur Cotonou Textiles;Achat de marchandises;601;844100;
+24/12/2025;FA-202512-04;Grossiste Dantokpa;Achat de marchandises;601;675386;
+28/12/2025;CH-202512-622;Bailleur;Loyer boutique;622;180000;
+28/12/2025;CH-202512-661;Personnel;Salaires du mois;661;320000;
+28/12/2025;CH-202512-618;Transporteur zem / camion;Transport marchandises;618;109900;
+01/01/2026;VT-202601-00464;Client comptant;Ventes du jour;701;;106100
+02/01/2026;VT-202601-00465;Client mobile money;Ventes du jour;701;;126300
+03/01/2026;VT-202601-00466;Client mobile money;Ventes du jour;701;;116800
+05/01/2026;VT-202601-00467;Client comptant;Ventes du jour;701;;78700
+06/01/2026;VT-202601-00468;Client comptant;Ventes du jour;701;;84600
+07/01/2026;VT-202601-00469;Client comptant;Ventes du jour;701;;57600
+08/01/2026;VT-202601-00470;Client comptant;Ventes du jour;701;;96500
+09/01/2026;VT-202601-00471;Client comptant;Ventes du jour;701;;124200
+10/01/2026;VT-202601-00472;Client comptant;Ventes du jour;701;;120700
+12/01/2026;VT-202601-00473;Client mobile money;Ventes du jour;701;;94000
+13/01/2026;VT-202601-00474;Client comptant;Ventes du jour;701;;67400
+14/01/2026;VT-202601-00475;Client comptant;Ventes du jour;701;;117100
+15/01/2026;VT-202601-00476;Client mobile money;Ventes du jour;701;;99400
+16/01/2026;VT-202601-00477;Client comptant;Ventes du jour;701;;130500
+17/01/2026;VT-202601-00478;Client comptant;Ventes du jour;701;;91500
+19/01/2026;VT-202601-00479;Client mobile money;Ventes du jour;701;;103100
+20/01/2026;VT-202601-00480;Client comptant;Ventes du jour;701;;101900
+21/01/2026;VT-202601-00481;Client mobile money;Ventes du jour;701;;127500
+22/01/2026;VT-202601-00482;Client comptant;Ventes du jour;701;;107800
+23/01/2026;VT-202601-00483;Client comptant;Ventes du jour;701;;81700
+24/01/2026;VT-202601-00484;Client comptant;Ventes du jour;701;;76300
+26/01/2026;VT-202601-00485;Client mobile money;Ventes du jour;701;;108700
+27/01/2026;VT-202601-00486;Client comptant;Ventes du jour;701;;91900
+28/01/2026;VT-202601-00487;Client comptant;Ventes du jour;701;;83200
+29/01/2026;VT-202601-00488;Client comptant;Ventes du jour;701;;119600
+30/01/2026;VT-202601-00489;Client mobile money;Ventes du jour;701;;96800
+31/01/2026;VT-202601-00490;Client comptant;Ventes du jour;701;;97100
+03/01/2026;FA-202601-01;Grossiste Dantokpa;Achat de marchandises;601;306500;
+10/01/2026;FA-202601-02;Fournisseur Cotonou Textiles;Achat de marchandises;601;255400;
+17/01/2026;FA-202601-03;Import Lomé SARL;Achat de marchandises;601;255400;
+24/01/2026;FA-202601-04;Grossiste Dantokpa;Achat de marchandises;601;204500;
+28/01/2026;CH-202601-622;Bailleur;Loyer boutique;622;180000;
+28/01/2026;CH-202601-661;Personnel;Salaires du mois;661;320000;
+28/01/2026;CH-202601-618;Transporteur zem / camion;Transport marchandises;618;67675;
+02/02/2026;VT-202602-00498;Client comptant;Ventes du jour;701;;160200
+03/02/2026;VT-202602-00499;Client mobile money;Ventes du jour;701;;139500
+04/02/2026;VT-202602-00500;Client comptant;Ventes du jour;701;;76400
+05/02/2026;VT-202602-00501;Client mobile money;Ventes du jour;701;;125800
+06/02/2026;VT-202602-00502;Client comptant;Ventes du jour;701;;80900
+07/02/2026;VT-202602-00503;Client comptant;Ventes du jour;701;;159500
+09/02/2026;VT-202602-00504;Client comptant;Ventes du jour;701;;154000
+10/02/2026;VT-202602-00505;Client mobile money;Ventes du jour;701;;136500
+11/02/2026;VT-202602-00506;Client comptant;Ventes du jour;701;;98300
+12/02/2026;VT-202602-00507;Client mobile money;Ventes du jour;701;;113600
+13/02/2026;VT-202602-00508;Client comptant;Ventes du jour;701;;99800
+14/02/2026;VT-202602-00509;Client comptant;Ventes du jour;701;;153200
+16/02/2026;VT-202602-00510;Client mobile money;Ventes du jour;701;;134000
+17/02/2026;VT-202602-00511;Client mobile money;Ventes du jour;701;;107000
+18/02/2026;VT-202602-00512;Client mobile money;Ventes du jour;701;;117600
+19/02/2026;VT-202602-00513;Client comptant;Ventes du jour;701;;148700
+20/02/2026;VT-202602-00514;Client comptant;Ventes du jour;701;;108800
+21/02/2026;VT-202602-00515;Client comptant;Ventes du jour;701;;115300
+23/02/2026;VT-202602-00516;Client mobile money;Ventes du jour;701;;125200
+24/02/2026;VT-202602-00517;Client comptant;Ventes du jour;701;;110600
+25/02/2026;VT-202602-00518;Client comptant;Ventes du jour;701;;141300
+26/02/2026;VT-202602-00519;Client comptant;Ventes du jour;701;;124500
+27/02/2026;VT-202602-00520;Client comptant;Ventes du jour;701;;124700
+28/02/2026;VT-202602-00521;Client comptant;Ventes du jour;701;;114600
+03/02/2026;FA-202602-01;Fournisseur Cotonou Textiles;Achat de marchandises;601;483200;
+10/02/2026;FA-202602-02;Import Lomé SARL;Achat de marchandises;601;402600;
+17/02/2026;FA-202602-03;Grossiste Dantokpa;Achat de marchandises;601;402600;
+24/02/2026;FA-202602-04;Fournisseur Cotonou Textiles;Achat de marchandises;601;322136;
+28/02/2026;CH-202602-622;Bailleur;Loyer boutique;622;180000;
+28/02/2026;CH-202602-661;Personnel;Salaires du mois;661;320000;
+28/02/2026;CH-202602-618;Transporteur zem / camion;Transport marchandises;618;74250;
+02/03/2026;VT-202603-00529;Client comptant;Ventes du jour;701;;81800
+03/03/2026;VT-202603-00530;Client comptant;Ventes du jour;701;;91100
+04/03/2026;VT-202603-00531;Client comptant;Ventes du jour;701;;114400
+05/03/2026;VT-202603-00532;Client comptant;Ventes du jour;701;;85300
+06/03/2026;VT-202603-00533;Client comptant;Ventes du jour;701;;84700
+07/03/2026;VT-202603-00534;Client comptant;Ventes du jour;701;;172300
+09/03/2026;VT-202603-00535;Client mobile money;Ventes du jour;701;;114000
+10/03/2026;VT-202603-00536;Client comptant;Ventes du jour;701;;74900
+11/03/2026;VT-202603-00537;Client mobile money;Ventes du jour;701;;93800
+12/03/2026;VT-202603-00538;Client comptant;Ventes du jour;701;;100300
+13/03/2026;VT-202603-00539;Client comptant;Ventes du jour;701;;153600
+14/03/2026;VT-202603-00540;Client comptant;Ventes du jour;701;;126200
+16/03/2026;VT-202603-00541;Client comptant;Ventes du jour;701;;164600
+17/03/2026;VT-202603-00542;Client mobile money;Ventes du jour;701;;82700
+18/03/2026;VT-202603-00543;Client comptant;Ventes du jour;701;;90900
+19/03/2026;VT-202603-00544;Client comptant;Ventes du jour;701;;164600
+20/03/2026;VT-202603-00545;Client mobile money;Ventes du jour;701;;95900
+21/03/2026;VT-202603-00546;Client comptant;Ventes du jour;701;;157700
+23/03/2026;VT-202603-00547;Client comptant;Ventes du jour;701;;153800
+24/03/2026;VT-202603-00548;Client comptant;Ventes du jour;701;;130000
+25/03/2026;VT-202603-00549;Client mobile money;Ventes du jour;701;;163400
+26/03/2026;VT-202603-00550;Client mobile money;Ventes du jour;701;;128700
+27/03/2026;VT-202603-00551;Client comptant;Ventes du jour;701;;77800
+28/03/2026;VT-202603-00552;Client comptant;Ventes du jour;701;;169400
+30/03/2026;VT-202603-00553;Client comptant;Ventes du jour;701;;171200
+31/03/2026;VT-202603-00554;Client comptant;Ventes du jour;701;;142900
+03/03/2026;FA-202603-01;Grossiste Dantokpa;Achat de marchandises;601;591200;
+10/03/2026;FA-202603-02;Fournisseur Cotonou Textiles;Achat de marchandises;601;492700;
+17/03/2026;FA-202603-03;Fournisseur Cotonou Textiles;Achat de marchandises;601;492700;
+24/03/2026;FA-202603-04;Fournisseur Cotonou Textiles;Achat de marchandises;601;394121;
+28/03/2026;CH-202603-622;Bailleur;Loyer boutique;622;180000;
+28/03/2026;CH-202603-661;Personnel;Salaires du mois;661;320000;
+28/03/2026;CH-202603-618;Transporteur zem / camion;Transport marchandises;618;79650;
+01/04/2026;VT-202604-00562;Client comptant;Ventes du jour;701;;145100
+02/04/2026;VT-202604-00563;Client mobile money;Ventes du jour;701;;107500
+03/04/2026;VT-202604-00564;Client comptant;Ventes du jour;701;;170800
+04/04/2026;VT-202604-00565;Client comptant;Ventes du jour;701;;140500
+06/04/2026;VT-202604-00566;Client comptant;Ventes du jour;701;;106400
+07/04/2026;VT-202604-00567;Client mobile money;Ventes du jour;701;;124300
+08/04/2026;VT-202604-00568;Client comptant;Ventes du jour;701;;91100
+09/04/2026;VT-202604-00569;Client mobile money;Ventes du jour;701;;85000
+10/04/2026;VT-202604-00570;Client comptant;Ventes du jour;701;;126600
+11/04/2026;VT-202604-00571;Client comptant;Ventes du jour;701;;142000
+13/04/2026;VT-202604-00572;Client comptant;Ventes du jour;701;;129600
+14/04/2026;VT-202604-00573;Client comptant;Ventes du jour;701;;149300
+15/04/2026;VT-202604-00574;Client mobile money;Ventes du jour;701;;100200
+16/04/2026;VT-202604-00575;Client comptant;Ventes du jour;701;;99500
+17/04/2026;VT-202604-00576;Client comptant;Ventes du jour;701;;103300
+18/04/2026;VT-202604-00577;Client mobile money;Ventes du jour;701;;163800
+20/04/2026;VT-202604-00578;Client comptant;Ventes du jour;701;;125100
+21/04/2026;VT-202604-00579;Client mobile money;Ventes du jour;701;;188600
+22/04/2026;VT-202604-00580;Client comptant;Ventes du jour;701;;152900
+23/04/2026;VT-202604-00581;Client comptant;Ventes du jour;701;;132500
+24/04/2026;VT-202604-00582;Client mobile money;Ventes du jour;701;;83600
+25/04/2026;VT-202604-00583;Client comptant;Ventes du jour;701;;89700
+27/04/2026;VT-202604-00584;Client mobile money;Ventes du jour;701;;163500
+28/04/2026;VT-202604-00585;Client comptant;Ventes du jour;701;;188300
+29/04/2026;VT-202604-00586;Client comptant;Ventes du jour;701;;143200
+30/04/2026;VT-202604-00587;Client comptant;Ventes du jour;701;;137600
+03/04/2026;FA-202604-01;Fournisseur Cotonou Textiles;Achat de marchandises;601;667700;
+10/04/2026;FA-202604-02;Grossiste Dantokpa;Achat de marchandises;601;556400;
+17/04/2026;FA-202604-03;Fournisseur Cotonou Textiles;Achat de marchandises;601;556400;
+24/04/2026;FA-202604-04;Import Lomé SARL;Achat de marchandises;601;445021;
+28/04/2026;CH-202604-622;Bailleur;Loyer boutique;622;180000;
+28/04/2026;CH-202604-661;Personnel;Salaires du mois;661;320000;
+28/04/2026;CH-202604-618;Transporteur zem / camion;Transport marchandises;618;84750;
+01/05/2026;VT-202605-00595;Client mobile money;Ventes du jour;701;;97000
+02/05/2026;VT-202605-00596;Client comptant;Ventes du jour;701;;110700
+04/05/2026;VT-202605-00597;Client mobile money;Ventes du jour;701;;97700
+05/05/2026;VT-202605-00598;Client comptant;Ventes du jour;701;;103500
+06/05/2026;VT-202605-00599;Client mobile money;Ventes du jour;701;;140000
+07/05/2026;VT-202605-00600;Client comptant;Ventes du jour;701;;140400
+08/05/2026;VT-202605-00601;Client comptant;Ventes du jour;701;;129300
+09/05/2026;VT-202605-00602;Client comptant;Ventes du jour;701;;103800
+11/05/2026;VT-202605-00603;Client mobile money;Ventes du jour;701;;125800
+12/05/2026;VT-202605-00604;Client comptant;Ventes du jour;701;;169100
+13/05/2026;VT-202605-00605;Client comptant;Ventes du jour;701;;107300
+14/05/2026;VT-202605-00606;Client comptant;Ventes du jour;701;;145900
+15/05/2026;VT-202605-00607;Client comptant;Ventes du jour;701;;143800
+16/05/2026;VT-202605-00608;Client mobile money;Ventes du jour;701;;131600
+18/05/2026;VT-202605-00609;Client mobile money;Ventes du jour;701;;97500
+19/05/2026;VT-202605-00610;Client comptant;Ventes du jour;701;;119900
+20/05/2026;VT-202605-00611;Client mobile money;Ventes du jour;701;;166100
+21/05/2026;VT-202605-00612;Client mobile money;Ventes du jour;701;;133300
+22/05/2026;VT-202605-00613;Client mobile money;Ventes du jour;701;;123000
+23/05/2026;VT-202605-00614;Client mobile money;Ventes du jour;701;;138600
+25/05/2026;VT-202605-00615;Client comptant;Ventes du jour;701;;84700
+26/05/2026;VT-202605-00616;Client mobile money;Ventes du jour;701;;86100
+27/05/2026;VT-202605-00617;Client mobile money;Ventes du jour;701;;133800
+28/05/2026;VT-202605-00618;Client mobile money;Ventes du jour;701;;104200
+29/05/2026;VT-202605-00619;Client comptant;Ventes du jour;701;;113700
+30/05/2026;VT-202605-00620;Client comptant;Ventes du jour;701;;98200
+03/05/2026;FA-202605-01;Import Lomé SARL;Achat de marchandises;601;561700;
+10/05/2026;FA-202605-02;Import Lomé SARL;Achat de marchandises;601;468100;
+17/05/2026;FA-202605-03;Import Lomé SARL;Achat de marchandises;601;468100;
+24/05/2026;FA-202605-04;Import Lomé SARL;Achat de marchandises;601;374333;
+28/05/2026;CH-202605-622;Bailleur;Loyer boutique;622;180000;
+28/05/2026;CH-202605-661;Personnel;Salaires du mois;661;320000;
+28/05/2026;CH-202605-618;Transporteur zem / camion;Transport marchandises;618;78625;
+01/06/2026;VT-202606-00628;Client comptant;Ventes du jour;701;;174400
+02/06/2026;VT-202606-00629;Client comptant;Ventes du jour;701;;94700
+03/06/2026;VT-202606-00630;Client comptant;Ventes du jour;701;;144300
+04/06/2026;VT-202606-00631;Client mobile money;Ventes du jour;701;;106200
+05/06/2026;VT-202606-00632;Client comptant;Ventes du jour;701;;193400
+06/06/2026;VT-202606-00633;Client mobile money;Ventes du jour;701;;116100
+08/06/2026;VT-202606-00634;Client comptant;Ventes du jour;701;;192200
+09/06/2026;VT-202606-00635;Client comptant;Ventes du jour;701;;194100
+10/06/2026;VT-202606-00636;Client comptant;Ventes du jour;701;;108400
+11/06/2026;VT-202606-00637;Client mobile money;Ventes du jour;701;;160400
+12/06/2026;VT-202606-00638;Client mobile money;Ventes du jour;701;;119600
+13/06/2026;VT-202606-00639;Client comptant;Ventes du jour;701;;172400
+15/06/2026;VT-202606-00640;Client mobile money;Ventes du jour;701;;109000
+16/06/2026;VT-202606-00641;Client comptant;Ventes du jour;701;;97700
+17/06/2026;VT-202606-00642;Client comptant;Ventes du jour;701;;120700
+18/06/2026;VT-202606-00643;Client comptant;Ventes du jour;701;;143100
+19/06/2026;VT-202606-00644;Client mobile money;Ventes du jour;701;;106500
+20/06/2026;VT-202606-00645;Client comptant;Ventes du jour;701;;144500
+22/06/2026;VT-202606-00646;Client comptant;Ventes du jour;701;;184800
+23/06/2026;VT-202606-00647;Client comptant;Ventes du jour;701;;143300
+24/06/2026;VT-202606-00648;Client comptant;Ventes du jour;701;;125400
+25/06/2026;VT-202606-00649;Client mobile money;Ventes du jour;701;;112700
+26/06/2026;VT-202606-00650;Client comptant;Ventes du jour;701;;179700
+27/06/2026;VT-202606-00651;Client mobile money;Ventes du jour;701;;133700
+29/06/2026;VT-202606-00652;Client mobile money;Ventes du jour;701;;102900
+30/06/2026;VT-202606-00653;Client comptant;Ventes du jour;701;;116800
+03/06/2026;FA-202606-01;Fournisseur Cotonou Textiles;Achat de marchandises;601;739100;
+10/06/2026;FA-202606-02;Fournisseur Cotonou Textiles;Achat de marchandises;601;615900;
+17/06/2026;FA-202606-03;Fournisseur Cotonou Textiles;Achat de marchandises;601;615900;
+24/06/2026;FA-202606-04;Fournisseur Cotonou Textiles;Achat de marchandises;601;492880;
+28/06/2026;CH-202606-622;Bailleur;Loyer boutique;622;180000;
+28/06/2026;CH-202606-661;Personnel;Salaires du mois;661;320000;
+28/06/2026;CH-202606-618;Transporteur zem / camion;Transport marchandises;618;89925;
+01/07/2026;VT-202607-00661;Client comptant;Ventes du jour;701;;98200
+02/07/2026;VT-202607-00662;Client comptant;Ventes du jour;701;;134200
+03/07/2026;VT-202607-00663;Client comptant;Ventes du jour;701;;161800
+04/07/2026;VT-202607-00664;Client comptant;Ventes du jour;701;;119100
+06/07/2026;VT-202607-00665;Client mobile money;Ventes du jour;701;;150000
+07/07/2026;VT-202607-00666;Client comptant;Ventes du jour;701;;104400
+08/07/2026;VT-202607-00667;Client mobile money;Ventes du jour;701;;108000
+09/07/2026;VT-202607-00668;Client comptant;Ventes du jour;701;;92000
+10/07/2026;VT-202607-00669;Client mobile money;Ventes du jour;701;;111100
+11/07/2026;VT-202607-00670;Client comptant;Ventes du jour;701;;111800
+13/07/2026;VT-202607-00671;Client comptant;Ventes du jour;701;;130200
+14/07/2026;VT-202607-00672;Client comptant;Ventes du jour;701;;157400
+15/07/2026;VT-202607-00673;Client comptant;Ventes du jour;701;;152100
+16/07/2026;VT-202607-00674;Client mobile money;Ventes du jour;701;;147000
+17/07/2026;VT-202607-00675;Client comptant;Ventes du jour;701;;124100
+18/07/2026;VT-202607-00676;Client mobile money;Ventes du jour;701;;106900
+20/07/2026;VT-202607-00677;Client mobile money;Ventes du jour;701;;153000
+21/07/2026;VT-202607-00678;Client comptant;Ventes du jour;701;;153100
+22/07/2026;VT-202607-00679;Client comptant;Ventes du jour;701;;73900
+23/07/2026;VT-202607-00680;Client comptant;Ventes du jour;701;;93500
+24/07/2026;VT-202607-00681;Client mobile money;Ventes du jour;701;;87700
+25/07/2026;VT-202607-00682;Client comptant;Ventes du jour;701;;129700
+27/07/2026;VT-202607-00683;Client comptant;Ventes du jour;701;;116000
+28/07/2026;VT-202607-00684;Client mobile money;Ventes du jour;701;;148300
+29/07/2026;VT-202607-00685;Client comptant;Ventes du jour;701;;112400
+30/07/2026;VT-202607-00686;Client mobile money;Ventes du jour;701;;89100
+31/07/2026;VT-202607-00687;Client comptant;Ventes du jour;701;;74000
+03/07/2026;FA-202607-01;Fournisseur Cotonou Textiles;Achat de marchandises;601;577900;
+10/07/2026;FA-202607-02;Grossiste Dantokpa;Achat de marchandises;601;481600;
+17/07/2026;FA-202607-03;Grossiste Dantokpa;Achat de marchandises;601;481600;
+24/07/2026;FA-202607-04;Fournisseur Cotonou Textiles;Achat de marchandises;601;385304;
+28/07/2026;CH-202607-622;Bailleur;Loyer boutique;622;180000;
+28/07/2026;CH-202607-661;Personnel;Salaires du mois;661;320000;
+28/07/2026;CH-202607-618;Transporteur zem / camion;Transport marchandises;618;80975;
+01/08/2026;VT-202608-00695;Client comptant;Ventes du jour;701;;158400
+03/08/2026;VT-202608-00696;Client mobile money;Ventes du jour;701;;107300
+04/08/2026;VT-202608-00697;Client comptant;Ventes du jour;701;;91600
+05/08/2026;VT-202608-00698;Client mobile money;Ventes du jour;701;;82300
+06/08/2026;VT-202608-00699;Client comptant;Ventes du jour;701;;97100
+07/08/2026;VT-202608-00700;Client comptant;Ventes du jour;701;;117400
+08/08/2026;VT-202608-00701;Client comptant;Ventes du jour;701;;167300
+10/08/2026;VT-202608-00702;Client comptant;Ventes du jour;701;;163900
+11/08/2026;VT-202608-00703;Client comptant;Ventes du jour;701;;164200
+12/08/2026;VT-202608-00704;Client mobile money;Ventes du jour;701;;128000
+13/08/2026;VT-202608-00705;Client mobile money;Ventes du jour;701;;170400
+14/08/2026;VT-202608-00706;Client mobile money;Ventes du jour;701;;148000
+15/08/2026;VT-202608-00707;Client comptant;Ventes du jour;701;;86700
+17/08/2026;VT-202608-00708;Client comptant;Ventes du jour;701;;75800
+18/08/2026;VT-202608-00709;Client comptant;Ventes du jour;701;;119400
+19/08/2026;VT-202608-00710;Client mobile money;Ventes du jour;701;;160000
+20/08/2026;VT-202608-00711;Client comptant;Ventes du jour;701;;80000
+21/08/2026;VT-202608-00712;Client mobile money;Ventes du jour;701;;122800
+22/08/2026;VT-202608-00713;Client comptant;Ventes du jour;701;;118000
+24/08/2026;VT-202608-00714;Client comptant;Ventes du jour;701;;108400
+25/08/2026;VT-202608-00715;Client comptant;Ventes du jour;701;;83500
+26/08/2026;VT-202608-00716;Client comptant;Ventes du jour;701;;78400
+27/08/2026;VT-202608-00717;Client mobile money;Ventes du jour;701;;91700
+28/08/2026;VT-202608-00718;Client mobile money;Ventes du jour;701;;136800
+29/08/2026;VT-202608-00719;Client mobile money;Ventes du jour;701;;99000
+31/08/2026;VT-202608-00720;Client comptant;Ventes du jour;701;;127600
+03/08/2026;FA-202608-01;Fournisseur Cotonou Textiles;Achat de marchandises;601;530100;
+10/08/2026;FA-202608-02;Import Lomé SARL;Achat de marchandises;601;441700;
+17/08/2026;FA-202608-03;Grossiste Dantokpa;Achat de marchandises;601;441700;
+24/08/2026;FA-202608-04;Fournisseur Cotonou Textiles;Achat de marchandises;601;353414;
+28/08/2026;CH-202608-622;Bailleur;Loyer boutique;622;180000;
+28/08/2026;CH-202608-661;Personnel;Salaires du mois;661;320000;
+28/08/2026;CH-202608-618;Transporteur zem / camion;Transport marchandises;618;77100;
+01/09/2026;VT-202609-00728;Client mobile money;Ventes du jour;701;;187400
+02/09/2026;VT-202609-00729;Client mobile money;Ventes du jour;701;;151500
+03/09/2026;VT-202609-00730;Client comptant;Ventes du jour;701;;152000
+04/09/2026;VT-202609-00731;Client mobile money;Ventes du jour;701;;119300
+05/09/2026;VT-202609-00732;Client comptant;Ventes du jour;701;;155300
+07/09/2026;VT-202609-00733;Client mobile money;Ventes du jour;701;;119200
+08/09/2026;VT-202609-00734;Client comptant;Ventes du jour;701;;144000
+09/09/2026;VT-202609-00735;Client mobile money;Ventes du jour;701;;138400
+10/09/2026;VT-202609-00736;Client comptant;Ventes du jour;701;;190600
+11/09/2026;VT-202609-00737;Client comptant;Ventes du jour;701;;120200
+12/09/2026;VT-202609-00738;Client mobile money;Ventes du jour;701;;173400
+14/09/2026;VT-202609-00739;Client mobile money;Ventes du jour;701;;181200
+15/09/2026;VT-202609-00740;Client comptant;Ventes du jour;701;;159500
+16/09/2026;VT-202609-00741;Client mobile money;Ventes du jour;701;;108600
+17/09/2026;VT-202609-00742;Client comptant;Ventes du jour;701;;186200
+18/09/2026;VT-202609-00743;Client mobile money;Ventes du jour;701;;126000
+19/09/2026;VT-202609-00744;Client comptant;Ventes du jour;701;;120800
+21/09/2026;VT-202609-00745;Client mobile money;Ventes du jour;701;;102400
+22/09/2026;VT-202609-00746;Client mobile money;Ventes du jour;701;;161400
+23/09/2026;VT-202609-00747;Client comptant;Ventes du jour;701;;89500
+24/09/2026;VT-202609-00748;Client mobile money;Ventes du jour;701;;112800
+25/09/2026;VT-202609-00749;Client mobile money;Ventes du jour;701;;160000
+26/09/2026;VT-202609-00750;Client comptant;Ventes du jour;701;;172200
+28/09/2026;VT-202609-00751;Client mobile money;Ventes du jour;701;;175800
+29/09/2026;VT-202609-00752;Client mobile money;Ventes du jour;701;;203500
+30/09/2026;VT-202609-00753;Client mobile money;Ventes du jour;701;;103800
+03/09/2026;FA-202609-01;Grossiste Dantokpa;Achat de marchandises;601;819400;
+10/09/2026;FA-202609-02;Import Lomé SARL;Achat de marchandises;601;682900;
+17/09/2026;FA-202609-03;Import Lomé SARL;Achat de marchandises;601;682900;
+24/09/2026;FA-202609-04;Import Lomé SARL;Achat de marchandises;601;546221;
+28/09/2026;CH-202609-622;Bailleur;Loyer boutique;622;180000;
+28/09/2026;CH-202609-661;Personnel;Salaires du mois;661;320000;
+28/09/2026;CH-202609-618;Transporteur zem / camion;Transport marchandises;618;95375;
+01/10/2026;VT-202610-00761;Client comptant;Ventes du jour;701;;83400
+02/10/2026;VT-202610-00762;Client comptant;Ventes du jour;701;;81200
+03/10/2026;VT-202610-00763;Client comptant;Ventes du jour;701;;153200
+05/10/2026;VT-202610-00764;Client comptant;Ventes du jour;701;;135500
+06/10/2026;VT-202610-00765;Client comptant;Ventes du jour;701;;136000
+07/10/2026;VT-202610-00766;Client comptant;Ventes du jour;701;;84500
+08/10/2026;VT-202610-00767;Client comptant;Ventes du jour;701;;159600
+09/10/2026;VT-202610-00768;Client mobile money;Ventes du jour;701;;124100
+10/10/2026;VT-202610-00769;Client comptant;Ventes du jour;701;;119100
+12/10/2026;VT-202610-00770;Client comptant;Ventes du jour;701;;174800
+13/10/2026;VT-202610-00771;Client mobile money;Ventes du jour;701;;178800
+14/10/2026;VT-202610-00772;Client comptant;Ventes du jour;701;;105800
+15/10/2026;VT-202610-00773;Client comptant;Ventes du jour;701;;100400
+16/10/2026;VT-202610-00774;Client comptant;Ventes du jour;701;;84800
+17/10/2026;VT-202610-00775;Client mobile money;Ventes du jour;701;;102800
+19/10/2026;VT-202610-00776;Client mobile money;Ventes du jour;701;;84000
+20/10/2026;VT-202610-00777;Client mobile money;Ventes du jour;701;;117300
+21/10/2026;VT-202610-00778;Client comptant;Ventes du jour;701;;170100
+22/10/2026;VT-202610-00779;Client comptant;Ventes du jour;701;;143800
+23/10/2026;VT-202610-00780;Client mobile money;Ventes du jour;701;;126700
+24/10/2026;VT-202610-00781;Client comptant;Ventes du jour;701;;149700
+26/10/2026;VT-202610-00782;Client comptant;Ventes du jour;701;;135100
+27/10/2026;VT-202610-00783;Client mobile money;Ventes du jour;701;;145200
+28/10/2026;VT-202610-00784;Client mobile money;Ventes du jour;701;;84500
+29/10/2026;VT-202610-00785;Client comptant;Ventes du jour;701;;92100
+30/10/2026;VT-202610-00786;Client mobile money;Ventes du jour;701;;170600
+31/10/2026;VT-202610-00787;Client comptant;Ventes du jour;701;;102900
+03/10/2026;FA-202610-01;Fournisseur Cotonou Textiles;Achat de marchandises;601;601000;
+10/10/2026;FA-202610-02;Grossiste Dantokpa;Achat de marchandises;601;500900;
+17/10/2026;FA-202610-03;Fournisseur Cotonou Textiles;Achat de marchandises;601;500900;
+24/10/2026;FA-202610-04;Import Lomé SARL;Achat de marchandises;601;400612;
+28/10/2026;CH-202610-622;Bailleur;Loyer boutique;622;180000;
+28/10/2026;CH-202610-661;Personnel;Salaires du mois;661;320000;
+28/10/2026;CH-202610-618;Transporteur zem / camion;Transport marchandises;618;83650;

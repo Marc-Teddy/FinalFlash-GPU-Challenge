@@ -1,0 +1,192 @@
+periode;compte;intitule;debit;credit
+2025-11;701;Ventes de marchandises;;4356000
+2025-11;601;Achats de marchandises;3579683;
+2025-11;6031;Variation des stocks;;7763
+2025-11;618;Transports;108900;
+2025-11;622;Loyers;90000;
+2025-11;638;Autres charges externes;102120;
+2025-11;641;Impôts et taxes;43560;
+2025-11;661;Salaires;150000;
+2025-11;681;Dotations aux amortissements;20000;
+2025-11;891;Impôt sur le résultat;67375;
+2025-11;244;Matériel et mobilier;1180000;
+2025-11;311;Marchandises;2607763;
+2025-11;571;Caisse;928434;
+2025-11;101;Capital et compte de l'exploitant;;4092125
+2025-11;401;Fournisseurs;;536952
+2025-11;441;État, impôts;;87120
+2025-12;701;Ventes de marchandises;;4690000
+2025-12;601;Achats de marchandises;3930796;
+2025-12;6031;Variation des stocks;;84996
+2025-12;618;Transports;117250;
+2025-12;622;Loyers;90000;
+2025-12;638;Autres charges externes;108800;
+2025-12;641;Impôts et taxes;46900;
+2025-12;661;Salaires;150000;
+2025-12;681;Dotations aux amortissements;20000;
+2025-12;891;Impôt sur le résultat;77812;
+2025-12;244;Matériel et mobilier;1160000;
+2025-12;311;Marchandises;2692759;
+2025-12;571;Caisse;976223;
+2025-12;101;Capital et compte de l'exploitant;;4145563
+2025-12;401;Fournisseurs;;589619
+2025-12;441;État, impôts;;93800
+2026-01;701;Ventes de marchandises;;4241000
+2026-01;601;Achats de marchandises;3420618;
+2026-01;6031;Variation des stocks;57002;
+2026-01;618;Transports;106025;
+2026-01;622;Loyers;90000;
+2026-01;638;Autres charges externes;99820;
+2026-01;641;Impôts et taxes;42410;
+2026-01;661;Salaires;150000;
+2026-01;681;Dotations aux amortissements;20000;
+2026-01;891;Impôt sur le résultat;63781;
+2026-01;244;Matériel et mobilier;1140000;
+2026-01;311;Marchandises;2635757;
+2026-01;571;Caisse;979062;
+2026-01;101;Capital et compte de l'exploitant;;4156906
+2026-01;401;Fournisseurs;;513093
+2026-01;441;État, impôts;;84820
+2026-02;701;Ventes de marchandises;;4101000
+2026-02;601;Achats de marchandises;3294944;
+2026-02;6031;Variation des stocks;67876;
+2026-02;618;Transports;102525;
+2026-02;622;Loyers;90000;
+2026-02;638;Autres charges externes;97020;
+2026-02;641;Impôts et taxes;41010;
+2026-02;661;Salaires;150000;
+2026-02;681;Dotations aux amortissements;20000;
+2026-02;891;Impôt sur le résultat;59406;
+2026-02;244;Matériel et mobilier;1120000;
+2026-02;311;Marchandises;2567882;
+2026-02;571;Caisse;1043505;
+2026-02;101;Capital et compte de l'exploitant;;4155125
+2026-02;401;Fournisseurs;;494242
+2026-02;441;État, impôts;;82020
+2026-03;701;Ventes de marchandises;;4576000
+2026-03;601;Achats de marchandises;3825848;
+2026-03;6031;Variation des stocks;;73528
+2026-03;618;Transports;114400;
+2026-03;622;Loyers;90000;
+2026-03;638;Autres charges externes;106520;
+2026-03;641;Impôts et taxes;45760;
+2026-03;661;Salaires;150000;
+2026-03;681;Dotations aux amortissements;20000;
+2026-03;891;Impôt sur le résultat;74250;
+2026-03;244;Matériel et mobilier;1100000;
+2026-03;311;Marchandises;2641410;
+2026-03;571;Caisse;1121863;
+2026-03;101;Capital et compte de l'exploitant;;4197876
+2026-03;401;Fournisseurs;;573877
+2026-03;441;État, impôts;;91520
+2026-04;701;Ventes de marchandises;;4817000
+2026-04;601;Achats de marchandises;4052025;
+2026-04;6031;Variation des stocks;;102085
+2026-04;618;Transports;120425;
+2026-04;638;Autres charges externes;111340;
+2026-04;641;Impôts et taxes;48170;
+2026-04;661;Salaires;150000;
+2026-04;681;Dotations aux amortissements;20000;
+2026-04;891;Impôt sur le résultat;81781;
+2026-04;244;Matériel et mobilier;1080000;
+2026-04;311;Marchandises;2743495;
+2026-04;571;Caisse;1143868;
+2026-04;101;Capital et compte de l'exploitant;;4263219
+2026-04;401;Fournisseurs;;607804
+2026-04;441;État, impôts;;96340
+2026-05;701;Ventes de marchandises;;4131000
+2026-05;601;Achats de marchandises;3283665;
+2026-05;6031;Variation des stocks;103755;
+2026-05;618;Transports;103275;
+2026-05;622;Loyers;90000;
+2026-05;638;Autres charges externes;97620;
+2026-05;641;Impôts et taxes;41310;
+2026-05;661;Salaires;150000;
+2026-05;681;Dotations aux amortissements;20000;
+2026-05;891;Impôt sur le résultat;60344;
+2026-05;244;Matériel et mobilier;1060000;
+2026-05;311;Marchandises;2639740;
+2026-05;571;Caisse;1139680;
+2026-05;101;Capital et compte de l'exploitant;;4264250
+2026-05;401;Fournisseurs;;492550
+2026-05;441;État, impôts;;82620
+2026-06;701;Ventes de marchandises;;4330000
+2026-06;601;Achats de marchandises;3536213;
+2026-06;6031;Variation des stocks;14387;
+2026-06;618;Transports;108250;
+2026-06;622;Loyers;90000;
+2026-06;638;Autres charges externes;101600;
+2026-06;641;Impôts et taxes;43300;
+2026-06;661;Salaires;150000;
+2026-06;681;Dotations aux amortissements;20000;
+2026-06;891;Impôt sur le résultat;66562;
+2026-06;244;Matériel et mobilier;1040000;
+2026-06;311;Marchandises;2625353;
+2026-06;571;Caisse;1235616;
+2026-06;101;Capital et compte de l'exploitant;;4283937
+2026-06;401;Fournisseurs;;530432
+2026-06;441;État, impôts;;86600
+2026-07;701;Ventes de marchandises;;4097000
+2026-07;601;Achats de marchandises;3294864;
+2026-07;6031;Variation des stocks;64676;
+2026-07;618;Transports;102425;
+2026-07;622;Loyers;90000;
+2026-07;638;Autres charges externes;96940;
+2026-07;641;Impôts et taxes;40970;
+2026-07;661;Salaires;150000;
+2026-07;681;Dotations aux amortissements;20000;
+2026-07;891;Impôt sur le résultat;59281;
+2026-07;244;Matériel et mobilier;1020000;
+2026-07;311;Marchandises;2560677;
+2026-07;571;Caisse;1277274;
+2026-07;101;Capital et compte de l'exploitant;;4281781
+2026-07;401;Fournisseurs;;494230
+2026-07;441;État, impôts;;81940
+2026-08;701;Ventes de marchandises;;4162000
+2026-08;601;Achats de marchandises;3389669;
+2026-08;6031;Variation des stocks;23171;
+2026-08;618;Transports;104050;
+2026-08;622;Loyers;90000;
+2026-08;638;Autres charges externes;98240;
+2026-08;641;Impôts et taxes;41620;
+2026-08;661;Salaires;150000;
+2026-08;681;Dotations aux amortissements;20000;
+2026-08;891;Impôt sur le résultat;61312;
+2026-08;244;Matériel et mobilier;1000000;
+2026-08;311;Marchandises;2537506;
+2026-08;571;Caisse;1339903;
+2026-08;101;Capital et compte de l'exploitant;;4285719
+2026-08;401;Fournisseurs;;508450
+2026-08;441;État, impôts;;83240
+2026-09;701;Ventes de marchandises;;4153000
+2026-09;601;Achats de marchandises;3389393;
+2026-09;6031;Variation des stocks;16067;
+2026-09;618;Transports;103825;
+2026-09;622;Loyers;90000;
+2026-09;638;Autres charges externes;98060;
+2026-09;641;Impôts et taxes;41530;
+2026-09;661;Salaires;150000;
+2026-09;681;Dotations aux amortissements;20000;
+2026-09;891;Impôt sur le résultat;61031;
+2026-09;244;Matériel et mobilier;980000;
+2026-09;311;Marchandises;2521439;
+2026-09;571;Caisse;1378843;
+2026-09;101;Capital et compte de l'exploitant;;4288813
+2026-09;401;Fournisseurs;;508409
+2026-09;441;État, impôts;;83060
+2026-10;701;Ventes de marchandises;;4357000
+2026-10;601;Achats de marchandises;3612168;
+2026-10;6031;Variation des stocks;;39428
+2026-10;618;Transports;108925;
+2026-10;622;Loyers;90000;
+2026-10;638;Autres charges externes;102140;
+2026-10;641;Impôts et taxes;43570;
+2026-10;661;Salaires;150000;
+2026-10;681;Dotations aux amortissements;20000;
+2026-10;891;Impôt sur le résultat;67406;
+2026-10;244;Matériel et mobilier;960000;
+2026-10;311;Marchandises;2560867;
+2026-10;571;Caisse;1419130;
+2026-10;101;Capital et compte de l'exploitant;;4311032
+2026-10;401;Fournisseurs;;541825
+2026-10;441;État, impôts;;87140

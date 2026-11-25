@@ -1,0 +1,405 @@
+date;reference;tiers;libelle;compte;debit;credit
+01/11/2025;VT-202511-00001;Client comptant;Ventes du jour;701;;248200
+03/11/2025;VT-202511-00002;Client comptant;Ventes du jour;701;;117300
+03/11/2025;FA-202511-01;Grossiste Parakou Vivres;Achat de marchandises;601;1073900;
+04/11/2025;VT-202511-00003;Client comptant;Ventes du jour;701;;204900
+05/11/2025;VT-202511-00004;Client comptant;Ventes du jour;701;;130100
+06/11/2025;VT-202511-00005;Client comptant;Ventes du jour;701;;201100
+07/11/2025;VT-202511-00006;Client mobile money;Ventes du jour;701;;145800
+08/11/2025;VT-202511-00007;Client comptant;Ventes du jour;701;;155300
+10/11/2025;VT-202511-00008;Client comptant;Ventes du jour;701;;162700
+10/11/2025;FA-202511-02;Huilerie du Nord;Achat de marchandises;601;894900;
+11/11/2025;VT-202511-00009;Client comptant;Ventes du jour;701;;202600
+12/11/2025;VT-202511-00010;Client mobile money;Ventes du jour;701;;243000
+13/11/2025;VT-202511-00011;Client comptant;Ventes du jour;701;;127100
+14/11/2025;VT-202511-00012;Client comptant;Ventes du jour;701;;150500
+15/11/2025;VT-202511-00013;Client mobile money;Ventes du jour;701;;202000
+17/11/2025;VT-202511-00014;Client mobile money;Ventes du jour;701;;237200
+17/11/2025;FA-202511-03;Sucrerie distribution;Achat de marchandises;601;894900;
+18/11/2025;VT-202511-00015;Client comptant;Ventes du jour;701;;250000
+19/11/2025;VT-202511-00016;Client comptant;Ventes du jour;701;;142200
+20/11/2025;VT-202511-00017;Client mobile money;Ventes du jour;701;;145800
+21/11/2025;VT-202511-00018;Client comptant;Ventes du jour;701;;154700
+22/11/2025;VT-202511-00019;Client mobile money;Ventes du jour;701;;134300
+24/11/2025;VT-202511-00020;Client mobile money;Ventes du jour;701;;154600
+24/11/2025;FA-202511-04;Grossiste Parakou Vivres;Achat de marchandises;601;715983;
+25/11/2025;VT-202511-00021;Client mobile money;Ventes du jour;701;;215600
+26/11/2025;VT-202511-00022;Client comptant;Ventes du jour;701;;171800
+27/11/2025;VT-202511-00023;Client comptant;Ventes du jour;701;;144800
+28/11/2025;VT-202511-00024;Client comptant;Ventes du jour;701;;143300
+28/11/2025;CH-202511-622;Bailleur;Loyer boutique;622;90000;
+28/11/2025;CH-202511-661;Personnel;Salaires du mois;661;150000;
+28/11/2025;CH-202511-618;Transporteur zem / camion;Transport marchandises;618;108900;
+29/11/2025;VT-202511-00025;Client mobile money;Ventes du jour;701;;171100
+01/12/2025;VT-202512-00033;Client mobile money;Ventes du jour;701;;182200
+02/12/2025;VT-202512-00034;Client comptant;Ventes du jour;701;;153300
+02/12/2025;VT-202512-00034;Client comptant;Ventes du jour;701;;153300
+03/12/2025;VT-202512-00035;Client mobile money;Ventes du jour;701;;130600
+03/12/2025;FA-202512-01;Grossiste Parakou Vivres;Achat de marchandises;601;1179200;
+04/12/2025;VT-202512-00036;Client comptant;Ventes du jour;701;;250900
+05/12/2025;VT-202512-00037;Client comptant;Ventes du jour;701;;246200
+06/12/2025;VT-202512-00038;Client comptant;Ventes du jour;701;;118200
+08/12/2025;VT-202512-00039;Client mobile money;Ventes du jour;701;;121300
+09/12/2025;VT-202512-00040;Client mobile money;Ventes du jour;701;;223400
+10/12/2025;VT-202512-00041;Client comptant;Ventes du jour;701;;124600
+10/12/2025;FA-202512-02;Sucrerie distribution;Achat de marchandises;601;982700;
+11/12/2025;VT-202512-00042;Client comptant;Ventes du jour;701;;141100
+12/12/2025;VT-202512-00043;Client mobile money;Ventes du jour;701;;141300
+13/12/2025;VT-202512-00044;Client comptant;Ventes du jour;701;;191300
+15/12/2025;VT-202512-00045;Client comptant;Ventes du jour;701;;115700
+16/12/2025;VT-202512-00046;Client comptant;Ventes du jour;701;;158000
+17/12/2025;VT-202512-00047;Client mobile money;Ventes du jour;701;;115300
+17/12/2025;FA-202512-03;Brasserie distribution;Achat de marchandises;601;982700;
+18/12/2025;VT-202512-00048;Client mobile money;Ventes du jour;701;;235900
+19/12/2025;VT-202512-00049;Client comptant;Ventes du jour;701;;125100
+20/12/2025;VT-202512-00050;Client comptant;Ventes du jour;701;;185200
+22/12/2025;VT-202512-00051;Client comptant;Ventes du jour;701;;188400
+23/12/2025;VT-202512-00052;Client comptant;Ventes du jour;701;;172300
+24/12/2025;VT-202512-00053;Client comptant;Ventes du jour;701;;160800
+24/12/2025;FA-202512-04;Sucrerie distribution;Achat de marchandises;601;786196;
+25/12/2025;VT-202512-00054;Client mobile money;Ventes du jour;701;;221800
+26/12/2025;VT-202512-00055;Client mobile money;Ventes du jour;701;;143700
+27/12/2025;VT-202512-00056;Client comptant;Ventes du jour;701;;164300
+28/12/2025;CH-202512-622;Bailleur;Loyer boutique;622;90000;
+28/12/2025;CH-202512-661;Personnel;Salaires du mois;661;150000;
+28/12/2025;CH-202512-618;Transporteur zem / camion;Transport marchandises;618;117250;
+29/12/2025;VT-202512-00057;Client comptant;Ventes du jour;701;;211500
+30/12/2025;VT-202512-00058;Client comptant;Ventes du jour;701;;217600
+31/12/2025;VT-202512-00059;Client comptant;Ventes du jour;701;;250000
+01/01/2026;VT-202601-00067;Client mobile money;Ventes du jour;701;;151100
+02/01/2026;VT-202601-00068;Client mobile money;Ventes du jour;701;;191800
+03/01/2026;VT-202601-00069;Client mobile money;Ventes du jour;701;;182900
+03/01/2026;FA-202601-01;Brasserie distribution;Achat de marchandises;601;1026200;
+05/01/2026;VT-202601-00070;Client comptant;Ventes du jour;701;;144900
+06/01/2026;VT-202601-00071;Client comptant;Ventes du jour;701;;114200
+07/01/2026;VT-202601-00072;Client comptant;Ventes du jour;701;;113700
+08/01/2026;VT-202601-00073;Client comptant;Ventes du jour;701;;153700
+09/01/2026;VT-202601-00074;Client comptant;Ventes du jour;701;;182800
+10/01/2026;VT-202601-00075;Client comptant;Ventes du jour;701;;134700
+10/01/2026;FA-202601-02;Brasserie distribution;Achat de marchandises;601;855200;
+12/01/2026;VT-202601-00076;Client comptant;Ventes du jour;701;;126200
+13/01/2026;VT-202601-00077;Client mobile money;Ventes du jour;701;;223400
+14/01/2026;VT-202601-00078;Client mobile money;Ventes du jour;701;;99500
+15/01/2026;VT-202601-00079;Client mobile money;Ventes du jour;701;;103300
+16/01/2026;VT-202601-00080;Client comptant;Ventes du jour;701;;225500
+17/01/2026;VT-202601-00081;Client comptant;Ventes du jour;701;;160500
+17/01/2026;FA-202601-03;Huilerie du Nord;Achat de marchandises;601;855200;
+19/01/2026;VT-202601-00082;Client comptant;Ventes du jour;701;;120900
+20/01/2026;VT-202601-00083;Client comptant;Ventes du jour;701;;216500
+21/01/2026;VT-202601-00084;Client mobile money;Ventes du jour;701;;222200
+22/01/2026;VT-202601-00085;Client comptant;Ventes du jour;701;;115600
+23/01/2026;VT-202601-00086;Client comptant;Ventes du jour;701;;124300
+24/01/2026;VT-202601-00087;Client comptant;Ventes du jour;701;;177200
+24/01/2026;FA-202601-04;Sucrerie distribution;Achat de marchandises;601;684018;
+26/01/2026;VT-202601-00088;Client comptant;Ventes du jour;701;;121800
+26/01/2026;VT-202601-00088;Client comptant;Ventes du jour;701;;121800
+27/01/2026;VT-202601-00089;Client mobile money;Ventes du jour;701;;196700
+28/01/2026;VT-202601-00090;Client comptant;Ventes du jour;701;;135800
+28/01/2026;CH-202601-622;Bailleur;Loyer boutique;622;90000;
+28/01/2026;CH-202601-661;Personnel;Salaires du mois;661;150000;
+28/01/2026;CH-202601-618;Transporteur zem / camion;Transport marchandises;618;106025;
+29/01/2026;VT-202601-00091;Client comptant;Ventes du jour;701;;205900
+30/01/2026;VT-202601-00092;Client mobile money;Ventes du jour;701;;171200
+31/01/2026;VT-202601-00093;Client comptant;Ventes du jour;701;;124700
+02/02/2026;VT-202602-00101;Client comptant;Ventes du jour;701;;160800
+03/02/2026;VT-202602-00102;Client mobile money;Ventes du jour;701;;159300
+03/02/2026;FA-202602-01;Sucrerie distribution;Achat de marchandises;601;988500;
+04/02/2026;VT-202602-00103;Client comptant;Ventes du jour;701;;224200
+05/02/2026;VT-202602-00104;Client mobile money;Ventes du jour;701;;212100
+06/02/2026;VT-202602-00105;Client comptant;Ventes du jour;701;;194400
+07/02/2026;VT-202602-00106;Client comptant;Ventes du jour;701;;208000
+09/02/2026;VT-202602-00107;Client mobile money;Ventes du jour;701;;190900
+10/02/2026;VT-202602-00108;Client comptant;Ventes du jour;701;;182600
+10/02/2026;FA-202602-02;Grossiste Parakou Vivres;Achat de marchandises;601;823700;
+11/02/2026;VT-202602-00109;Client comptant;Ventes du jour;701;;135600
+12/02/2026;VT-202602-00110;Client mobile money;Ventes du jour;701;;216800
+13/02/2026;VT-202602-00111;Client comptant;Ventes du jour;701;;160600
+14/02/2026;VT-202602-00112;Client comptant;Ventes du jour;701;;191100
+16/02/2026;VT-202602-00113;Client mobile money;Ventes du jour;701;;108100
+17/02/2026;VT-202602-00114;Client mobile money;Ventes du jour;701;;150400
+17/02/2026;FA-202602-03;Brasserie distribution;Achat de marchandises;601;823700;
+18/02/2026;VT-202602-00115;Client mobile money;Ventes du jour;701;;168600
+19/02/2026;VT-202602-00116;Client mobile money;Ventes du jour;701;;156200
+20/02/2026;VT-202602-00117;Client comptant;Ventes du jour;701;;140700
+21/02/2026;VT-202602-00118;Client comptant;Ventes du jour;701;;111300
+23/02/2026;VT-202602-00119;Client comptant;Ventes du jour;701;;191600
+24/02/2026;VT-202602-00120;Client comptant;Ventes du jour;701;;136200
+24/02/2026;FA-202602-04;Sucrerie distribution;Achat de marchandises;601;659044;
+25/02/2026;VT-202602-00121;Client comptant;Ventes du jour;701;;192500
+26/02/2026;VT-202602-00122;Client comptant;Ventes du jour;701;;168100
+27/02/2026;VT-202602-00123;Client mobile money;Ventes du jour;701;;116300
+28/02/2026;VT-202602-00124;Client mobile money;Ventes du jour;701;;224600
+28/02/2026;CH-202602-622;Bailleur;Loyer boutique;622;90000;
+28/02/2026;CH-202602-661;Personnel;Salaires du mois;661;150000;
+28/02/2026;CH-202602-618;Transporteur zem / camion;Transport marchandises;618;102525;
+31/02/2026;CH-ERR-0001;Transporteur zem / camion;Transport marchandises;618;45000;
+02/03/2026;VT-202603-00132;Client comptant;Ventes du jour;701;;258100
+03/03/2026;VT-202603-00133;Client mobile money;Ventes du jour;701;;206100
+03/03/2026;FA-202603-01;Huilerie du Nord;Achat de marchandises;601;1147800;
+04/03/2026;VT-202603-00134;Client mobile money;Ventes du jour;701;;173800
+05/03/2026;VT-202603-00135;Client comptant;Ventes du jour;701;;197200
+06/03/2026;VT-202603-00136;Client comptant;Ventes du jour;701;;114100
+07/03/2026;VT-202603-00137;Client comptant;Ventes du jour;701;;197200
+09/03/2026;VT-202603-00138;Client comptant;Ventes du jour;701;;123500
+10/03/2026;VT-202603-00139;Client mobile money;Ventes du jour;701;;246200
+10/03/2026;FA-202603-02;Grossiste Parakou Vivres;Achat de marchandises;601;956500;
+11/03/2026;VT-202603-00140;Client comptant;Ventes du jour;701;;260700
+12/03/2026;VT-202603-00141;Client mobile money;Ventes du jour;701;;119500
+13/03/2026;VT-202603-00142;Client comptant;Ventes du jour;701;;160200
+14/03/2026;VT-202603-00143;Client comptant;Ventes du jour;701;;132700
+16/03/2026;VT-202603-00144;Client mobile money;Ventes du jour;701;;116200
+17/03/2026;VT-202603-00145;Client mobile money;Ventes du jour;701;;120700
+17/03/2026;FA-202603-03;Brasserie distribution;Achat de marchandises;601;956500;
+18/03/2026;VT-202603-00146;Client comptant;Ventes du jour;701;;115700
+19/03/2026;VT-202603-00147;Client mobile money;Ventes du jour;701;;255200
+20/03/2026;VT-202603-00148;Client comptant;Ventes du jour;701;;179800
+21/03/2026;VT-202603-00149;Client comptant;Ventes du jour;701;;120700
+23/03/2026;VT-202603-00150;Client comptant;Ventes du jour;701;;226300
+24/03/2026;VT-202603-00151;Client comptant;Ventes du jour;701;;202500
+24/03/2026;FA-202603-04;Grossiste Parakou Vivres;Achat de marchandises;601;765048;
+25/03/2026;VT-202603-00152;Client comptant;Ventes du jour;701;;187200
+26/03/2026;VT-202603-00153;Client comptant;Ventes du jour;701;;259200
+27/03/2026;VT-202603-00154;Client comptant;Ventes du jour;701;;118800
+28/03/2026;VT-202603-00155;Client comptant;Ventes du jour;701;;181200
+28/03/2026;CH-202603-622;Bailleur;Loyer boutique;622;90000;
+28/03/2026;CH-202603-661;Personnel;Salaires du mois;661;150000;
+28/03/2026;CH-202603-618;Transporteur zem / camion;Transport marchandises;618;114400;
+30/03/2026;VT-202603-00156;Client comptant;Ventes du jour;701;;143000
+31/03/2026;VT-202603-00157;Client comptant;Ventes du jour;701;;160200
+01/04/2026;VT-202604-00165;Client comptant;Ventes du jour;701;;246000
+02/04/2026;VT-202604-00166;Client comptant;Ventes du jour;701;;153300
+02/04/2026;VT-EXC-0001;Client comptant;Vente en gros (non justifiée);701;;2850000
+03/04/2026;VT-202604-00167;Client comptant;Ventes du jour;701;;165000
+03/04/2026;FA-202604-01;Sucrerie distribution;Achat de marchandises;601;1215600;
+04/04/2026;VT-202604-00168;Client comptant;Ventes du jour;701;;217900
+06/04/2026;VT-202604-00169;Client comptant;Ventes du jour;701;;248100
+07/04/2026;VT-202604-00170;Client comptant;Ventes du jour;701;;235300
+08/04/2026;VT-202604-00171;Client comptant;Ventes du jour;701;;179800
+09/04/2026;VT-202604-00172;Client comptant;Ventes du jour;701;;157400
+10/04/2026;VT-202604-00173;Client mobile money;Ventes du jour;701;;159400
+10/04/2026;FA-202604-02;Grossiste Parakou Vivres;Achat de marchandises;601;1013000;
+11/04/2026;VT-202604-00174;Client comptant;Ventes du jour;701;;226400
+13/04/2026;VT-202604-00175;Client comptant;Ventes du jour;701;;144000
+14/04/2026;VT-202604-00176;Client mobile money;Ventes du jour;701;;115000
+15/04/2026;VT-202604-00177;Client comptant;Ventes du jour;701;;237300
+16/04/2026;VT-202604-00178;Client comptant;Ventes du jour;701;;128600
+17/04/2026;VT-202604-00179;Client comptant;Ventes du jour;701;;172300
+17/04/2026;FA-202604-03;Sucrerie distribution;Achat de marchandises;601;1013000;
+18/04/2026;VT-202604-00180;Client mobile money;Ventes du jour;701;;182500
+20/04/2026;VT-202604-00181;Client comptant;Ventes du jour;701;;122100
+21/04/2026;VT-202604-00182;Client mobile money;Ventes du jour;701;;130200
+22/04/2026;VT-202604-00183;Client comptant;Ventes du jour;701;;195700
+23/04/2026;VT-202604-00184;Client comptant;Ventes du jour;701;;226100
+24/04/2026;VT-202604-00185;Client comptant;Ventes du jour;701;;177200
+24/04/2026;FA-202604-04;Sucrerie distribution;Achat de marchandises;601;810425;
+25/04/2026;VT-202604-00186;Client comptant;Ventes du jour;701;;233800
+27/04/2026;VT-202604-00187;Client comptant;Ventes du jour;701;;222400
+28/04/2026;VT-202604-00188;Client comptant;Ventes du jour;701;;195900
+28/04/2026;CH-202604-622;Bailleur;Loyer boutique;622;90000;
+28/04/2026;CH-202604-661;Personnel;Salaires du mois;661;150000;
+28/04/2026;CH-202604-618;Transporteur zem / camion;Transport marchandises;618;120425;
+29/04/2026;VT-202604-00189;Client comptant;Ventes du jour;701;;133600
+30/04/2026;VT-202604-00190;Client mobile money;Ventes du jour;701;;211700
+01/05/2026;VT-202605-00198;Client mobile money;Ventes du jour;701;;195600
+02/05/2026;VT-202605-00199;Client mobile money;Ventes du jour;701;;132300
+03/05/2026;FA-202605-01;Brasserie distribution;Achat de marchandises;601;985100;
+04/05/2026;VT-202605-00200;Client comptant;Ventes du jour;701;;161000
+05/05/2026;VT-202605-00201;Client comptant;Ventes du jour;701;;132300
+06/05/2026;VT-202605-00202;Client comptant;Ventes du jour;701;;145800
+07/05/2026;VT-202605-00203;Client comptant;Ventes du jour;701;;213600
+08/05/2026;VT-202605-00204;Client comptant;Ventes du jour;701;;121800
+09/05/2026;VT-202605-00205;Client comptant;Ventes du jour;701;;134200
+10/05/2026;FA-202605-02;Brasserie distribution;Achat de marchandises;601;820900;
+11/05/2026;VT-202605-00206;Client comptant;Ventes du jour;701;;142300
+12/05/2026;VT-202605-00207;Client comptant;Ventes du jour;701;;144800
+13/05/2026;VT-202605-00208;Client comptant;Ventes du jour;701;;197500
+14/05/2026;VT-202605-00209;Client comptant;Ventes du jour;701;;111400
+15/05/2026;VT-202605-00210;Client comptant;Ventes du jour;701;;205500
+16/05/2026;VT-202605-00211;Client comptant;Ventes du jour;701;;132600
+17/05/2026;FA-202605-03;Sucrerie distribution;Achat de marchandises;601;820900;
+18/05/2026;VT-202605-00212;Client comptant;Ventes du jour;701;;150900
+19/05/2026;VT-202605-00213;Client comptant;Ventes du jour;701;;124900
+20/05/2026;VT-202605-00214;Client comptant;Ventes du jour;701;;183300
+21/05/2026;VT-202605-00215;Client mobile money;Ventes du jour;701;;110400
+22/05/2026;VT-202605-00216;Client comptant;Ventes du jour;701;;108000
+23/05/2026;VT-202605-00217;Client comptant;Ventes du jour;701;;204400
+24/05/2026;FA-202605-04;Grossiste Parakou Vivres;Achat de marchandises;601;656765;
+25/05/2026;VT-202605-00218;Client comptant;Ventes du jour;701;;204300
+26/05/2026;VT-202605-00219;Client comptant;Ventes du jour;701;;216300
+27/05/2026;VT-202605-00220;Client comptant;Ventes du jour;701;;181000
+28/05/2026;VT-202605-00221;Client mobile money;Ventes du jour;701;;140000
+28/05/2026;CH-202605-622;Bailleur;Loyer boutique;622;90000;
+28/05/2026;CH-202605-661;Personnel;Salaires du mois;661;150000;
+28/05/2026;CH-202605-618;Transporteur zem / camion;Transport marchandises;618;103275;
+29/05/2026;VT-202605-00222;Client comptant;Ventes du jour;701;;121100
+30/05/2026;VT-202605-00223;Client mobile money;Ventes du jour;701;;215700
+01/06/2026;VT-202606-00231;Client mobile money;Ventes du jour;701;;206500
+02/06/2026;VT-202606-00232;Client comptant;Ventes du jour;701;;192900
+03/06/2026;VT-202606-00233;Client comptant;Ventes du jour;701;;180900
+03/06/2026;FA-202606-01;Brasserie distribution;Achat de marchandises;601;1060900;
+04/06/2026;VT-202606-00234;Client mobile money;Ventes du jour;701;;195100
+05/06/2026;VT-202606-00235;Client mobile money;Ventes du jour;701;;106900
+06/06/2026;VT-202606-00236;Client comptant;Ventes du jour;701;;109100
+08/06/2026;VT-202606-00237;Client comptant;Ventes du jour;701;;235500
+09/06/2026;VT-202606-00238;Client comptant;Ventes du jour;701;;117100
+10/06/2026;VT-202606-00239;Client comptant;Ventes du jour;701;;233700
+10/06/2026;FA-202606-02;Brasserie distribution;Achat de marchandises;601;884100;
+11/06/2026;VT-202606-00240;Client comptant;Ventes du jour;701;;180100
+12/06/2026;VT-202606-00241;Client comptant;Ventes du jour;701;;175700
+13/06/2026;VT-202606-00242;Client comptant;Ventes du jour;701;;102400
+15/06/2026;VT-202606-00243;Client comptant;Ventes du jour;701;;117400
+16/06/2026;VT-202606-00244;Client mobile money;Ventes du jour;701;;117200
+16/06/2026;VT-202606-00244;Client mobile money;Ventes du jour;701;;117200
+17/06/2026;VT-202606-00245;Client comptant;Ventes du jour;701;;223500
+17/06/2026;FA-202606-03;Brasserie distribution;Achat de marchandises;601;884100;
+18/06/2026;VT-202606-00246;Client comptant;Ventes du jour;701;;108300
+19/06/2026;VT-202606-00247;Client comptant;Ventes du jour;701;;115100
+20/06/2026;VT-202606-00248;Client comptant;Ventes du jour;701;;132100
+22/06/2026;VT-202606-00249;Client comptant;Ventes du jour;701;;185100
+23/06/2026;VT-202606-00250;Client comptant;Ventes du jour;701;;147100
+24/06/2026;VT-202606-00251;Client mobile money;Ventes du jour;701;;124900
+24/06/2026;FA-202606-04;Sucrerie distribution;Achat de marchandises;601;707113;
+25/06/2026;VT-202606-00252;Client mobile money;Ventes du jour;701;;180600
+26/06/2026;VT-202606-00253;Client comptant;Ventes du jour;701;;220600
+27/06/2026;VT-202606-00254;Client mobile money;Ventes du jour;701;;159800
+28/06/2026;CH-202606-622;Bailleur;Loyer boutique;622;90000;
+28/06/2026;CH-202606-661;Personnel;Salaires du mois;661;150000;
+28/06/2026;CH-202606-618;Transporteur zem / camion;Transport marchandises;618;108250;
+29/06/2026;VT-202606-00255;Client comptant;Ventes du jour;701;;228300
+30/06/2026;VT-202606-00256;Client comptant;Ventes du jour;701;;234100
+01/07/2026;VT-202607-00264;Client mobile money;Ventes du jour;701;;198400
+02/07/2026;VT-202607-00265;Client comptant;Ventes du jour;701;;163600
+03/07/2026;VT-202607-00266;Client comptant;Ventes du jour;701;;129900
+03/07/2026;FA-202607-01;Grossiste Parakou Vivres;Achat de marchandises;601;988500;
+04/07/2026;VT-202607-00267;Client comptant;Ventes du jour;701;;187700
+06/07/2026;VT-202607-00268;Client mobile money;Ventes du jour;701;;108500
+07/07/2026;VT-202607-00269;Client comptant;Ventes du jour;701;;110400
+08/07/2026;VT-202607-00270;Client mobile money;Ventes du jour;701;;141000
+09/07/2026;VT-202607-00271;Client mobile money;Ventes du jour;701;;173500
+10/07/2026;VT-202607-00272;Client comptant;Ventes du jour;701;;184300
+10/07/2026;FA-202607-02;Brasserie distribution;Achat de marchandises;601;823700;
+11/07/2026;VT-202607-00273;Client mobile money;Ventes du jour;701;;183000
+13/07/2026;VT-202607-00274;Client comptant;Ventes du jour;701;;89100
+14/07/2026;VT-202607-00275;Client comptant;Ventes du jour;701;;108100
+15/07/2026;VT-202607-00276;Client comptant;Ventes du jour;701;;192500
+16/07/2026;VT-202607-00277;Client comptant;Ventes du jour;701;;126400
+17/07/2026;VT-202607-00278;Client mobile money;Ventes du jour;701;;91200
+17/07/2026;FA-202607-03;Brasserie distribution;Achat de marchandises;601;823700;
+18/07/2026;VT-202607-00279;Client comptant;Ventes du jour;701;;165200
+20/07/2026;VT-202607-00280;Client comptant;Ventes du jour;701;;176600
+21/07/2026;VT-202607-00281;Client comptant;Ventes du jour;701;;134800
+22/07/2026;VT-202607-00282;Client mobile money;Ventes du jour;701;;185000
+23/07/2026;VT-202607-00283;Client mobile money;Ventes du jour;701;;167000
+24/07/2026;VT-202607-00284;Client comptant;Ventes du jour;701;;195100
+24/07/2026;FA-202607-04;Huilerie du Nord;Achat de marchandises;601;658964;
+25/07/2026;VT-202607-00285;Client comptant;Ventes du jour;701;;167600
+27/07/2026;VT-202607-00286;Client mobile money;Ventes du jour;701;;189600
+28/07/2026;VT-202607-00287;Client comptant;Ventes du jour;701;;172100
+28/07/2026;CH-202607-622;Bailleur;Loyer boutique;622;90000;
+28/07/2026;CH-202607-661;Personnel;Salaires du mois;661;150000;
+28/07/2026;CH-202607-618;Transporteur zem / camion;Transport marchandises;618;102425;
+29/07/2026;VT-202607-00288;Client comptant;Ventes du jour;701;;93500
+30/07/2026;VT-202607-00289;Client comptant;Ventes du jour;701;;158500
+31/07/2026;VT-202607-00290;Client comptant;Ventes du jour;701;;104400
+01/08/2026;VT-202608-00298;Client comptant;Ventes du jour;701;;103400
+03/08/2026;VT-202608-00299;Client comptant;Ventes du jour;701;;118100
+03/08/2026;FA-202608-01;Brasserie distribution;Achat de marchandises;601;1016900;
+04/08/2026;VT-202608-00300;Client comptant;Ventes du jour;701;;219000
+05/08/2026;VT-202608-00301;Client comptant;Ventes du jour;701;;103400
+06/08/2026;VT-202608-00302;Client comptant;Ventes du jour;701;;237600
+07/08/2026;VT-202608-00303;Client mobile money;Ventes du jour;701;;119300
+08/08/2026;VT-202608-00304;Client comptant;Ventes du jour;701;;140600
+10/08/2026;VT-202608-00305;Client mobile money;Ventes du jour;701;;226500
+10/08/2026;FA-202608-02;Huilerie du Nord;Achat de marchandises;601;847400;
+11/08/2026;VT-202608-00306;Client comptant;Ventes du jour;701;;185800
+12/08/2026;VT-202608-00307;Client mobile money;Ventes du jour;701;;137600
+13/08/2026;VT-202608-00308;Client mobile money;Ventes du jour;701;;119200
+14/08/2026;VT-202608-00309;Client mobile money;Ventes du jour;701;;173300
+15/08/2026;VT-202608-00310;Client comptant;Ventes du jour;701;;132200
+17/08/2026;VT-202608-00311;Client mobile money;Ventes du jour;701;;119100
+17/08/2026;FA-202608-03;Brasserie distribution;Achat de marchandises;601;847400;
+18/08/2026;VT-202608-00312;Client comptant;Ventes du jour;701;;105600
+19/08/2026;VT-202608-00313;Client comptant;Ventes du jour;701;;175800
+20/08/2026;VT-202608-00314;Client mobile money;Ventes du jour;701;;214700
+21/08/2026;VT-202608-00315;Client mobile money;Ventes du jour;701;;239400
+22/08/2026;VT-202608-00316;Client comptant;Ventes du jour;701;;158500
+24/08/2026;VT-202608-00317;Client mobile money;Ventes du jour;701;;190700
+24/08/2026;FA-202608-04;Sucrerie distribution;Achat de marchandises;601;677969;
+25/08/2026;VT-202608-00318;Client mobile money;Ventes du jour;701;;216700
+26/08/2026;VT-202608-00319;Client comptant;Ventes du jour;701;;154700
+27/08/2026;VT-202608-00320;Client comptant;Ventes du jour;701;;121300
+28/08/2026;VT-202608-00321;Client mobile money;Ventes du jour;701;;118800
+28/08/2026;CH-202608-622;Bailleur;Loyer boutique;622;90000;
+28/08/2026;CH-202608-661;Personnel;Salaires du mois;661;150000;
+28/08/2026;CH-202608-618;Transporteur zem / camion;Transport marchandises;618;104050;
+29/08/2026;VT-202608-00322;Client mobile money;Ventes du jour;701;;202100
+31/08/2026;VT-202608-00323;Client comptant;Ventes du jour;701;;128600
+01/09/2026;VT-202609-00331;Client mobile money;Ventes du jour;701;;151800
+02/09/2026;VT-202609-00332;Client comptant;Ventes du jour;701;;203800
+03/09/2026;VT-202609-00333;Client comptant;Ventes du jour;701;;105500
+03/09/2026;FA-202609-01;Brasserie distribution;Achat de marchandises;601;1016800;
+04/09/2026;VT-202609-00334;Client comptant;Ventes du jour;701;;187200
+05/09/2026;VT-202609-00335;Client comptant;Ventes du jour;701;;175500
+05/09/2026;VT-202609-00335;Client comptant;Ventes du jour;701;;175500
+07/09/2026;VT-202609-00336;Client comptant;Ventes du jour;701;;212000
+08/09/2026;VT-202609-00337;Client mobile money;Ventes du jour;701;;177300
+09/09/2026;VT-202609-00338;Client comptant;Ventes du jour;701;;159500
+10/09/2026;VT-202609-00339;Client comptant;Ventes du jour;701;;129300
+10/09/2026;FA-202609-02;Sucrerie distribution;Achat de marchandises;601;847300;
+11/09/2026;VT-202609-00340;Client comptant;Ventes du jour;701;;177800
+12/09/2026;VT-202609-00341;Client mobile money;Ventes du jour;701;;148400
+14/09/2026;VT-202609-00342;Client comptant;Ventes du jour;701;;101600
+15/09/2026;VT-202609-00343;Client mobile money;Ventes du jour;701;;203200
+16/09/2026;VT-202609-00344;Client mobile money;Ventes du jour;701;;214900
+17/09/2026;VT-202609-00345;Client comptant;Ventes du jour;701;;156500
+17/09/2026;FA-202609-03;Brasserie distribution;Achat de marchandises;601;847300;
+18/09/2026;VT-202609-00346;Client comptant;Ventes du jour;701;;125300
+19/09/2026;VT-202609-00347;Client comptant;Ventes du jour;701;;125700
+21/09/2026;VT-202609-00348;Client comptant;Ventes du jour;701;;189600
+22/09/2026;VT-202609-00349;Client mobile money;Ventes du jour;701;;181600
+23/09/2026;VT-202609-00350;Client mobile money;Ventes du jour;701;;140300
+24/09/2026;VT-202609-00351;Client mobile money;Ventes du jour;701;;133100
+24/09/2026;FA-202609-04;Grossiste Parakou Vivres;Achat de marchandises;601;677993;
+25/09/2026;VT-202609-00352;Client mobile money;Ventes du jour;701;;147200
+26/09/2026;VT-202609-00353;Client mobile money;Ventes du jour;701;;218500
+28/09/2026;VT-202609-00354;Client comptant;Ventes du jour;701;;97900
+28/09/2026;CH-202609-622;Bailleur;Loyer boutique;622;90000;
+28/09/2026;CH-202609-661;Personnel;Salaires du mois;661;150000;
+28/09/2026;CH-202609-618;Transporteur zem / camion;Transport marchandises;618;103825;
+29/09/2026;VT-202609-00355;Client mobile money;Ventes du jour;701;;149600
+30/09/2026;VT-202609-00356;Client comptant;Ventes du jour;701;;139900
+01/10/2026;VT-202610-00364;Client comptant;Ventes du jour;701;;139400
+02/10/2026;VT-202610-00365;Client comptant;Ventes du jour;701;;169000
+03/10/2026;VT-202610-00366;Client mobile money;Ventes du jour;701;;205700
+03/10/2026;FA-202610-01;Huilerie du Nord;Achat de marchandises;601;1083700;
+05/10/2026;VT-202610-00367;Client comptant;Ventes du jour;701;;218700
+06/10/2026;VT-202610-00368;Client comptant;Ventes du jour;701;;206700
+07/10/2026;VT-202610-00369;Client comptant;Ventes du jour;701;;149300
+08/10/2026;VT-202610-00370;Client comptant;Ventes du jour;701;;187200
+09/10/2026;VT-202610-00371;Client comptant;Ventes du jour;701;;98900
+10/10/2026;VT-202610-00372;Client comptant;Ventes du jour;701;;142800
+10/10/2026;FA-202610-02;Huilerie du Nord;Achat de marchandises;601;903000;
+12/10/2026;VT-202610-00373;Client comptant;Ventes du jour;701;;164400
+13/10/2026;VT-202610-00374;Client mobile money;Ventes du jour;701;;222000
+14/10/2026;VT-202610-00375;Client mobile money;Ventes du jour;701;;144700
+15/10/2026;VT-202610-00376;Client comptant;Ventes du jour;701;;151900
+16/10/2026;VT-202610-00377;Client comptant;Ventes du jour;701;;137900
+17/10/2026;VT-202610-00378;Client comptant;Ventes du jour;701;;105900
+17/10/2026;FA-202610-03;Brasserie distribution;Achat de marchandises;601;903000;
+17/10/2026;FA-202610-03-bis;Brasserie distribution;Achat de marchandises;601;903000;
+19/10/2026;VT-202610-00379;Client comptant;Ventes du jour;701;;172000
+20/10/2026;VT-202610-00380;Client comptant;Ventes du jour;701;;121300
+21/10/2026;VT-202610-00381;Client comptant;Ventes du jour;701;;185000
+22/10/2026;VT-202610-00382;Client comptant;Ventes du jour;701;;215000
+23/10/2026;VT-202610-00383;Client comptant;Ventes du jour;701;;173400
+24/10/2026;VT-202610-00384;Client mobile money;Ventes du jour;701;;120700
+24/10/2026;FA-202610-04;Sucrerie distribution;Achat de marchandises;601;722468;
+26/10/2026;VT-202610-00385;Client comptant;Ventes du jour;701;;122000
+27/10/2026;VT-202610-00386;Client comptant;Ventes du jour;701;;174400
+28/10/2026;VT-202610-00387;Client comptant;Ventes du jour;701;;168200
+28/10/2026;CH-202610-622;Bailleur;Loyer boutique;622;90000;
+28/10/2026;CH-202610-661;Personnel;Salaires du mois;661;150000;
+28/10/2026;CH-202610-618;Transporteur zem / camion;Transport marchandises;618;108925;
+29/10/2026;VT-202610-00388;Client mobile money;Ventes du jour;701;;156200
+30/10/2026;VT-202610-00389;Client comptant;Ventes du jour;701;;173500
+31/10/2026;VT-202610-00390;Client comptant;Ventes du jour;701;;130800
