@@ -371,3 +371,38 @@ details summary { cursor: pointer; font-weight: 700; color: var(--ink); }
   .alert-item { grid-template-columns: 44px 1fr; }
 }
 .chip.justifie { background: var(--teal); color: #fff; border-color: var(--teal); }
+
+/* ---------------- affichage mobile : rien ne dépasse de l'écran */
+.grid > *, .row > *, .card { min-width: 0; }
+.card > table, .card > div > table:not(.table-wrap table) { display: block; overflow-x: auto; }
+img, canvas, svg { max-width: 100%; }
+@media (max-width: 600px) {
+  h1 { font-size: 28px; }
+  .page-head { flex-direction: column; align-items: flex-start; }
+  .page-head .row, .acts { width: 100%; }
+  .acts .btn, .page-head .btn { flex: 1 1 auto; }
+  .card { padding: 16px; }
+  table { font-size: 13.5px; }
+  th, td { padding: 8px; }
+  .chart-box { height: 260px; }
+  .kpi .value { font-size: 30px; }
+  .giant { font-size: 64px; }
+  .tabs { flex-wrap: nowrap; overflow-x: auto; }
+  .tabs button { flex: none; }
+  .dec-opt { font-size: 22px; }
+  .pub-cta { width: 100%; } .pub-cta .btn { flex: 1; }
+  .geant { font-size: 21vw; }
+  .vol h2, .titre { font-size: 40px; }
+  .et .tt { font-size: 26px; } .et .nu { font-size: 40px; }
+  .et .in { padding-left: 8px; }
+  .lex-row > button { font-size: 26px; }
+  .tl-step { grid-template-columns: 44px 1fr; } .tl-num { font-size: 40px; }
+  .auth-hero h1 { font-size: 34px; }
+}
+@media (max-width: 600px) {
+  .pub-cta .btn { white-space: normal; font-size: 12px; padding: 6px 8px; line-height: 1.15; text-align: center; }
+  .pub-top nav { gap: 12px; flex-wrap: wrap; } .pub-top nav a { font-size: 12.5px; }
+}
+@media (max-width: 600px) {
+  .hero-bars { position: static; width: 45%; height: 64px; margin: 0 0 14px auto; gap: 8px; }
+}
