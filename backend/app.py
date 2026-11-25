@@ -14,7 +14,7 @@ from datetime import date
 from pathlib import Path
 
 from fastapi import Depends, FastAPI, File, HTTPException, Query, Request, Response, UploadFile
-from fastapi.responses import FileResponse, JSONResponse
+from fastapi.responses import FileResponse, HTMLResponse, JSONResponse
 from fastapi.staticfiles import StaticFiles
 from typing import Annotated
 
@@ -72,6 +72,13 @@ SECURITY_HEADERS = {
 
 @app.middleware("http")
 async def security_headers(request: Request, call_next):
+    if services.CONFIG_ERROR:  # configuration incomplète : page explicative au lieu d'une erreur 500
+        page = ("<!doctype html><meta charset='utf-8'><title>CreditWise : configuration</title>"
+                "<body style='font-family:sans-serif;max-width:640px;margin:60px auto;padding:0 16px;line-height:1.6'>"
+                f"<h1 style='font-size:22px'>Configuration à terminer</h1><p>{services.CONFIG_ERROR}</p></body>")
+        if request.url.path.startswith("/api"):
+            return JSONResponse({"detail": services.CONFIG_ERROR}, status_code=503)
+        return HTMLResponse(page, status_code=503)
     if request.url.path.startswith("/api"):
         ensure_ready()
     resp = await call_next(request)
@@ -620,6 +627,14 @@ def report(request_id: int, user=Depends(current_user)):
     return Response(pdf, media_type="application/pdf", headers=attachment(f"Rapport_CreditWise_{name}.pdf"))
 
 
+@app.get("/api/health")
+def health():
+    """État du déploiement, sans aucun secret : utile pour diagnostiquer Vercel."""
+    return {"ok": True, "vercel": db.ON_VERCEL, "model": (ROOT / "models" / "pd_model.json").exists(),
+            "demo_files": (ROOT / "data" / "demo").is_dir(), "frontend": (ROOT / "frontend" / "index.html").exists(),
+            "email_delivery": otp.smtp_configured(), "google": bool(otp.google_client_id())}
+
+
 @app.get("/api/model-card")
 def model_card():
     return json.loads((ROOT / "models" / "model_card.json").read_text())
@@ -631,7 +646,8 @@ def demo_files():
     return [{"company": p.parent.name, "name": p.name, "url": f"/demo/{p.parent.name}/{p.name}"} for p in sorted(base.glob("*/*"))]
 
 
-app.mount("/demo", StaticFiles(directory=ROOT / "data" / "demo"), name="demo")
+if (ROOT / "data" / "demo").is_dir():  # absent si le dossier n'a pas été inclus dans le déploiement
+    app.mount("/demo", StaticFiles(directory=ROOT / "data" / "demo"), name="demo")
 app.mount("/", StaticFiles(directory=ROOT / "frontend", html=True), name="frontend")
 
 

@@ -16,11 +16,11 @@ from .engine.finance import analyse
 from .engine.items import ITEMS
 from .engine.scoring import pd_estimate, rule_score
 
-def _secret() -> bytes:
+def _secret() -> bytes | None:
     if os.environ.get("CREDITWISE_SECRET"):
         return os.environ["CREDITWISE_SECRET"].encode()
     if db.ON_VERCEL:  # plusieurs instances : une clé aléatoire par instance casserait sessions et signatures
-        raise RuntimeError("Variable d'environnement CREDITWISE_SECRET manquante (voir README, déploiement Vercel).")
+        return None
     path = db.DB_PATH.parent / ".secret"
     if not path.exists():
         path.parent.mkdir(parents=True, exist_ok=True)
@@ -30,6 +30,10 @@ def _secret() -> bytes:
 
 
 SECRET = _secret()
+# Erreur de configuration affichée à la place du site (plutôt qu'un plantage au démarrage)
+CONFIG_ERROR = None if SECRET else (
+    "La variable d'environnement CREDITWISE_SECRET n'est pas définie. Dans Vercel : Settings, Environment Variables, "
+    "ajoutez CREDITWISE_SECRET (une longue valeur aléatoire), puis relancez le déploiement (Deployments, Redeploy).")
 DOSSIER_ATTACHMENT = "creditwise_dossier.json"
 
 
