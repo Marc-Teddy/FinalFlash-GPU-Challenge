@@ -1,7 +1,7 @@
 """Format interne commun : postes standardisés et règles de normalisation.
 
 Chaque valeur importée est rattachée à un poste interne. Les libellés et numéros de
-compte (plan de comptes d'inspiration SYSCOHADA — aucune conformité n'est revendiquée)
+compte (plan de comptes d'inspiration SYSCOHADA, aucune conformité n'est revendiquée)
 sont associés aux postes ci-dessous. Un libellé non reconnu n'est JAMAIS additionné :
 il est remonté à l'utilisateur comme « poste non reconnu ».
 """

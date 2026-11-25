@@ -6,6 +6,7 @@ explication possible à rechercher.
 """
 from __future__ import annotations
 
+import re
 import statistics
 from collections import defaultdict
 from datetime import date
@@ -112,13 +113,13 @@ def detect(analysis: dict, transactions: list[dict], documents: list[dict], toda
             out.append(alert("resultat_incoherent", "attention", "Résultat déclaré différent du résultat recalculé",
                              f"Déclaré {fmt(d)}, recalculé à partir des postes {fmt(c)}.", period=m,
                              explanation="Une charge ou un produit n'a peut-être pas été transmis."))
-    # Trésorerie nette (FR – BFR) vs trésorerie réelle (caisse + banque – découverts)
+    # Trésorerie nette (FR - BFR) vs trésorerie réelle (caisse + banque - découverts)
     B = analysis["balance_last"]
     if B.get("tresorerie_nette") is not None and B.get("tresorerie") is not None:
         real = B["tresorerie"] - (B.get("dettes_financieres_ct") or 0)
         if abs(real - B["tresorerie_nette"]) > max(10000, 0.05 * abs(real)):
             out.append(alert("tresorerie_incoherente", "info", "Trésorerie nette théorique ≠ trésorerie constatée",
-                             f"FR – BFR = {fmt(B['tresorerie_nette'])} ; caisse + banque – découverts = {fmt(real)}.",
+                             f"FR - BFR = {fmt(B['tresorerie_nette'])} ; caisse + banque - découverts = {fmt(real)}.",
                              period=cov["last_balance"], explanation="Écart lié à des postes non transmis (autres créances/dettes)."))
 
     # 5. Variations inhabituelles et baisse prolongée du CA
@@ -147,7 +148,7 @@ def detect(analysis: dict, transactions: list[dict], documents: list[dict], toda
                          f"De {fmt(s0)} ({best_run[1]}) à {fmt(s1)} ({best_run[2]}), soit {(s1 - s0) / s0 * 100:+.1f} %.",
                          period=f"{best_run[1]}..{best_run[2]}",
                          explanation="Une baisse n'est pas automatiquement un signe d'insolvabilité : saison creuse, perte de clients ?"))
-    # Trésorerie nette constatée = caisse + banque – découverts
+    # Trésorerie nette constatée = caisse + banque - découverts
     tr = [(m, b["tresorerie"] - (b.get("dettes_financieres_ct") or 0)) for m, b in sorted(analysis["balances"].items())
           if b.get("tresorerie") is not None]
     if tr:
@@ -156,7 +157,7 @@ def detect(analysis: dict, transactions: list[dict], documents: list[dict], toda
         if v_last < 0:
             first = next(m for m, v in tr if v < 0 and all(x < 0 for mm, x in tr if mm >= m))
             out.append(alert("tresorerie_negative", "elevee", "Trésorerie nette négative (découvert bancaire)",
-                             f"Caisse + banque – découverts = {fmt(v_last)} en {m_last} ; négative depuis {first} "
+                             f"Caisse + banque - découverts = {fmt(v_last)} en {m_last} ; négative depuis {first} "
                              f"({len(neg)} mois sur {len(tr)}).", period=f"{first}..{m_last}",
                              explanation="L'activité est financée par le découvert : tension de trésorerie à expliquer."))
         elif len(tr) >= 6 and max(v for _, v in tr[-6:]) > 0 and v_last < 0.5 * max(v for _, v in tr[-6:]):
@@ -178,6 +179,10 @@ def detect(analysis: dict, transactions: list[dict], documents: list[dict], toda
                              explanation="Les valeurs n'ont été comptées qu'une fois."))
 
     out.sort(key=lambda a: (SEV_ORDER[a["severity"]], a["code"]))
+    for x in out:  # décimales à la française : « -44,9 % », « Z = 17,0 »
+        for k in ("title", "reason", "explanation"):
+            if x.get(k):
+                x[k] = re.sub(r"(?<=\d)\.(?=\d)", ",", x[k])
     return out
 
 
@@ -214,7 +219,7 @@ def _transaction_checks(analysis: dict, txs: list[dict], today: date) -> list[di
         amount = sum((g[0]["debit"] or g[0]["credit"]) * (len(g) - 1) for g in dups)
         out.append(alert("doublons", "elevee", f"{len(dups) or len(ref_dups)} transaction(s) potentiellement en double",
                          "Même date, même tiers, même compte et même montant (ou même référence) : " + " ; ".join(examples),
-                         explanation=f"Montant concerné : {fmt(amount)}. Peut être une double saisie ou une facture dupliquée — à vérifier sur pièces.",
+                         explanation=f"Montant concerné : {fmt(amount)}. Double saisie ou facture dupliquée possible : à vérifier sur pièces.",
                          evidence={"groups": [[t["reference"] for t in g] for g in dups + ref_dups]}))
     # Z-score sur les montants, par poste, après désaisonnalisation (montant / moyenne du mois)
     by_acc = defaultdict(list)
@@ -237,7 +242,7 @@ def _transaction_checks(analysis: dict, txs: list[dict], today: date) -> list[di
         if outl:
             outl.sort(key=lambda x: -abs(x[1]))
             out.append(alert("montant_inhabituel", "attention",
-                             f"{len(outl)} montant(s) inhabituel(s) — {ITEMS[item][0]}",
+                             f"{len(outl)} montant(s) inhabituel(s) : {ITEMS[item][0].lower()}",
                              " ; ".join(f"{t['reference']} du {t['date']} : {fmt(abs(t['debit'] - t['credit']))}, soit "
                                         f"{abs(t['debit'] - t['credit']) / month_mean[ym(t['date'])]:.1f} fois le montant habituel du mois (Z = {z:.1f})"
                                         for t, z in outl[:5]),

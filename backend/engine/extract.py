@@ -13,12 +13,13 @@ Les données venant d'un CSV/XLSX exporté sont « déclarées » ; celles lues 
 from __future__ import annotations
 
 import calendar
+import csv
 import io
+import logging
+import math
 import re
 from dataclasses import dataclass, field
 from datetime import date, datetime
-
-import pandas as pd
 
 from .items import ITEMS, account_sign, clean_label, match_account, match_label, strip_accents
 
@@ -45,9 +46,7 @@ def month_end(y: int, m: int) -> date:
 
 def parse_period(v) -> tuple[date, date] | None:
     """Interprète un en-tête de période. Retourne (début, fin) ou None."""
-    if isinstance(v, (datetime, pd.Timestamp)):
-        return date(v.year, v.month, 1), month_end(v.year, v.month)
-    if isinstance(v, date):
+    if isinstance(v, (datetime, date)):
         return date(v.year, v.month, 1), month_end(v.year, v.month)
     s = strip_accents(str(v)).lower().strip().replace("\n", " ")
     if not s or s in {"nan", "none"}:
@@ -78,7 +77,7 @@ def parse_amount(v) -> float | None:
     if v is None:
         return None
     if isinstance(v, (int, float)):
-        return None if pd.isna(v) else float(v)
+        return None if isinstance(v, float) and math.isnan(v) else float(v)
     s = str(v).strip().replace(" ", " ").replace("\xa0", " ")
     s = re.sub(r"(?i)\s*(f\s*cfa|xof|fcfa|f)\s*$", "", s)
     if not s or s in {"-", "–", "nan"}:
@@ -102,11 +101,25 @@ def parse_amount(v) -> float | None:
     return -val if neg else val
 
 
-def _norm_cols(df: pd.DataFrame) -> pd.DataFrame:
-    df = df.copy()
-    df.columns = [clean_label(c).replace(" ", "_") if not isinstance(c, (datetime, pd.Timestamp)) else c
-                  for c in df.columns]
-    return df
+def parse_date(v) -> date | None:
+    """Date d'une opération : objet date/datetime, « jj/mm/aaaa » ou « aaaa-mm-jj ». Date impossible : None."""
+    if isinstance(v, datetime):
+        return v.date()
+    if isinstance(v, date):
+        return v
+    s = str(v or "").strip()
+    try:
+        if m := re.fullmatch(r"(\d{1,2})[/.-](\d{1,2})[/.-](\d{4})", s):
+            return date(int(m[3]), int(m[2]), int(m[1]))
+        if m := re.match(r"(\d{4})-(\d{1,2})-(\d{1,2})", s):
+            return date(int(m[1]), int(m[2]), int(m[3]))
+    except ValueError:  # 31/02/2026, mois 13...
+        return None
+    return None
+
+
+def _col_name(c) -> str:
+    return c if isinstance(c, (datetime, date)) else clean_label(c).replace(" ", "_")
 
 
 def _from_wide(rows: list[list], status: str, source_conf: float, ex: Extraction, context_period=None) -> None:
@@ -139,25 +152,26 @@ def _from_wide(rows: list[list], status: str, source_conf: float, ex: Extraction
             })
 
 
-def _from_dataframe(df: pd.DataFrame, status: str, ex: Extraction) -> None:
-    cols = set(_norm_cols(df).columns)
-    n = _norm_cols(df)
+def _from_table(header: list, rows: list[list], status: str, ex: Extraction) -> None:
+    """Tableau générique (CSV ou feuille Excel) : en-tête + lignes de cellules."""
+    names = [_col_name(c) for c in header]
+    cols = {c for c in names if isinstance(c, str)}
+    n = [{k: (r[i] if i < len(r) else None) for i, k in enumerate(names) if isinstance(k, str)} for r in rows]
     if {"compte", "debit", "credit"} <= cols and "date" in cols:
         ex.kind = "grand_livre"
-        for _, r in n.iterrows():
-            d = pd.to_datetime(r["date"], errors="coerce", dayfirst=True)
+        for r in n:
             debit, credit = parse_amount(r.get("debit")) or 0.0, parse_amount(r.get("credit")) or 0.0
             ex.transactions.append({
-                "date": None if pd.isna(d) else d.date(), "raw_date": str(r["date"]),
-                "reference": str(r.get("reference", r.get("piece", "")) or ""),
-                "counterparty": str(r.get("tiers", "") or ""), "label": str(r.get("libelle", "") or ""),
+                "date": parse_date(r["date"]), "raw_date": str(r["date"]),
+                "reference": str(r.get("reference") or r.get("piece") or ""),
+                "counterparty": str(r.get("tiers") or ""), "label": str(r.get("libelle") or ""),
                 "account": str(r["compte"]).split(".")[0], "debit": debit, "credit": credit,
             })
         return
     if "compte" in cols and ({"debit", "credit"} <= cols or "solde" in cols) and "periode" in cols:
         ex.kind = "balance_generale"
         agg: dict[tuple, float] = {}
-        for _, r in n.iterrows():
+        for r in n:
             p = parse_period(r["periode"])
             item = match_account(r["compte"])
             if p is None:
@@ -184,7 +198,7 @@ def _from_dataframe(df: pd.DataFrame, status: str, ex: Extraction) -> None:
         return
     if {"poste", "montant"} <= cols:
         ex.kind = "etat_financier_long"
-        for _, r in n.iterrows():
+        for r in n:
             ps = parse_period(r.get("periode_debut", r.get("periode")))
             pe = parse_period(r.get("periode_fin", r.get("periode_debut", r.get("periode"))))
             item, conf = match_label(r["poste"])
@@ -195,29 +209,37 @@ def _from_dataframe(df: pd.DataFrame, status: str, ex: Extraction) -> None:
             if ps is None or pe is None or a is None:
                 ex.warnings.append(f"Ligne incomplète ignorée : {r['poste']}")
                 continue
-            st = str(r.get("statut", status) or status)
+            st = str(r.get("statut") or status)
             ex.values.append({"period_start": ps[0], "period_end": pe[1], "item": item, "amount": a,
                               "status": st if st in {"declare", "extrait", "verifie", "estime"} else status,
                               "source_label": str(r["poste"]), "confidence": conf,
                               "comment": None if conf == 1 else f"Libellé rapproché de « {ITEMS[item][0]} »"})
         return
     ex.kind = "etat_financier"
-    rows = [list(df.columns)] + df.astype(object).where(df.notna(), None).values.tolist()
-    _from_wide(rows, status, 1.0, ex)
+    _from_wide([list(header)] + [list(r) for r in rows], status, 1.0, ex)
 
 
-def _read_excel_all(data: bytes) -> list[pd.DataFrame]:
-    sheets = pd.read_excel(io.BytesIO(data), sheet_name=None, header=None)
+def _blank(v) -> bool:
+    return v is None or (isinstance(v, str) and not v.strip())
+
+
+def _read_excel_all(data: bytes) -> list[tuple[list, list[list]]]:
+    """Chaque feuille non vide -> (en-tête, lignes). L'en-tête est la 1re ligne avec au moins 2 cellules remplies."""
+    from openpyxl import load_workbook
+
+    wb = load_workbook(io.BytesIO(data), read_only=True, data_only=True)
     out = []
-    for raw in sheets.values():
-        raw = raw.dropna(how="all").dropna(axis=1, how="all")
-        if raw.empty:
+    for ws in wb.worksheets:
+        rows = [list(r) for r in ws.iter_rows(values_only=True) if any(not _blank(v) for v in r)]
+        if not rows:
             continue
-        # La ligne d'en-tête est la première qui contient au moins 2 cellules non vides
-        hdr = next(i for i, (_, r) in enumerate(raw.iterrows()) if r.notna().sum() >= 2)
-        df = raw.iloc[hdr + 1:].copy()
-        df.columns = [c if not pd.isna(c) else f"col{j}" for j, c in enumerate(raw.iloc[hdr])]
-        out.append(df.reset_index(drop=True))
+        width = max(len(r) for r in rows)
+        keep = [j for j in range(width) if any(j < len(r) and not _blank(r[j]) for r in rows)]
+        rows = [[r[j] if j < len(r) else None for j in keep] for r in rows]
+        hdr = next(i for i, r in enumerate(rows) if sum(not _blank(v) for v in r) >= 2)
+        header = [c if not _blank(c) else f"col{j}" for j, c in enumerate(rows[hdr])]
+        out.append((header, rows[hdr + 1:]))
+    wb.close()
     return out
 
 
@@ -266,17 +288,19 @@ def extract(filename: str, data: bytes) -> Extraction:
     try:
         if name.endswith(".pdf"):
             _from_pdf(data, ex)
-        elif name.endswith((".xlsx", ".xlsm", ".xls")):
-            for df in _read_excel_all(data):
-                _from_dataframe(df, "declare", ex)
+        elif name.endswith((".xlsx", ".xlsm")):
+            for header, rows in _read_excel_all(data):
+                _from_table(header, rows, "declare", ex)
         elif name.endswith((".csv", ".txt")):
             text = data.decode("utf-8-sig", errors="replace")
-            sep = ";" if text.split("\n", 1)[0].count(";") > text.split("\n", 1)[0].count(",") else ","
-            df = pd.read_csv(io.StringIO(text), sep=sep, dtype=str, keep_default_na=False)
-            _from_dataframe(df, "declare", ex)
+            first = text.split("\n", 1)[0]
+            rows = [r for r in csv.reader(io.StringIO(text), delimiter=";" if first.count(";") > first.count(",") else ",") if any(c.strip() for c in r)]
+            if rows:
+                _from_table(rows[0], rows[1:], "declare", ex)
         else:
-            ex.warnings.append("Format non pris en charge (PDF, XLSX ou CSV attendus).")
-    except Exception as e:  # le document est conservé, l'erreur est remontée à l'utilisateur
-        ex.warnings.append(f"Lecture impossible : {e}")
+            ex.warnings.append("Format non pris en charge (PDF, XLSX ou CSV attendus ; un ancien .xls doit être réenregistré en .xlsx).")
+    except Exception:  # détail technique journalisé côté serveur, jamais renvoyé à l'utilisateur
+        logging.getLogger(__name__).exception("Lecture impossible : %s", filename)
+        ex.warnings.append("Lecture impossible : fichier illisible ou structure non reconnue.")
     ex.unmatched = sorted(set(ex.unmatched))
     return ex
