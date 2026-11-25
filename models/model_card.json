@@ -1,0 +1,115 @@
+{
+  "name": "CreditWise PD indicative",
+  "selected_model": {
+    "complet": "xgboost",
+    "sans_croissance": "xgboost"
+  },
+  "dataset": {
+    "name": "UCI Polish Companies Bankruptcy (5year.arff)",
+    "url": "https://archive.ics.uci.edu/dataset/365/polish+companies+bankruptcy+data",
+    "license": "CC BY 4.0",
+    "citation": "Zieba, Tomczak & Tomczak (2016), Expert Systems with Applications 58",
+    "rows": 5910,
+    "positives": 410,
+    "base_rate": 0.06937394247038917,
+    "target": "Faillite dans l'année suivant les états financiers",
+    "real_data": true
+  },
+  "features": {
+    "roa": "Résultat net / Total actif",
+    "debt_ratio": "Total dettes / Total actif",
+    "wc_assets": "Fonds de roulement net / Total actif",
+    "current_ratio": "Actif circulant / Passif circulant",
+    "asset_turnover": "Chiffre d'affaires / Total actif",
+    "equity_assets": "Capitaux propres / Total actif",
+    "inventory_days": "Stocks × 365 / Chiffre d'affaires",
+    "sales_growth": "CA(n) / CA(n-1)",
+    "net_margin": "Résultat net / Chiffre d'affaires",
+    "cash_ratio": "Trésorerie / Passif circulant",
+    "operating_margin": "Résultat d'exploitation / Chiffre d'affaires",
+    "receivable_days": "Créances clients × 365 / Chiffre d'affaires",
+    "quick_ratio": "(Actif circulant – Stocks) / Passif circulant",
+    "st_liabilities_assets": "Passif circulant / Total actif",
+    "gross_margin": "(CA – Coût des ventes) / CA"
+  },
+  "split": "Stratifié 75/25, graine 42 (jeu de test mis de côté avant tout réglage)",
+  "variants": {
+    "complet": "15 ratios dont la croissance annuelle du CA (≥ 24 mois d'historique)",
+    "sans_croissance": "14 ratios, utilisé quand l'historique fait moins de 24 mois"
+  },
+  "missing_values": "Ratio non calculable remplacé par la médiane d'entraînement (neutre) et signalé",
+  "metrics_test": {
+    "complet": {
+      "logistic_regression": {
+        "roc_auc": 0.8328,
+        "pr_auc": 0.379,
+        "brier": 0.0524,
+        "train_seconds": 0.3652
+      },
+      "xgboost": {
+        "roc_auc": 0.8853,
+        "pr_auc": 0.5862,
+        "brier": 0.0423,
+        "train_seconds": 6.5087,
+        "device": "cpu"
+      }
+    },
+    "sans_croissance": {
+      "logistic_regression": {
+        "roc_auc": 0.8367,
+        "pr_auc": 0.3668,
+        "brier": 0.0536,
+        "train_seconds": 0.3386
+      },
+      "xgboost": {
+        "roc_auc": 0.88,
+        "pr_auc": 0.4357,
+        "brier": 0.0496,
+        "train_seconds": 5.3906,
+        "device": "cpu"
+      }
+    }
+  },
+  "feature_importance": {
+    "complet": {
+      "sales_growth": 0.1848,
+      "operating_margin": 0.1377,
+      "quick_ratio": 0.0729,
+      "cash_ratio": 0.0594,
+      "net_margin": 0.0558,
+      "equity_assets": 0.0521,
+      "inventory_days": 0.0517,
+      "debt_ratio": 0.0513,
+      "roa": 0.0512,
+      "st_liabilities_assets": 0.0502,
+      "current_ratio": 0.0497,
+      "gross_margin": 0.0481,
+      "receivable_days": 0.0477,
+      "wc_assets": 0.0463,
+      "asset_turnover": 0.0411
+    },
+    "sans_croissance": {
+      "operating_margin": 0.2125,
+      "roa": 0.0787,
+      "quick_ratio": 0.0752,
+      "net_margin": 0.072,
+      "cash_ratio": 0.0656,
+      "inventory_days": 0.0648,
+      "st_liabilities_assets": 0.0601,
+      "gross_margin": 0.058,
+      "current_ratio": 0.056,
+      "wc_assets": 0.054,
+      "receivable_days": 0.0534,
+      "equity_assets": 0.0527,
+      "asset_turnover": 0.0494,
+      "debt_ratio": 0.0477
+    }
+  },
+  "limits": [
+    "Entreprises polonaises 2000-2013 (industrie), pas des commerçants de l'UEMOA.",
+    "La PD est un indicateur relatif ; elle n'est pas calibrée pour un portefeuille béninois.",
+    "Aucune donnée de remboursement de crédit UEMOA : ce n'est pas une PD réglementaire.",
+    "Ratios calculés sur 12 mois glissants à partir de données en partie déclaratives.",
+    "Décision de crédit toujours prise par un analyste habilité."
+  ]
+}
